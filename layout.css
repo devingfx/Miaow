@@ -89,6 +89,11 @@ nav {
         list-style: none;
         padding: 0;
     }
+    nav button#settingsBtn {
+    	position: absolute;
+    	width: 100%;
+    	bottom: 0;
+    }
 section {
     position: fixed;
     width: calc(100% - 150px);

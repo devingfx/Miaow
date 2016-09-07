@@ -1,4 +1,151 @@
-class Store {
+
+window.Schema = class Schema {
+	constructor( json, doc )
+	{
+		this[Schema.document] = doc || document;
+		this[Schema.schema] = json;
+		this.result = this.extract( json, [(doc || document).documentElement] );
+	}
+	resolveProperty( val, node )
+	{
+		var handlers = [];
+		if( val.indexOf('=>') !== -1 )
+		{
+			var a = val.split('=>');
+			val = a.shift();
+			handlers = a.map( js=> new Function('item,index,list',`return `+js) );
+		}
+		if( val.indexOf('xpath:') === 0 )
+		{
+			var a = val.split(':');
+			a.shift();
+			val = a.join(':');
+			val = this.xpath( val, node );
+		}
+		handlers.length &&
+			handlers.map(f=>(val = (Array.isArray(val)?val:[val]).map(f)));
+		
+		return Array.isArray(val) && val.length == 1
+				? val[0]
+				: val;
+	}
+	extract_old( json, node )
+	{
+		var ctx = node,
+			target = {};
+		var make = (ctx)=>
+			Object.getOwnPropertyNames( json )
+				.map( key=> {
+					if( key !== '@selector' && key !== '@xpath' )
+					{
+						if( typeof json[key] == 'string' )
+						{
+							target[key] = this.resolveProperty( json[key], ctx );
+							// var val = json[key],
+							// 	handlers = [];
+							// if( val.indexOf('=>') !== -1 )
+							// {
+							// 	var a = val.split('=>');
+							// 	val = a.shift();
+							// 	handlers = a.map( js=> new Function('item,index,list',`return `+js) );
+							// }
+							// if( val.indexOf('xpath:') === 0 )
+							// {
+							// 	var a = val.split(':'),
+							// 		path = a[1]
+							// 	a.shift();
+							// 	val = a.join(':');
+							// 	val = this.xpath( val, ctx );
+							// }
+							// handlers.length &&
+							// 	handlers.map(f=>(val = f(val)));
+							
+							// target[key] = val;
+						}
+						else
+						{
+							target[key] = json[key];
+						}
+					}
+				})
+		
+		if( json['@selector'] )
+		{
+			ctx = this.selector( json['@selector'], node );
+		}
+		if( json['@xpath'] )
+		{
+			ctx = this.xpath( json['@xpath'], node );
+		}
+		if( Array.isArray(ctx) )
+		{
+			var arr = Array(ctx.length).fill({});
+			ctx.map( (_ctx,i)=> {
+				target = arr[i];
+				make(_ctx,i) ;
+			})
+			return target;
+		}
+		else
+			make(ctx)
+	}
+	extract( json, nodes )
+	{
+		if( json['@selector'] )
+		{
+			nodes = this.selector( json['@selector'], nodes[0] );
+		}
+		if( json['@xpath'] )
+		{
+			nodes = this.xpath( json['@xpath'], nodes[0] );
+		}
+		console.log( json, nodes );
+		var res = nodes.map( node=> {
+			
+			var result = {};
+			Object.getOwnPropertyNames( json )
+				.map( key=> {
+					if( key !== '@selector' && key !== '@xpath' )
+						switch( typeof json[key] )
+						{
+							case 'object': result[key] = Array.isArray(json[key])
+															? json[key].map( item=> this.extract( item, [node] ))
+															: this.extract( json[key], [node] );
+							break;
+							case 'string': result[key] = this.resolveProperty( json[key], node ); break;
+							default: result[key] = json[key]; break;
+						}
+				})
+			return result;
+		})
+		return res.length == 1 ? res[0] : res;
+	}
+	selector( sel, context )
+	{
+		context = context || this[Schema.document];
+		var res = context.querySelectorAll( sel );
+		var arr = Array.from( res );
+		arr = arr.map( n=> n.nodeValue ? n.nodeValue : n );
+		return arr;
+	}
+	xpath( path, context )
+	{
+		context = context || this[Schema.document];
+		var res = this[Schema.document].evaluate( path, context, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null );
+		var arr = Array(res.snapshotLength).fill(0)
+					.map( (o,i)=> res.snapshotItem(i) );
+		arr = arr.map( n=> n.nodeValue ? n.nodeValue : n );
+		return arr;
+		// return arr.length === 1
+		// 		? arr[0]
+		// 		: arr
+	}
+}
+window.Schema.document = Symbol`document`;
+window.Schema.schema = Symbol`schema`;
+
+
+window.Store = class Store {
     static get deps()
     {
         return {
@@ -111,6 +258,11 @@ class Store {
                 <hr/>
                 <!--span>Collections</span-->
                 <ul id="collections"></ul>
+                <hr/>
+                <button id="settingsBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSettings()">
+                	<span lang="en">Settings</span>
+                	<span lang="fr">Préférences</span>
+            	</button>
             </nav>
         `
         
@@ -127,6 +279,7 @@ class Store {
         this.$collections = $('#collections');
         // this.$main = $('#main');
         this.updateCollections();
+        this.updateLanguage( navigator.language );
     }
     onPageChange()
     {
@@ -373,13 +526,16 @@ class Store {
         Object.getOwnPropertyNames(this.data)
             .map( n=> this.$collections.append(`<li><button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showInTable(store['${n.replace(/'/g,"\\'")}'])">${n}</button></li>`) )
     }
+    updateLanguage( lang )
+    {
+        $('[lang]').hide();
+        $(`[lang="${lang}"]`).show();
+    }
     save()
     {
         localStorage.store_data = JSON.stringify( this.data );
     }
 }
-
-
 
 var store = new Store;
 
