@@ -99,14 +99,14 @@ class Store {
     }
     constructor()
     {
-        Store.deps.css.map( url => document.write(`<link rel="stylesheet" type="text/css" href="${url}">`) )
+        Store.deps.css.map( url => document.write(`<link rel="stylesheet" type="text/css" href="${url}?${Math.random()}">`) )
         Store.deps.js.map( url => document.write(`<script type="text/javascript" src="${url}" onload="store.start()"></script>`) )
         console.log(Store.deps, document);
         document.write(`<title>Miaow online - ${parentWindow.document.location.host}</title>`);
         document.documentElement.appendChild(document.createElement('body'))
         document.body.innerHTML = `
             <nav>
-                <img src="//devingfx.github.io/Miaow/logo.svg"/>
+                <img class="logo" src="//devingfx.github.io/Miaow/logo.svg"/>
                 <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()">Cette page</button>
                 <hr/>
                 <!--span>Collections</span-->
