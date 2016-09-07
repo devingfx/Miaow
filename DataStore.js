@@ -3,6 +3,7 @@ class Store {
     {
         return {
             css: [
+                "//devingfx.github.io/Miaow/layout.css",
                 "//cdn.datatables.net/1.10.12/css/jquery.dataTables.css"
             ],
             js: [
@@ -101,8 +102,7 @@ class Store {
         Store.deps.css.map( url => document.write(`<link rel="stylesheet" type="text/css" href="${url}">`) )
         Store.deps.js.map( url => document.write(`<script type="text/javascript" src="${url}" onload="store.start()"></script>`) )
         console.log(Store.deps, document);
-        document.write(`<title>Data Thief</title>`);
-        document.write(`<link rel="shortcut icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABrUlEQVR42mNkwAOepOgxMTD9mwhk5gDxQSB2l5l15SeyGkYGAuBJMtAQ5n+rgcwgIF4ENCCeJAOghvADXbIHqNoEyK0BGtKK14DXU9lAThZiYPw/XTTr92uId3SVgKoPA8WkgNxIoCErsBrwdhoL57//TGeATC0gfgVUMRlo+2zRjD8vn6RrmzH8ZT4E5IOU+gAN2YNhwMOJ/Ey8bJ+VgGYnAQ3K/f+fkQco/AYYDjP+feHs/fNQyub/N44NQJe0ysy5VI83DF5M5pRkY/mVyfCfIRtomNB/pv9v//9infbnucgZ5l/MW8T7HvxDMWB9hT3nXwbmrH//mO4Bubc4Wb/f9W09+uNmjwQPP/vHNHaWXwX/Gf7LsjD9k+FLZ3iKEQYbKmy1/jKwXIXx//1nfPvvP/MVJsZ/RzlYfpwX4nj/T5zrNbtK8evlWGNhcYU3Px/DR+f/DExGQK4pEKsCseJ/oDKgF0AGMvxjZLIP79xzCMWA3Jyc/yB68pQpGGEyuyJEhJXhtwYLELMx/NL9wcDRcfqLwjOYegwDYGxcAFkNbQxgIALgNIBUQBUDAFi2whGNUZ3eAAAAAElFTkSuQmCC"/>`);
+        document.write(`<title>Miaow online</title>`);
         this.render();
         
         this.data = localStorage.store_data ? JSON.parse(localStorage.store_data) : {};
@@ -116,178 +116,13 @@ class Store {
     {
         document.documentElement.appendChild(document.createElement('body'))
         document.body.innerHTML = `
-        <style>
-            @import 'https://fonts.googleapis.com/css?family=Open+Sans';
-            *, button, input { font-family: 'Open Sans', sans-serif; box-sizing: border-box; }
-            body {
-                margin: 0;
-                background: #fafafa;
-            }
-            select {
-                border: none;
-                background: url(data:image/svg+xml;charset=utf-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIzMiIgaWQ9ImNoZXZyb24tdXAiIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIHN0eWxlPSJmaWxsOiNmNTZiMmEiIGQ9Ik0xIDIwIEwxNiA2IEwzMSAyMCBMMjcgMjQgTDE2IDE0IEw1IDI0IHoiLz48L3N2Zz4=) no-repeat center right;
-                -webkit-appearance: none;
-                font-size: 1em;
-                background-size: 12px 12px;
-                outline: none;
-                cursor: context-menu;
-                padding: 0 20px 0px 5px;
-                background-position-x: calc(100% - 4px);
-            }
-                option[value=""] {
-                    color: grey;
-                }
-            button {
-                background: white;
-                color: #f56b2a;
-                border: 1px solid;
-                outline: none;
-                text-transform: uppercase;
-                font-size: 0.9em;
-                padding: 0.3em 1.3em;
-                font-weight: bold;
-                transition: all .3s ease-out;
-                border-radius: 4px;
-            }
-                button:hover, button.selected {
-                    background: #f56b2a;
-                    color: white;
-                }
-                button.important {
-                    box-shadow: inset 0 0 0px 2px #f56b2a;
-                }
-                button.important:hover {
-                    box-shadow: inset 0 0 0px 2px white;
-                }
-            nav {
-                position: fixed;
-                width: 150px;
-                top: -20px;
-                bottom: -20px;
-                background: #f56b2a;
-                color: white;
-                padding-top: 100px;
-                box-shadow: inset -5px 0 10px rgba(0,0,0,0.3);
-                z-index: 1;
-            }
-                nav button {
-                    background: none;
-                    border: none;
-                    color: white;
-                    width: 100%;
-                    padding: 0.3em;
-                    border-radius: 0;
-                }
-                    nav button:hover, nav button.selected {
-                        background: #fafafa;
-                        color: #f56b2a;
-                        box-shadow: -8px 5px 10px rgba(0,0,0,0.3);
-                    }
-                nav hr {
-                    border-bottom: none;
-                    border-top: 1px dashed rgba(255,255,255,0.3);
-                }
-                nav span {
-                    width: 100%;
-                    display: block;
-                    text-align: center;
-                    text-shadow: 0 -1px 0px rgba(0,0,0,0.5), 0 1px 1px rgba(255,255,255,0.5);
-                }
-                nav ul {
-                    list-style: none;
-                    padding: 0;
-                }
-            section {
-                position: fixed;
-                width: calc(100% - 150px);
-                height: 100%;
-                right: 0;
-            }
-                section > header {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 110px;
-                    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-                    background: white;
-                    overflow: hidden;
-                    padding: 5px 15px;
-                    z-index: 1;
-                }
-                    section > header h1 {
-                        color: #1a1a1a;
-                        margin: 0;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        width: 100%;
-                    }
-                    section > header span { color: grey; }
-                section > .content {
-                    position: absolute;
-                    top: 110px;
-                    bottom: 50px;
-                    width: 100%;
-                    padding: 15px;
-                    overflow: auto;
-                }
-                section > footer {
-                    position: absolute;
-                    bottom: 0;
-                    height: 50px;
-                    background: #e6e6e6;
-                    width: 100%;
-                    left: 0;
-                    padding: 10px;
-                    border-top: 1px solid #ccc;
-                }
-            pre v {
-                border: 1px solid #ccc;
-                background: white;
-                line-height: 40px;
-                display: inline-block;
-                height: 40px;
-                border-top: none;
-                padding: 0 10px;
-                border-left: none;
-                width: 100%;
-            }
-            pre s, pre k, pre header {
-                display: none;
-            }
-            pre p {
-                display: inline-block;
-                width: 160px;
-                margin: 0;
-                background: #f2f2f2;
-                color: #1a1a1a;
-                height: 40px;
-                line-height: 40px;
-                padding: 0 10px;
-                border: 1px solid #ccc;
-                border-top: none;
-            }
-            
-            table th.sorting:hover,
-            table th.sorting_asc:hover,
-            table th.sorting_desc:hover {
-                background-color: #f56b2a;
-                color: white;
-            }
-            table select {
-                width: 100%;
-            }
-            table.dataTable tfoot th, table.dataTable tfoot td { border:none; }
-        </style>
-        <body>
             <nav>
                 <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()">Cette page</button>
                 <hr/>
-                <span>Collections</span>
+                <!--span>Collections</span-->
                 <ul id="collections"></ul>
             </nav>
-        </body>`
+        `
     }
     start()
     {
