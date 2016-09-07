@@ -191,8 +191,10 @@ window.Store = class Store {
         console.log(Store.deps, document);
         document.write(`<title>Miaow online - ${parentWindow.document.location.host}</title>`);
         document.documentElement.appendChild(document.createElement('body'))
+        var themeColor = parentWindow.document.querySelector('meta[name="theme-color"]');
+        themeColor = themeColor ? themeColor.content : "#888";
         document.body.innerHTML = `
-            <nav>
+            <nav style="backgroud-color:${themeColor}">
                 <img class="logo" src="//devingfx.github.io/Miaow/logo.svg"/>
                 <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()">Cette page</button>
                 <hr/>
@@ -460,7 +462,7 @@ window.Store = class Store {
 		var page = new Store.Page, editor;
 		
 	    page.title = `<lang en>Settings</lang><lang fr>Préférences</lang>`;
-	    // page.title2 = uri;
+	    page.title2 = `<lang en>Language</lang><lang fr>Langue</lang>: ${$('html').attr('lang')}`;
 	    
 	    page.content = `<pre contenteditable="true">${JSON.stringify(JSON.parse(localStorage.store_extractors),null,'\t')}</pre>`
 	    
@@ -471,7 +473,13 @@ window.Store = class Store {
 	    this.showPage( page );
 	    
 	    page._target[0].saveData = ()=> {
-	        localStorage.store_extractors = JSON.stringify( page.content.text() );
+	        var settings;
+	        try {
+	        	settings= JSON.parse( page.content.text() );
+	        }catch(e){alert(e.message)}
+	        
+	        if( settings )
+	        	localStorage.store_extractors = JSON.stringify(settings);
 	        // store.save();
 	        // store.updateCollections();
 	    }
