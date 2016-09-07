@@ -106,7 +106,7 @@ class Store {
         document.documentElement.appendChild(document.createElement('body'))
         document.body.innerHTML = `
             <nav>
-                <img src="//devingfx.github.io/Miaow/Amusing black cat vector 04.svg"/>
+                <img src="//devingfx.github.io/Miaow/logo.svg"/>
                 <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()">Cette page</button>
                 <hr/>
                 <!--span>Collections</span-->
