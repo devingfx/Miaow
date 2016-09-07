@@ -177,7 +177,7 @@ window.Store = class Store {
         return class Page extends Store.Element {
             constructor()
             {
-                debugger;
+                // debugger;
                 super('<section>');
                 // this.$el = $('<section>');
                 // this.$el[0].ctrl = this;
@@ -420,6 +420,7 @@ window.Store = class Store {
     {
         $('section').remove();
         section.appendTo('body');
+        this.updateLanguage();
     }
     showInTable( what )
     {
@@ -514,6 +515,28 @@ window.Store = class Store {
         page.footer.css({ padding: 3 });
         page.table.draw();
     }
+    showSettings()
+    {
+		var page = new Store.Page, editor;
+		
+	    page.title = `<lang en>Settings</lang><lang fr>Préférences</lang>`;
+	    // page.title2 = uri;
+	    
+	    page.content = `<pre contenteditable="true">${JSON.stringify(JSON.parse(localStorage.store_extractors),null,'\t')}</pre>`
+	    
+	    page.footer = `
+	    <button onclick="this.parentNode.parentNode.saveData()" class="important"><lang en>Save</lang><lang fr>Enregistrer</lang></button>
+	    <button onclick="this.parentNode.parentNode.remove()"><lang en>Cancel</lang><lang fr>Annuler</lang></button>`;
+	    
+	    this.showPage( page );
+	    
+	    page._target[0].saveData = ()=> {
+	        localStorage.store_extractors = JSON.stringify( page.content.text() );
+	        // store.save();
+	        // store.updateCollections();
+	    }
+    }
+    
     update()
     {
         this.data = localStorage.store_data ? JSON.parse(localStorage.store_data) : {};
@@ -528,8 +551,10 @@ window.Store = class Store {
     }
     updateLanguage( lang )
     {
-        $('[lang]').hide();
-        $(`[lang="${lang}"]`).show();
+        lang = lang || $('html').attr('lang');
+        $('lang').hide();
+        $(`lang[${lang}]`).show();
+        $('html').attr('lang', lang );
     }
     save()
     {
