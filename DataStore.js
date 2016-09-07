@@ -29,66 +29,6 @@ window.Schema = class Schema {
 				? val[0]
 				: val;
 	}
-	extract_old( json, node )
-	{
-		var ctx = node,
-			target = {};
-		var make = (ctx)=>
-			Object.getOwnPropertyNames( json )
-				.map( key=> {
-					if( key !== '@selector' && key !== '@xpath' )
-					{
-						if( typeof json[key] == 'string' )
-						{
-							target[key] = this.resolveProperty( json[key], ctx );
-							// var val = json[key],
-							// 	handlers = [];
-							// if( val.indexOf('=>') !== -1 )
-							// {
-							// 	var a = val.split('=>');
-							// 	val = a.shift();
-							// 	handlers = a.map( js=> new Function('item,index,list',`return `+js) );
-							// }
-							// if( val.indexOf('xpath:') === 0 )
-							// {
-							// 	var a = val.split(':'),
-							// 		path = a[1]
-							// 	a.shift();
-							// 	val = a.join(':');
-							// 	val = this.xpath( val, ctx );
-							// }
-							// handlers.length &&
-							// 	handlers.map(f=>(val = f(val)));
-							
-							// target[key] = val;
-						}
-						else
-						{
-							target[key] = json[key];
-						}
-					}
-				})
-		
-		if( json['@selector'] )
-		{
-			ctx = this.selector( json['@selector'], node );
-		}
-		if( json['@xpath'] )
-		{
-			ctx = this.xpath( json['@xpath'], node );
-		}
-		if( Array.isArray(ctx) )
-		{
-			var arr = Array(ctx.length).fill({});
-			ctx.map( (_ctx,i)=> {
-				target = arr[i];
-				make(_ctx,i) ;
-			})
-			return target;
-		}
-		else
-			make(ctx)
-	}
 	extract( json, nodes )
 	{
 		if( json['@selector'] )
@@ -260,8 +200,8 @@ window.Store = class Store {
                 <ul id="collections"></ul>
                 <hr/>
                 <button id="settingsBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSettings()">
-                	<span lang="en">Settings</span>
-                	<span lang="fr">Préférences</span>
+                	<lang en>Settings</lang>
+                	<lang fr>Préférences</lang>
             	</button>
             </nav>
         `
