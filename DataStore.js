@@ -102,7 +102,7 @@ class Store {
         Store.deps.css.map( url => document.write(`<link rel="stylesheet" type="text/css" href="${url}">`) )
         Store.deps.js.map( url => document.write(`<script type="text/javascript" src="${url}" onload="store.start()"></script>`) )
         console.log(Store.deps, document);
-        document.write(`<title>Miaow online</title>`);
+        document.write(`<title>Miaow online - ${parentWindow.document.location.host}</title>`);
         this.render();
         
         this.data = localStorage.store_data ? JSON.parse(localStorage.store_data) : {};
