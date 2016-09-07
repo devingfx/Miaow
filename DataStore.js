@@ -103,7 +103,16 @@ class Store {
         Store.deps.js.map( url => document.write(`<script type="text/javascript" src="${url}" onload="store.start()"></script>`) )
         console.log(Store.deps, document);
         document.write(`<title>Miaow online - ${parentWindow.document.location.host}</title>`);
-        this.render();
+        document.documentElement.appendChild(document.createElement('body'))
+        document.body.innerHTML = `
+            <nav>
+                <img src="//devingfx.github.io/Miaow/Amusing black cat vector 04.svg"/>
+                <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()">Cette page</button>
+                <hr/>
+                <!--span>Collections</span-->
+                <ul id="collections"></ul>
+            </nav>
+        `
         
         this.data = localStorage.store_data ? JSON.parse(localStorage.store_data) : {};
         Object.getOwnPropertyNames(this.data)
@@ -111,18 +120,6 @@ class Store {
         
         parentWindow.addEventListener("beforeunload", this.onPageChange.bind(this) );
         this.onPageChange();
-    }
-    render()
-    {
-        document.documentElement.appendChild(document.createElement('body'))
-        document.body.innerHTML = `
-            <nav>
-                <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()">Cette page</button>
-                <hr/>
-                <!--span>Collections</span-->
-                <ul id="collections"></ul>
-            </nav>
-        `
     }
     start()
     {
