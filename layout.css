@@ -25,7 +25,7 @@ select {
     }
 button {
     background: white;
-    color: #f56b2a;
+    color: currentColor;
     border: 1px solid;
     outline: none;
     text-transform: uppercase;
@@ -36,11 +36,10 @@ button {
     border-radius: 4px;
 }
     button:hover, button.selected {
-        background: #f56b2a;
-        color: white;
+        background: currentColor;
     }
     button.important {
-        box-shadow: inset 0 0 0px 2px #f56b2a;
+        box-shadow: inset 0 0 0px 2px;
     }
     button.important:hover {
         box-shadow: inset 0 0 0px 2px white;
@@ -50,14 +49,14 @@ nav {
     width: 150px;
     top: -20px;
     bottom: -20px;
-    background: #f56b2a;
-    color: white;
+    background: currentColor;
     box-shadow: inset -5px 0 10px rgba(0,0,0,0.3);
     z-index: 1;
 }
     nav .logo {
 	    width: 220px;
 	    margin: -6px 0 0px -40px;
+	    opacity: 0.8;
     }
     nav button {
         background: none;
@@ -70,7 +69,7 @@ nav {
     }
         nav button:hover, nav button.selected {
             background: #fafafa;
-            color: #f56b2a;
+            color: currentColor;
             box-shadow: -8px 5px 10px rgba(0,0,0,0.3);
             text-shadow: 0 0 0;
         }

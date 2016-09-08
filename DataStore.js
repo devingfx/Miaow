@@ -193,10 +193,11 @@ window.Store = class Store {
         document.documentElement.appendChild(document.createElement('body'))
         var themeColor = parentWindow.document.querySelector('meta[name="theme-color"]');
         themeColor = themeColor ? themeColor.content : "#888";
+        document.body.style.color = themeColor;
         document.body.innerHTML = `
-            <nav style="background-color:${themeColor}">
+            <nav>
                 <img class="logo" src="//devingfx.github.io/Miaow/logo.svg"/>
-                <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()">Cette page</button>
+                <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()"><lang en>Current page</lang><lang fr>Cette page</lang></button>
                 <hr/>
                 <!--span>Collections</span-->
                 <ul id="collections"></ul>
