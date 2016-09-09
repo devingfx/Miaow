@@ -93,13 +93,15 @@ nav {
     	bottom: 20px;
     	border-top: 1px dashed rgba(255,255,255,0.3);
     }
-section {
+window {
     position: fixed;
-    width: calc(100% - 150px);
-    height: 100%;
-    right: 0;
+    display: flex;
+	min-width: 300px;
+    min-height: 250px;
+    background: #fafafa;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
-    section > header {
+    window > header {
         position: absolute;
         top: 0;
         left: 0;
@@ -111,16 +113,24 @@ section {
         padding: 5px 15px;
         z-index: 1;
     }
-        section > header h1 {
+        window > header h1 {
             color: #1a1a1a;
             margin: 0;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
             width: 100%;
+            font-size: 1.2em;
         }
-        section > header span { color: grey; }
-    section > .content {
+        window > header span { color: grey; }
+		window > header > controls {
+	        float: right;
+		}
+			window > header > controls > button {
+			    padding: 0 5px;
+			    border: none;
+			}
+    window > .content {
         position: absolute;
         top: 110px;
         bottom: 50px;
@@ -128,7 +138,8 @@ section {
         padding: 15px;
         overflow: auto;
     }
-    section > footer {
+    window > footer {
+        order: -1;
         position: absolute;
         bottom: 0;
         height: 50px;
@@ -138,6 +149,19 @@ section {
         padding: 10px;
         border-top: 1px solid #ccc;
     }
+    window > footer:empty + .content { bottom: 0; }
+    window > footer:empty {
+        display: none;
+    }
+    
+	window[page] {
+	    width: calc(100% - 150px);
+	    height: 100%;
+	    right: 0;
+	}
+		window[page] > header { height: 110px; }
+			window[page] > header > controls { display: none; }
+	    window[page] > .content { top: 110px; }
 pre v {
     border: 1px solid #ccc;
     background: white;

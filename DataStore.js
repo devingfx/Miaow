@@ -113,13 +113,53 @@ window.Store = class Store {
             }
         }
     }
+    static get Window()
+    {
+        return class Window extends Store.Element {
+            constructor()
+            {
+                // debugger;
+                super('<window>');
+                // this.$el = $('<section>');
+                // this.$el[0].ctrl = this;
+                // this.$el[0].innerHTML = `
+                this.html(`
+                    <header>
+                        <h1></h1>
+                        <span></span>
+                        <controls>
+	                        <button><icon min>_</icon></button>
+	                        <button><icon max>+</icon></button>
+	                        <button><icon restore>o</icon></button>
+	                        <button><icon close>x</icon></button>
+                        </controls>
+                    </header>
+                    <div class="content"></div>
+                    <footer></footer>
+                `);
+                this.$header = this.find('header');
+                this.$content = this.find('.content');
+                this.$footer = this.find('footer');
+            }
+            get title()     { return this.$header.find('h1').text() }
+            set title( v )  { this.$header.find('h1').append(v) }
+            get title2()    { return this.$header.find('span').text() }
+            set title2( v ) { this.$header.find('span').append(v) }
+            get head()      { return this.$header }
+            set head( v )   { this.$header.append(v) }
+            get content()   { return this.$content }
+            set content( v ){ this.$content.append(v) }
+            get footer()    { return this.$footer }
+            set footer( v ) { this.$footer.append(v) }
+        }
+    }
     static get Page()
     {
         return class Page extends Store.Element {
             constructor()
             {
                 // debugger;
-                super('<section>');
+                super('<window>');
                 // this.$el = $('<section>');
                 // this.$el[0].ctrl = this;
                 // this.$el[0].innerHTML = `
