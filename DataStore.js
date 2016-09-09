@@ -84,8 +84,119 @@ window.Schema = class Schema {
 window.Schema.document = Symbol`document`;
 window.Schema.schema = Symbol`schema`;
 
+var cat = {};
+cat.Element = class Element {
+    constructor( tag )
+    {
+        this._target = $( tag );
+        return new Proxy( this, {
+            get: (o,k) => Reflect.get( Reflect.has(this._target,k) ? this._target : o, k ),
+            set: (o,k,v) => Reflect.set( Reflect.has(this._target,k) ? this._target : o, k, v )
+        } )
+    }
+}
+cat.Window = class Window extends cat.Element {
+    constructor( html )
+    {
+        // debugger;
+        super( html || '<window>' );
+        // this.$el = $('<section>');
+        // this.$el[0].ctrl = this;
+        // this.$el[0].innerHTML = `
+        this.html(`
+            <header>
+                <h1></h1>
+                <span></span>
+                <controls>
+                    <button><icon min>_</icon></button>
+                    <button><icon max>+</icon></button>
+                    <button><icon restore>o</icon></button>
+                    <button><icon close>x</icon></button>
+                </controls>
+            </header>
+            <div class="content"></div>
+            <footer></footer>
+        `);
+        this.$header = this.find('header');
+        this.$content = this.find('.content');
+        this.$footer = this.find('footer');
+    }
+    get icon()     { return this.$header.find('> icon') }
+    set icon( v )  { this.$header.find('h1').append(v) }
+    get title()     { return this.$header.find('h1').text() }
+    set title( v )  { this.$header.find('h1').append(v) }
+    get head()      { return this.$header }
+    set head( v )   { this.$header.append(v) }
+    get content()   { return this.$content }
+    set content( v ){ this.$content.append(v) }
+    get footer()    { return this.$footer }
+    set footer( v ) { this.$footer.append(v) }
+}
+cat.Page = class Page extends cat.Window {
+    constructor( html )
+    {
+        // debugger;
+        super( html || '<window page>' );
+        // this.$el = $('<section>');
+        // this.$el[0].ctrl = this;
+        // this.$el[0].innerHTML = `
+        this.head = '<span>';
+        // this.html(`
+        //     <header>
+        //         <h1></h1>
+        //         <span></span>
+        //     </header>
+        //     <div class="content"></div>
+        //     <footer></footer>
+        // `);
+        // this.$header = this.find('header');
+        // this.$content = this.find('.content');
+        // this.$footer = this.find('footer');
+    }
+    // get title()     { return this.$header.find('h1').text() }
+    // set title( v )  { this.$header.find('h1').append(v) }
+    get title2()    { return this.$header.find('span').text() }
+    set title2( v ) { this.$header.find('span').append(v) }
+    // get head()      { return this.$header }
+    // set head( v )   { this.$header.append(v) }
+    // get content()   { return this.$content }
+    // set content( v ){ this.$content.append(v) }
+    // get footer()    { return this.$footer }
+    // set footer( v ) { this.$footer.append(v) }
+}
+cat.Editor = class Editor {
+    constructor( before, data )
+    {
+        this.$el = $('<pre>');
+        this.$el[0].ctrl = this;
+        this.$el[0].innerHTML = `<header>${before}</header>` + this.stringify(data);
+    }
+    stringify( o )
+    {
+        return '<s>{</s>\n' +
+            Object.getOwnPropertyNames(o)
+                .map( n=> `<s>"</s><p contenteditable="true">${n}</p><s>"</s><k>: </k>` +
+                (typeof o[n] == 'string'
+                 ? JSON.stringify(o[n]).replace(/^(")(.*)(")$/, '<s>$1</s><v contenteditable="true">$2</v><s>$3</s>')
+                 : `<v contenteditable="true">${JSON.stringify(o[n])}</v>`
+                )).join('<s>,</s>\n')
+        + '<s>};</s>';
+    }
+}
+cat.Navigation = class Navigation extends cat.Element {
+    constructor()
+    {
+        super('<nav>');
+    }
+    updateCollections()
+    {
+        this.$collections.empty();
+        Object.getOwnPropertyNames(this.data)
+            .map( n=> this.$collections.append(`<li><button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showInTable(store['${n}'])">${n}</button></li>`) )
+    }
+}
 
-window.Store = class Store {
+cat.Store = class Store {
     static get deps()
     {
         return {
@@ -98,132 +209,6 @@ window.Store = class Store {
                 "//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
                 "//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
             ]
-        }
-    }
-    static get Element()
-    {
-        return class Element {
-            constructor( tag )
-            {
-                this._target = $( tag );
-                return new Proxy( this, {
-                    get: (o,k) => Reflect.get( Reflect.has(this._target,k) ? this._target : o, k ),
-                    set: (o,k,v) => Reflect.set( Reflect.has(this._target,k) ? this._target : o, k, v )
-                } )
-            }
-        }
-    }
-    static get Window()
-    {
-        return class Window extends Store.Element {
-            constructor()
-            {
-                // debugger;
-                super('<window>');
-                // this.$el = $('<section>');
-                // this.$el[0].ctrl = this;
-                // this.$el[0].innerHTML = `
-                this.html(`
-                    <header>
-                        <h1></h1>
-                        <span></span>
-                        <controls>
-	                        <button><icon min>_</icon></button>
-	                        <button><icon max>+</icon></button>
-	                        <button><icon restore>o</icon></button>
-	                        <button><icon close>x</icon></button>
-                        </controls>
-                    </header>
-                    <div class="content"></div>
-                    <footer></footer>
-                `);
-                this.$header = this.find('header');
-                this.$content = this.find('.content');
-                this.$footer = this.find('footer');
-            }
-            get icon()     { return this.$header.find('> icon') }
-            set icon( v )  { this.$header.find('h1').append(v) }
-            get title()     { return this.$header.find('h1').text() }
-            set title( v )  { this.$header.find('h1').append(v) }
-            get head()      { return this.$header }
-            set head( v )   { this.$header.append(v) }
-            get content()   { return this.$content }
-            set content( v ){ this.$content.append(v) }
-            get footer()    { return this.$footer }
-            set footer( v ) { this.$footer.append(v) }
-        }
-    }
-    static get Page()
-    {
-        return class Page extends Store.Window {
-            constructor()
-            {
-                // debugger;
-                super('<window page>');
-                // this.$el = $('<section>');
-                // this.$el[0].ctrl = this;
-                // this.$el[0].innerHTML = `
-                this.head = '<span>';
-                // this.html(`
-                //     <header>
-                //         <h1></h1>
-                //         <span></span>
-                //     </header>
-                //     <div class="content"></div>
-                //     <footer></footer>
-                // `);
-                // this.$header = this.find('header');
-                // this.$content = this.find('.content');
-                // this.$footer = this.find('footer');
-            }
-            // get title()     { return this.$header.find('h1').text() }
-            // set title( v )  { this.$header.find('h1').append(v) }
-            get title2()    { return this.$header.find('span').text() }
-            set title2( v ) { this.$header.find('span').append(v) }
-            // get head()      { return this.$header }
-            // set head( v )   { this.$header.append(v) }
-            // get content()   { return this.$content }
-            // set content( v ){ this.$content.append(v) }
-            // get footer()    { return this.$footer }
-            // set footer( v ) { this.$footer.append(v) }
-        }
-    }
-    static get Editor()
-    {
-        return class Editor {
-            constructor( before, data )
-            {
-                this.$el = $('<pre>');
-                this.$el[0].ctrl = this;
-                this.$el[0].innerHTML = `<header>${before}</header>` + this.stringify(data);
-            }
-            stringify( o )
-            {
-                return '<s>{</s>\n' +
-                    Object.getOwnPropertyNames(o)
-                        .map( n=> `<s>"</s><p contenteditable="true">${n}</p><s>"</s><k>: </k>` +
-                        (typeof o[n] == 'string'
-                         ? JSON.stringify(o[n]).replace(/^(")(.*)(")$/, '<s>$1</s><v contenteditable="true">$2</v><s>$3</s>')
-                         : `<v contenteditable="true">${JSON.stringify(o[n])}</v>`
-                        )).join('<s>,</s>\n')
-                + '<s>};</s>';
-            }
-        }
-    }
-    static get Navigation()
-    {
-        return class Navigation {
-            constructor()
-            {
-                this.$el = $('<nav>');
-                this.$el[0].ctrl = this;
-            }
-            updateCollections()
-            {
-                this.$collections.empty();
-                Object.getOwnPropertyNames(this.data)
-                    .map( n=> this.$collections.append(`<li><button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showInTable(store['${n}'])">${n}</button></li>`) )
-            }
         }
     }
     constructor()
@@ -261,7 +246,7 @@ window.Store = class Store {
     }
     start()
     {
-        if( this.$nav ) return;
+        if( typeof $ == 'undefined' || this.$nav ) return;
         this.$nav = $('nav').eq(0);
         this.$collections = $('#collections');
         // this.$main = $('#main');
@@ -272,38 +257,38 @@ window.Store = class Store {
     {
         // parentWindow.location.pathname
     }
-    addItem()
-    {
-        var doc = parentWindow.document,
-            uri = doc.location.pathname,
-            pageid = uri.match(/\/(.*?)\/(.*?)\.(html|htm)/),
-            cat = pageid[1], id = pageid[2];
-        // console.log(cat,id);
-        if( cat && id )
-        {
-            this.data[cat] = this.data[cat] || {};
-            this.data[cat][id] = this.data[cat][id] || { url: uri };
-            this.data[cat][id].title = doc.title;
+    // addItem()
+    // {
+    //     var doc = parentWindow.document,
+    //         uri = doc.location.pathname,
+    //         pageid = uri.match(/\/(.*?)\/(.*?)\.(html|htm)/),
+    //         cat = pageid[1], id = pageid[2];
+    //     // console.log(cat,id);
+    //     if( cat && id )
+    //     {
+    //         this.data[cat] = this.data[cat] || {};
+    //         this.data[cat][id] = this.data[cat][id] || { url: uri };
+    //         this.data[cat][id].title = doc.title;
             
-            Array.from( doc.querySelectorAll('#adview [itemprop]') )
-                .map( n => {
-                    console.log(n);
-                    var a = n.attributes;
-                    this.data[cat][id][a.itemprop.value] = (a.content ? a.content.value : n.textContent).trim();
+    //         Array.from( doc.querySelectorAll('#adview [itemprop]') )
+    //             .map( n => {
+    //                 console.log(n);
+    //                 var a = n.attributes;
+    //                 this.data[cat][id][a.itemprop.value] = (a.content ? a.content.value : n.textContent).trim();
                     
-                });
-            Array.from( doc.querySelectorAll('#adview .line .property, #adview .line .value:not(.large-hidden)') )
-                .map( (n,i,a)=> {
-                    console.log(n);
-                    if( i%2 === 0 )
-                        this.data[cat][id][n.innerText] = a[i+1].innerHTML.replace(/<br\s*\/*>/g,'\n');
-                })
+    //             });
+    //         Array.from( doc.querySelectorAll('#adview .line .property, #adview .line .value:not(.large-hidden)') )
+    //             .map( (n,i,a)=> {
+    //                 console.log(n);
+    //                 if( i%2 === 0 )
+    //                     this.data[cat][id][n.innerText] = a[i+1].innerHTML.replace(/<br\s*\/*>/g,'\n');
+    //             })
             
-            this.panel.document.write('<pre style="width:100%;overflow:auto">'+JSON.stringify(this.data[cat][id],null,'\t')+'</pre>');
+    //         this.panel.document.write('<pre style="width:100%;overflow:auto">'+JSON.stringify(this.data[cat][id],null,'\t')+'</pre>');
             
-            this.save();
-        }
-    }
+    //         this.save();
+    //     }
+    // }
     extract()
     {
         var doc = parentWindow.document,
@@ -366,11 +351,11 @@ window.Store = class Store {
             }
             // console.log(collection, id, data);
             
-            var page = new Store.Page, editor;
+            var page = new cat.Page, editor;
             page.title = doc.title;
             page.title2 = uri;
             page.content = (
-                    editor = new Store.Editor(`
+                    editor = new cat.Editor(`
                         store.data["${collection}"] = store.data["${collection}"] || {};
                         store.data["${collection}"][${id}] = `,
                         data)
@@ -414,7 +399,7 @@ window.Store = class Store {
         var colNum = 8;
         // this.$main.empty();
         // var $table = $('<table class="display compact" cellspacing="0" width="100%"><tfoot><tr></tr></tfoot></table>');
-        var page = new Store.Page;
+        var page = new cat.Page;
         page.title = 'collection';
         page.content = `
         <table class="display" cellspacing="0" width="100%">
@@ -504,7 +489,7 @@ window.Store = class Store {
     }
     showSettings()
     {
-		var page = new Store.Page, editor;
+		var page = new cat.Page, editor;
 		
 	    page.title = `<lang en>Settings</lang><lang fr>Préférences</lang>`;
 	    page.title2 = `<lang en>Language</lang><lang fr>Langue</lang>: ${$('html').attr('lang')}`;
@@ -620,15 +605,5 @@ window.Store = class Store {
     }
 }
 
-var store = new Store;
-
-
-
-function panel()
-{
-    var win = window.open(null,'LBCDataStore','menubar=no,location=no,resizable=yes,scrollbars=no,status=no'); 
-    win.parentWindow = window;
-    win.eval('window.store = new (eval(localStorage.Store));' )
-    return win; 
-}
+var store = new cat.Store;
 
