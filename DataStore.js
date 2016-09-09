@@ -105,8 +105,8 @@ cat.Window = class Window extends cat.Element {
         // this.$el[0].innerHTML = `
         this.html(`
             <header>
+                <icon></icon>
                 <h1></h1>
-                <span></span>
                 <controls>
                     <button><icon min>_</icon></button>
                     <button><icon max>+</icon></button>
