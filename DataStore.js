@@ -94,7 +94,7 @@ window.Store = class Store {
                 "//cdn.datatables.net/1.10.12/css/jquery.dataTables.css"
             ],
             js: [
-                "//devingfx.github.io/Miaow/lang.js",
+                `//devingfx.github.io/Miaow/lang.js`,
                 "//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
                 "//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
             ]
@@ -188,7 +188,7 @@ window.Store = class Store {
     constructor()
     {
         Store.deps.css.map( url => document.write(`<link rel="stylesheet" type="text/css" href="${url}?${Math.random()}">`) )
-        Store.deps.js.map( url => document.write(`<script type="text/javascript" src="${url}" onload="store.start()"></script>`) )
+        Store.deps.js.map( url => document.write(`<script type="text/javascript" src="${url}?${Math.random()}" onload="store.start()"></script>`) )
         console.log(Store.deps, document);
         document.write(`<title>Miaow online - ${parentWindow.document.location.host}</title>`);
         document.documentElement.appendChild(document.createElement('body'))
@@ -220,6 +220,7 @@ window.Store = class Store {
     }
     start()
     {
+        if( this.$nav ) return;
         this.$nav = $('nav').eq(0);
         this.$collections = $('#collections');
         // this.$main = $('#main');
