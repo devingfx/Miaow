@@ -35,15 +35,19 @@ LANG[LANG[LANG.DEFAULT]]={}
 language = navigator.language || LANG[LANG.DEFAULT];
 
 
-LANG[LANG[LANG.DEFAULT]][mess]=mess;
 
 
 // in a file
-LANG.en = {}
-LANG.fr = {}
-LANG['en'][mess]
-LANG['en']['Save'] = 'Save'
-LANG['fr']['Save'] = 'Enregistrer'
+LANG.en = {
+	"This page": "This page",
+	"Save": "Save",
+	"Cancel": "Cancel"
+};
+LANG.fr = {
+	"This page": "Cette page",
+	"Save": "Enregistrer",
+	"Cancel": "Annuler"
+};
 
-LANG('Save') // <lang en>Save</lang><lang fr>Enregistrer</lang>
-LANG('Cancel') // <lang en>Cancel</lang> + LANG['en']['Cancel'] = 'Cancel'
+// LANG('Save') // <lang en>Save</lang><lang fr>Enregistrer</lang>
+// LANG('Cancel') // <lang en>Cancel</lang> + LANG['en']['Cancel'] = 'Cancel'
