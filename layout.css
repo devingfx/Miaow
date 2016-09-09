@@ -5,6 +5,12 @@
 	box-sizing: border-box;
 }
 
+[lang=fr] [langFR] { font-size: 0 }
+[lang=fr] [langFR]:after { content: attr(langFR);font-size: initial }
+
+[lang=en] [langEN] { font-size: 0 }
+[lang=en] [langEN]:after { content: attr(langEN);font-size: initial }
+
 body {
     margin: 0;
     background: #fafafa;

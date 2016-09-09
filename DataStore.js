@@ -94,6 +94,7 @@ window.Store = class Store {
                 "//cdn.datatables.net/1.10.12/css/jquery.dataTables.css"
             ],
             js: [
+                "//devingfx.github.io/Miaow/lang.js",
                 "//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
                 "//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
             ]
@@ -197,7 +198,8 @@ window.Store = class Store {
         document.body.innerHTML = `
             <nav>
                 <img class="logo" src="//devingfx.github.io/Miaow/logo.svg"/>
-                <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()"><lang en>Current page</lang><lang fr>Cette page</lang></button>
+                <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()"
+                		langfr="Cette page">Current page</button>
                 <hr/>
                 <!--span>Collections</span-->
                 <ul id="collections"></ul>
@@ -486,6 +488,70 @@ window.Store = class Store {
 	    }
     }
     
+    
+  //  activeOverlay( sel=> {
+  //  	var getSelector = n=>`${ n.className || n.id
+		// 					? '' 
+		// 					: n.localName 
+		// 		    	}${ n.id
+		// 		    		? '#' + n.id
+		// 		    		: ''
+		// 		    	}${ !n.id && n.className
+		// 		    		? '.' + n.className
+		// 		    					.split(' ')
+		// 		    					.join('.')
+	 //   					: ''
+		// 		    	}`
+  //  	  , loopSelectors=n=> {
+	 //   		var sels=[getSelector(n)];
+		// 		while(n!=n.ownerDocument.body&&!n.id)
+		// 		{
+		// 			n=n.parentNode;
+		// 			sels.push(getSelector(n))
+					
+		// 		}
+		// 		return sels.reverse().join(' > ')
+	 //   	}
+		
+		// var selector = loopSelectors( sel );
+		
+		
+  //  })
+    activeOverlay(cb)
+    {
+    	var overlay = this._overlay = parentWindow.document.createElement('overlay');
+		overlay.innerHTML = `<style>
+		overlay {
+			position:fixed;
+			z-index:999999999;
+			border: 10000px solid rgba(0,0,0,0.3);
+		    margin: -10000px;
+		    pointer-events: none;
+		    box-sizing: content-box;
+		    transition:all 0.2s ease
+		}</style>`;
+		parentWindow.document.body.appendChild( overlay );
+		
+		var onClick = e=> {
+				parentWindow.removeEventListener('mousemove', onMove);
+				parentWindow.removeEventListener('click', onClick);
+				overlay.remove();
+				delete overlay;
+				cb( e.target );
+			}
+		  , onMove = e=> {
+			    var rect = e.target.getBoundingClientRect();
+			    overlay.style.top = rect.top+'px';
+			    overlay.style.height = rect.height+'px';
+			    overlay.style.left = rect.left+'px';
+			    overlay.style.width = rect.width+'px';
+			}
+		  ;
+		parentWindow.addEventListener('mousemove', onMove );
+		parentWindow.addEventListener('click', onClick );
+		// parentWindow.addEventListener('click', onClick, true );
+    }
+    
     update()
     {
         this.data = localStorage.store_data ? JSON.parse(localStorage.store_data) : {};
@@ -505,6 +571,7 @@ window.Store = class Store {
         $(`lang[${lang}]`).show();
         $('html').attr('lang', lang );
     }
+    
     save()
     {
         localStorage.store_data = JSON.stringify( this.data );
