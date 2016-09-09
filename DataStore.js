@@ -536,7 +536,7 @@ window.Store = class Store {
 				parentWindow.removeEventListener('mousemove', onMove);
 				parentWindow.removeEventListener('click', onClick);
 				overlay.remove();
-				delete overlay;
+				// delete overlay;
 				cb( e.target );
 			}
 		  , onMove = e=> {
