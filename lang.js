@@ -3,15 +3,16 @@ Object.defineProperty( window, 'language', {
 	set: ( L )=> {
         L = L || document.documentElement.attributes.lang.value;
         
-        Array.From( document.querySelectorAll('lang') )
+        Array.from( document.querySelectorAll('lang') )
         	.map( lang=> (lang.style.display='none') );
         	
-        Array.From( document.querySelectorAll(`lang[${L}]`) )
+        Array.from( document.querySelectorAll(`lang[${L}]`) )
         	.map( lang=> (lang.style.display='inline') );
         
         document.documentElement.setAttribute( 'lang', L );
 	}
 })
+
 var LANG = mess=> {
 	var out='';
 	if( LANG[LANG[LANG.DEFAULT]][mess] )
