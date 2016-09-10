@@ -196,6 +196,14 @@ cat.Navigation = class Navigation extends cat.Element {
     }
 }
 
+/*
+
+db._.mixin({
+  type: function(collection,Type) {
+    console.log(arguments);return this.filter(collection,{'@type': Type})
+  }
+})
+*/
 cat.Store = class Store {
     static get deps()
     {
@@ -206,8 +214,10 @@ cat.Store = class Store {
             ],
             js: [
                 `//devingfx.github.io/Miaow/lang.js`,
-                `https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js`,
-                `//devingfx.github.io/Miaow/lowdb.minou.js`,
+                // `https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js`,
+                `https://unpkg.com/lodash@4/lodash.min.js`,
+                // `//devingfx.github.io/Miaow/lowdb.minou.js`,
+                `https://unpkg.com/lowdb/dist/lowdb.min.js`,
                 "//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
                 "//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
             ]
@@ -239,21 +249,36 @@ cat.Store = class Store {
             </nav>
         `
         
-        this.data = localStorage.store_data ? JSON.parse(localStorage.store_data) : {};
-        Object.getOwnPropertyNames(this.data)
-            .map( n=> Object.defineProperty(this, n, {get: ()=> this.data[n]}) )
+        // Object.getOwnPropertyNames(this.data)
+        //     .map( n=> Object.defineProperty(this, n, {get: ()=> this.data[n]}) )
         
         parentWindow.addEventListener("beforeunload", this.onPageChange.bind(this) );
-        this.onPageChange();
     }
     start()
     {
         if( typeof $ == 'undefined' || this.$nav ) return;
+        
+        this.data = low('store_data');
+        this.data._.mixin({
+			type: function( collection, Type )
+			{
+				return this.filter(collection,{'@type': Type})
+			},
+			x_add: function( collection, item )
+			{
+				if( this.isString(collection) )
+					collection = this.get(collection);
+				if( !this.isArray(collection)) return object;
+				return this.push( collection, item )
+			}
+		});
+		
         this.$nav = $('nav').eq(0);
         this.$collections = $('#collections');
         // this.$main = $('#main');
         this.updateCollections();
         this.updateLanguage( navigator.language );
+        this.onPageChange();
     }
     onPageChange()
     {
@@ -373,6 +398,7 @@ cat.Store = class Store {
             page.title2 = uri;
             page.content = (
                     editor = new cat.Editor(`
+                    	store.data.get("${collection}").push()
                         store.data["${collection}"] = store.data["${collection}"] || {};
                         store.data["${collection}"][${id}] = `,
                         data)
@@ -384,8 +410,10 @@ cat.Store = class Store {
             <button onclick="">Supprimer</button>`;
             this.showPage( page );
             page._target[0].saveData = ()=> {
-                eval( editor.$el.text() );
-                store.save();
+                var data = JSON.parse( editor.$el.text() );
+                !this.data.has(collection) && this.data.set(collection) && this.updateCollections();
+                this.data.get(collection).set( data['@id'] data )
+                // store.save();
                 store.updateCollections();
             }
             // var $section = $('<section>');
@@ -605,7 +633,7 @@ cat.Store = class Store {
     updateCollections()
     {
         this.$collections.empty();
-        Object.getOwnPropertyNames(this.data)
+        Object.getOwnPropertyNames(this.data.keys().value())
             .map( n=> this.$collections.append(`<li><button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showInTable(store['${n.replace(/'/g,"\\'")}'])">${n}</button></li>`) )
     }
     updateLanguage( lang )
@@ -624,3 +652,9 @@ cat.Store = class Store {
 
 var store = new cat.Store;
 
+/*
+
+
+
+
+*/
