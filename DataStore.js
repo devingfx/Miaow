@@ -206,7 +206,7 @@ cat.Store = class Store {
             ],
             js: [
                 `//devingfx.github.io/Miaow/lang.js`,
-                `//devingfx.github.io/Miaow/lowdash.core.minou.js`,
+                `//devingfx.github.io/Miaow/lodash.core.minou.js`,
                 `//devingfx.github.io/Miaow/lowdb.minou.js`,
                 "//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
                 "//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
