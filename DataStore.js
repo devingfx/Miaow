@@ -206,6 +206,7 @@ cat.Store = class Store {
             ],
             js: [
                 `//devingfx.github.io/Miaow/lang.js`,
+                `https://typicode.github.io/lowdb/bundle.js`,
                 "//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
                 "//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
             ]
@@ -321,6 +322,21 @@ cat.Store = class Store {
         
         if( collection && id )
         {}
+    }
+    extract2()
+    {
+    	var doc = parentWindow.document,
+            uri = doc.location.pathname,
+            // pageid = uri.match(/\/(.*?)\/(.*?)\.(html|htm)/),
+            // collection = pageid[1], 
+            // id = pageid[2],
+            schemas = this.schemas = this.schemas || JSON.parse(localStorage.store_schemas || {}),
+            data;
+        
+        for(var search in schemas)
+        {
+        	schemas[search] = new SchemaExtractor( schemas[search], doc )
+        }
     }
     addPage()
     {
