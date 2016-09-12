@@ -709,7 +709,7 @@ const SchemaListItem = new Schema({
 	"url": ""
 })
 
-SchemaListItem.from( {item:item} )
+// SchemaListItem.from( {item:item} )
 
 var store = new cat.Store;
 
