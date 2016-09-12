@@ -698,7 +698,7 @@ window.Schema = class Schema {
 const SchemaList = new Schema({
 	"@context": "http://schema.org/",
 	"@type": "ItemList",
-	"itemListElement": "=>SchemaListItem.from(item)"
+	"itemListElement": "=>SchemaListItem.from(item)",
 	"itemListElement": item=>SchemaListItem.from(item)
 })
 const SchemaListItem = new Schema({
