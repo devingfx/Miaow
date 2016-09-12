@@ -1,10 +1,15 @@
 
-window.Schema = class Schema {
+window.SchemaExtractor = class SchemaExtractor {
 	constructor( json, doc )
 	{
-		this[Schema.document] = doc || document;
 		this[Schema.schema] = json;
-		this.result = this.extract( json, [(doc || document).documentElement] );
+		this[Schema.document] = doc || document;
+		if( this[Schema.document] )
+			return this.from( this[Schema.document] );
+	}
+	from( thing )
+	{
+		return this.extract( this[Schema.schema], Array.isArray(thing) ? thing : [thing] )
 	}
 	resolveProperty( val, node )
 	{
@@ -13,9 +18,16 @@ window.Schema = class Schema {
 		{
 			var a = val.split('=>');
 			val = a.shift();
-			handlers = a.map( js=> new Function('item,index,list',`return `+js) );
+			handlers = a.map( js=> new Function('item,index,list',`return `+js).bind(node) );
 		}
-		if( val.indexOf('xpath:') === 0 )
+		if( val.indexOf('@selector:') === 0 )
+		{
+			var a = val.split(':');
+			a.shift();
+			val = a.join(':');
+			val = this.selector( val, node );
+		}
+		if( val.indexOf('@xpath:') === 0 )
 		{
 			var a = val.split(':');
 			a.shift();
@@ -53,6 +65,7 @@ window.Schema = class Schema {
 															: this.extract( json[key], [node] );
 							break;
 							case 'string': result[key] = this.resolveProperty( json[key], node ); break;
+							case 'function': result[key] = json[key]( node ); break;
 							default: result[key] = json[key]; break;
 						}
 				})
@@ -71,7 +84,8 @@ window.Schema = class Schema {
 	xpath( path, context )
 	{
 		context = context || this[Schema.document];
-		var res = this[Schema.document].evaluate( path, context, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null );
+		
+		var res = context.ownerDocument.evaluate( path, context, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null );
 		var arr = Array(res.snapshotLength).fill(0)
 					.map( (o,i)=> res.snapshotItem(i) );
 		arr = arr.map( n=> n.nodeValue ? n.nodeValue : n );
@@ -81,8 +95,8 @@ window.Schema = class Schema {
 		// 		: arr
 	}
 }
-window.Schema.document = Symbol`document`;
-window.Schema.schema = Symbol`schema`;
+window.SchemaExtractor.document = Symbol`document`;
+window.SchemaExtractor.schema = Symbol`schema`;
 
 var cat = {};
 cat.Element = class Element {
@@ -273,6 +287,10 @@ cat.Store = class Store {
 			}
 		});
 		
+		this.schemas = SchemaList.from( JSON.parse(localStorage['store_schemas']) );
+		this.schemas.itemListElement
+			.map( item=> SchemaListItem.from( item ) )
+		
         this.$nav = $('nav').eq(0);
         this.$collections = $('#collections');
         // this.$main = $('#main');
@@ -361,7 +379,7 @@ cat.Store = class Store {
         
         for(var search in schemas)
         {
-        	schemas[search] = new SchemaExtractor( schemas[search], doc )
+        	schemas[search] = new SchemaExtractor( schemas[search], [doc.documentElement] )
         }
     }
     addPage()
@@ -412,7 +430,7 @@ cat.Store = class Store {
             page._target[0].saveData = ()=> {
                 var data = JSON.parse( editor.$el.text() );
                 !this.data.has(collection) && this.data.set(collection) && this.updateCollections();
-                this.data.get(collection).set( data['@id'] data )
+                this.data.get(collection).set( data['@id'], data );
                 // store.save();
                 store.updateCollections();
             }
@@ -474,7 +492,7 @@ cat.Store = class Store {
                 { data: 'Chevaux', title: 'Chevaux', className: 'select-filter', defaultContent: '' },
                 { data: 'price', title: 'Prix', render: data => data + '€', defaultContent: '' },
                 { data: 'description', title:'Description', className: 'text-filter', defaultContent: '', render: function ( data, type, full, meta ) {
-                    return type === 'display' && data.length > 40 ?
+                    return data && type === 'display' && data.length > 40 ?
                         '<span title="'+data+'">'+data.substr( 0, 38 )+'...</span>' :
                         data;
                     } }
@@ -560,7 +578,11 @@ cat.Store = class Store {
 	    }
     }
     
-    
+    backup( filename )
+    {
+    	filename = filename || 'store_data.bak.json';
+    	saveAs(new Blob([JSON.stringify(this.data,null,'\t')],{type: "text/plain;charset=utf-8"}), filename);
+    }
   //  activeOverlay( sel=> {
   //  	var getSelector = n=>`${ n.className || n.id
 		// 					? '' 
@@ -649,6 +671,45 @@ cat.Store = class Store {
         localStorage.store_data = JSON.stringify( this.data );
     }
 }
+
+window.Schema = class Schema {
+	constructor( json )
+	{
+		this.schema = json;
+		this.schema.toJson = function( pretty )
+		{
+			return JSON.stringify( this, null, pretty ? '\t' : null )
+		}
+		this.schema.toLocalStorage = function( name )
+		{
+			return localStorage[name] = this.toJson();
+		}
+		this.schema.toFile = function( name, type )
+		{
+			// TODO :)
+		}
+	}
+	from( json )
+	{
+		var copy = _(this.schema).cloneDeep();
+		return Object.assign( _(this.schema).cloneDeep(), json || {} );
+	}
+}
+const SchemaList = new Schema({
+	"@context": "http://schema.org/",
+	"@type": "ItemList",
+	"itemListElement": "=>SchemaListItem.from(item)"
+	"itemListElement": item=>SchemaListItem.from(item)
+})
+const SchemaListItem = new Schema({
+	"@context": "http://schema.org/",
+	"@type": "ListItem",
+	"item": {},
+	"name": "",
+	"url": ""
+})
+
+SchemaListItem.from( {item:item} )
 
 var store = new cat.Store;
 
