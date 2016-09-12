@@ -8,7 +8,7 @@ window.SchemaExtractor = class SchemaExtractor {
 	}
 	from( thing )
 	{
-		return this.extract( this[SchemaExtractor.schema], thing ? Array.isArray(thing) ? thing : [thing] : document )
+		return this.extract( this[SchemaExtractor.schema], thing ? Array.isArray(thing) ? thing : [thing] : [document] )
 	}
 	resolveProperty( val, node )
 	{
