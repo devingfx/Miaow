@@ -230,8 +230,8 @@ cat.Store = class Store {
                 `//devingfx.github.io/Miaow/lang.js`,
                 // `https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js`,
                 `https://unpkg.com/lodash@4/lodash.min.js`,
-                // `//devingfx.github.io/Miaow/lowdb.minou.js`,
-                `https://unpkg.com/lowdb/dist/lowdb.min.js`,
+                `//devingfx.github.io/Miaow/lowdb.minou.js`,
+                // `https://unpkg.com/lowdb/dist/lowdb.min.js`,
                 "//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
                 "//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
             ]
