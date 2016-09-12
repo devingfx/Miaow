@@ -2,14 +2,14 @@
 window.SchemaExtractor = class SchemaExtractor {
 	constructor( json, doc )
 	{
-		this[Schema.schema] = json;
-		this[Schema.document] = doc || document;
-		if( this[Schema.document] )
-			return this.from( this[Schema.document] );
+		this[SchemaExtractor.schema] = json;
+		this[SchemaExtractor.document] = doc || document;
+		if( this[SchemaExtractor.document] )
+			return this.from( this[SchemaExtractor.document] );
 	}
 	from( thing )
 	{
-		return this.extract( this[Schema.schema], Array.isArray(thing) ? thing : [thing] )
+		return this.extract( this[SchemaExtractor.schema], Array.isArray(thing) ? thing : [thing] )
 	}
 	resolveProperty( val, node )
 	{
@@ -75,7 +75,7 @@ window.SchemaExtractor = class SchemaExtractor {
 	}
 	selector( sel, context )
 	{
-		context = context || this[Schema.document];
+		context = context || this[SchemaExtractor.document];
 		var res = context.querySelectorAll( sel );
 		var arr = Array.from( res );
 		arr = arr.map( n=> n.nodeValue ? n.nodeValue : n );
@@ -83,7 +83,7 @@ window.SchemaExtractor = class SchemaExtractor {
 	}
 	xpath( path, context )
 	{
-		context = context || this[Schema.document];
+		context = context || this[SchemaExtractor.document];
 		
 		var res = context.ownerDocument.evaluate( path, context, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null );
 		var arr = Array(res.snapshotLength).fill(0)
