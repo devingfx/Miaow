@@ -6,9 +6,11 @@ window.SchemaExtractor = class SchemaExtractor {
 		if( doc )
 			return this.from( doc );
 	}
-	from( thing )
+	from()
 	{
-		return this.extract( this[SchemaExtractor.schema], thing ? Array.isArray(thing) ? thing : [thing] : [document] )
+		var things = Array.from( arguments );
+		things[0] = things[0] || document;
+		return this.extract( this[SchemaExtractor.schema], things )
 	}
 	resolveProperty( val, node )
 	{
@@ -284,8 +286,6 @@ cat.Store = class Store {
 		});
 		
 		this.schemas = SchemaList.from( JSON.parse(localStorage['store_schemas']) );
-		this.schemas.itemListElement
-			.map( item=> SchemaListItem.from( item ) )
 		
         this.$nav = $('nav').eq(0);
         this.$collections = $('#collections');
@@ -668,42 +668,54 @@ cat.Store = class Store {
     }
 }
 
-window.Schema = class Schema {
-	constructor( json )
-	{
-		this.schema = json;
-		this.schema.toJson = function( pretty )
-		{
-			return JSON.stringify( this, null, pretty ? '\t' : null )
-		}
-		this.schema.toLocalStorage = function( name )
-		{
-			return localStorage[name] = this.toJson();
-		}
-		this.schema.toFile = function( name, type )
-		{
-			// TODO :)
-		}
-	}
-	from( json )
-	{
-		var copy = _(this.schema).cloneDeep();
-		return Object.assign( _(this.schema).cloneDeep(), json || {} );
-	}
-}
-const SchemaList = new Schema({
+// window.Schema = class Schema {
+// 	constructor( json )
+// 	{
+// 		this.schema = json;
+// 		this.schema.toJson = function( pretty )
+// 		{
+// 			return JSON.stringify( this, null, pretty ? '\t' : null )
+// 		}
+// 		this.schema.toLocalStorage = function( name )
+// 		{
+// 			return localStorage[name] = this.toJson();
+// 		}
+// 		this.schema.toFile = function( name, type )
+// 		{
+// 			// TODO :)
+// 		}
+// 	}
+// 	from( json )
+// 	{
+// 		var copy = _(this.schema).cloneDeep();
+// 		return Object.assign( _(this.schema).cloneDeep(), json || {} );
+// 	}
+// }
+// const SchemaList = new SchemaExtractor({
+// 	"@context": "http://schema.org/",
+// 	"@type": "ItemList",
+// 	"itemListElement": "=>SchemaListItem.from(item)",
+// 	"itemListElement": item=>SchemaListItem.from(item)
+// })
+const SchemaList = new SchemaExtractor({
 	"@context": "http://schema.org/",
 	"@type": "ItemList",
-	"itemListElement": "=>SchemaListItem.from(item)",
-	"itemListElement": item=>SchemaListItem.from(item)
+	"itemListElement": "=>SchemaListItem.from(...this.itemListElement)"
 })
-const SchemaListItem = new Schema({
+const ListItem = new SchemaExtractor({
 	"@context": "http://schema.org/",
 	"@type": "ListItem",
-	"item": {},
+	"item": "=>this.item",
 	"name": "",
 	"url": ""
 })
+// const SchemaListItem = new SchemaExtractor({
+// 	"@context": "http://schema.org/",
+// 	"@type": "ListItem",
+// 	"item": {},
+// 	"name": "",
+// 	"url": ""
+// })
 
 // SchemaListItem.from( {item:item} )
 
