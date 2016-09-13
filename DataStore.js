@@ -3,18 +3,18 @@ window.SchemaExtractor = class SchemaExtractor {
 	constructor( json, doc )
 	{
 		this[SchemaExtractor.schema] = json;
-		this[SchemaExtractor.schema].toJsonString = function( pretty )
-		{
-			return JSON.stringify( this, null, pretty ? '\t' : null )
-		}
-		this[SchemaExtractor.schema].toLocalStorage = function( name )
-		{
-			return localStorage[name] = this.toJsonString();
-		}
-		this[SchemaExtractor.schema].toFile = function( name, type )
-		{
-			// TODO :)
-		}
+		// this[SchemaExtractor.schema].toJsonString = function( pretty )
+		// {
+		// 	return JSON.stringify( this, null, pretty ? '\t' : null )
+		// }
+		// this[SchemaExtractor.schema].toLocalStorage = function( name )
+		// {
+		// 	return localStorage[name] = this.toJsonString();
+		// }
+		// this[SchemaExtractor.schema].toFile = function( name, type )
+		// {
+		// 	// TODO :)
+		// }
 		if( doc )
 			return this.from( doc );
 	}
@@ -46,6 +46,13 @@ window.SchemaExtractor = class SchemaExtractor {
 			a.shift();
 			val = a.join(':');
 			val = this.xpath( val, node );
+		}
+		if( val.indexOf('@json:') === 0 )
+		{
+			var a = val.split(':');
+			a.shift();
+			val = a.join(':');
+			val = this.jsonPath( val, node );
 		}
 		handlers.length &&
 			handlers.map(f=>(val = (Array.isArray(val)?val:[val]).map(f)));
@@ -207,6 +214,91 @@ cat.Editor = class Editor {
         + '<s>};</s>';
     }
 }
+cat.MultiEditor = class MultiEditor extends cat.Element {
+    constructor( data )
+    {
+        // debugger;
+        super( `<pre style="margin:0">
+        	<style>
+			    *:focus {
+			        outline: none;
+			    }
+			    String, Boolean, Number, Array, key { display: inline; }
+			    String {  }
+				    String:before { content: '"'; }
+				    String:after { content: '"'; }
+			    Boolean {  }
+			    Number {  }
+			    Array {  }
+				    Array:before { content: "["; }
+				    Array:after { content: "]"; }
+			    Object {  }
+				    Object:before { content: "{"; }
+				    Object:after { content: "}"; }
+				children {
+				    margin-left: 4em;
+				    display: block;
+				}
+				key {
+				    border-bottom: 1px dashed;
+				}
+					key:before { content: '"'; }
+					key::after { content: '":'; }
+        	</style>
+    	</pre>` );
+    	this.append( this.transform(data) );
+    	this.customStyles = {}
+        // this.$el[0].innerHTML = `<header>${before}</header>` + this.stringify(data);
+	    document.body.setAttribute('spellcheck',"false");
+	    Array.from( this.find('[contenteditable]').get() )
+	        .map( node=> 
+	        	node.addEventListener('keydown', e=> e.key == 'Enter' && (e.preventDefault(),e.target.blur()) ) 
+	        )
+        
+    }
+    transform( json )
+    {
+        switch( typeof json )
+        {
+            case 'string': return JSON.stringify( json ).replace(/^(")(.*)(")$/, 
+                                '<String contenteditable="true">$2</String>');
+            case 'boolean': return `<Boolean class="${json}" contenteditable="true">${json}</Boolean>`;
+            case 'number': return `<Number class="${json}" contenteditable="true">${json}</Number>`;
+            case 'object': if( Array.isArray(json) )
+                                return `<Array><children>${json.map( item=> this.transform(item) ).join(',\n')}</children></Array>`;
+                            else
+                                return `<Object><children>${Object.getOwnPropertyNames(json)
+        .map( n=> `<key contenteditable="true" >${n}</key>${this.transform(json[n])}` )
+        .join(',\n')
+    }</children></Object>`;
+        }
+    }
+    stringify( o )
+    {
+        return '<s>{</s>\n' +
+            Object.getOwnPropertyNames(o)
+                .map( n=> `<s>"</s><p contenteditable="true">${n}</p><s>"</s><k>: </k>` +
+                (typeof o[n] == 'string'
+                 ? JSON.stringify(o[n]).replace(/^(")(.*)(")$/, '<s>$1</s><v contenteditable="true">$2</v><s>$3</s>')
+                 : `<v contenteditable="true">${JSON.stringify(o[n])}</v>`
+                )).join('<s>,</s>\n')
+        + '<s>};</s>';
+    }
+    
+    addStyle( name, css )
+    {
+    	var s = document.createElement('style');
+		s.id = name;
+		s.innerText = css;
+		this.append(s);
+		s.disabled = true;
+    	this.customStyles[name] = s;
+    }
+    toggleStyle( name, force )
+    {
+    	this.customStyles[name].disabled = typeof force != 'undefined' ? !!force : !this.customStyles[name].disabled;
+    }
+}
 cat.Navigation = class Navigation extends cat.Element {
     constructor()
     {
@@ -219,6 +311,14 @@ cat.Navigation = class Navigation extends cat.Element {
             .map( n=> this.$collections.append(`<li><button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showInTable(store['${n}'])">${n}</button></li>`) )
     }
 }
+
+window.ON = function(ss,...args)
+{
+	args = args.map( o=> typeof o == 'function' ? (ON[ON.id]=o,`ON[${ON.id++}](event)`) : o );
+	return ss.map((s,i)=>s+`${args[i]||''}`).join('')
+};
+ON.id = 0;
+        
 
 /*
 
@@ -233,8 +333,8 @@ cat.Store = class Store {
     {
         return {
             css: [
-                "//devingfx.github.io/Miaow/layout.css",
-                "//cdn.datatables.net/1.10.12/css/jquery.dataTables.css"
+                `//devingfx.github.io/Miaow/layout.css?${Math.random()}`,
+                `//cdn.datatables.net/1.10.12/css/jquery.dataTables.css`
             ],
             js: [
                 // `https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js`,
@@ -245,7 +345,7 @@ cat.Store = class Store {
                 `//devingfx.github.io/Miaow/db.minou.js`,
                 `//devingfx.github.io/Miaow/db-indexed-adapter.minou.js`,
                 
-                `//devingfx.github.io/Miaow/lang.js`,
+                `//devingfx.github.io/Miaow/lang.js?${Math.random()}" editor="true`,
                 "//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
                 "//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
             ]
@@ -253,8 +353,8 @@ cat.Store = class Store {
     }
     constructor()
     {
-        Store.deps.css.map( url => document.write(`<link rel="stylesheet" type="text/css" href="${url}?${Math.random()}">`) )
-        Store.deps.js.map( url => document.write(`<script type="text/javascript" src="${url}?${Math.random()}" onload="store.start()"></script>`) )
+        Store.deps.css.map( url => document.write(`<link rel="stylesheet" type="text/css" href="${url}">`) )
+        Store.deps.js.map( url => document.write(`<script type="text/javascript" src="${url}" onload="store.start()"></script>`) )
         console.log(Store.deps, document);
         document.write(`<title>Miaow online - ${parentWindow.document.location.host}</title>`);
         document.documentElement.appendChild(document.createElement('body'))
@@ -409,17 +509,34 @@ cat.Store = class Store {
     extract2()
     {
     	var doc = parentWindow.document,
-            uri = doc.location.pathname,
+            url = doc.location+'',
             // pageid = uri.match(/\/(.*?)\/(.*?)\.(html|htm)/),
             // collection = pageid[1], 
             // id = pageid[2],
-            schemas = this.schemas = this.schemas || JSON.parse(localStorage.store_schemas || {}),
             data;
         
-        for(var search in schemas)
-        {
-        	schemas[search] = new SchemaExtractor( schemas[search], [doc.documentElement] )
-        }
+        store.schemas.find()
+        	.filter( schema=> new RegExp(schema.url).test(url) )
+        	.map( schema=> new SchemaExtractor( schema.item )
+        							.from( doc )
+       // 	store.objects.insert(
+							// )
+        	)
+		
+    }
+    showObjectPage( object )
+    {
+        var page = new cat.Page;
+        page.title = object.name;
+        page.title2 = object.url || object['@type'];
+        page.content = (
+                page.editor = new cat.MultiEditor( object )
+                );
+        page.footer = ON`
+        <button onclick="${e=> page.editor.save()}" class="important">${LANG('Save')}</button>
+        <button onclick="${e=> page.editor.remove()}">${LANG('Delete')}</button>`;
+        this.showPage( page );
+        return page;
     }
     addPage()
     {
