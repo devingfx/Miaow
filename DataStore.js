@@ -325,8 +325,16 @@ cat.Store = class Store {
     {
 		var db = this.db, coll;
 		// if database did not exist it will be empty so I will intitialize here
-		this.schemas = db.getCollection('schemas') || db.addCollection('schemas');
-		this.objects = db.getCollection('objects') || db.addCollection('objects');
+		this.schemas = db.getCollection('schemas') || 
+						db.addCollection('schemas', {
+							unique: ['@id'],
+							indices: ['@id','@type']
+						});
+		this.objects = db.getCollection('objects') || 
+						db.addCollection('objects', {
+							unique: ['@id'],
+							indices: ['@id','@type']
+						});
 		
     }
     onPageChange()
