@@ -3,6 +3,18 @@ window.SchemaExtractor = class SchemaExtractor {
 	constructor( json, doc )
 	{
 		this[SchemaExtractor.schema] = json;
+		this[SchemaExtractor.schema].toJsonString = function( pretty )
+		{
+			return JSON.stringify( this, null, pretty ? '\t' : null )
+		}
+		this[SchemaExtractor.schema].toLocalStorage = function( name )
+		{
+			return localStorage[name] = this.toJsonString();
+		}
+		this[SchemaExtractor.schema].toFile = function( name, type )
+		{
+			// TODO :)
+		}
 		if( doc )
 			return this.from( doc );
 	}
@@ -225,11 +237,15 @@ cat.Store = class Store {
                 "//cdn.datatables.net/1.10.12/css/jquery.dataTables.css"
             ],
             js: [
-                `//devingfx.github.io/Miaow/lang.js`,
                 // `https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js`,
-                `https://unpkg.com/lodash@4/lodash.min.js`,
-                `//devingfx.github.io/Miaow/lowdb.minou.js`,
+                // `https://unpkg.com/lodash@4/lodash.min.js`,
+                // `//devingfx.github.io/Miaow/lowdb.minou.js`,
                 // `https://unpkg.com/lowdb/dist/lowdb.min.js`,
+                
+                `//devingfx.github.io/Miaow/db.minou.js`,
+                `//devingfx.github.io/Miaow/db-indexed-adapter.minou.js`,
+                
+                `//devingfx.github.io/Miaow/lang.js`,
                 "//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
                 "//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
             ]
@@ -270,22 +286,22 @@ cat.Store = class Store {
     {
         if( typeof $ == 'undefined' || this.$nav ) return;
         
-        this.data = low('store_data');
-        this.data._.mixin({
-			type: function( collection, Type )
-			{
-				return this.filter(collection,{'@type': Type})
-			},
-			x_add: function( collection, item )
-			{
-				if( this.isString(collection) )
-					collection = this.get(collection);
-				if( !this.isArray(collection)) return object;
-				return this.push( collection, item )
-			}
-		});
+  //      this.data = low('store_data');
+  //      this.data._.mixin({
+		// 	type: function( collection, Type )
+		// 	{
+		// 		return this.filter(collection,{'@type': Type})
+		// 	},
+		// 	x_add: function( collection, item )
+		// 	{
+		// 		if( this.isString(collection) )
+		// 			collection = this.get(collection);
+		// 		if( !this.isArray(collection)) return object;
+		// 		return this.push( collection, item )
+		// 	}
+		// });
 		
-		this.schemas = SchemaList.from( JSON.parse(localStorage['store_schemas']) );
+		this.schemas = SchemaList.from( JSON.parse(localStorage['store_schemas']||'{}') );
 		
         this.$nav = $('nav').eq(0);
         this.$collections = $('#collections');
@@ -715,17 +731,21 @@ const ListItem = new SchemaExtractor({
 	"@context": "http://schema.org/",
 	"@type": "ListItem",
 	"item": "=>this.item",
-	"name": "",
-	"url": ""
+	"name": "=>this.name",
+	"url": "=>this.url"
 })
-// const SchemaListItem = new SchemaExtractor({
-// 	"@context": "http://schema.org/",
-// 	"@type": "ListItem",
-// 	"item": {},
-// 	"name": "",
-// 	"url": ""
-// })
-
+const CollectionPage = new SchemaExtractor({
+	"@context": "http://schema.org/",
+	"@type": "CollectionPage",
+	"name": "=>this.name",
+	"speciality": "=>this.speciality"
+})
+CollectionPage.from({
+	"name": "Voitures",
+	"speciality": [{
+		"@type": ["Speciality","Offer","Car"],
+	}]
+})
 // SchemaListItem.from( {item:item} )
 
 var store = new cat.Store;
