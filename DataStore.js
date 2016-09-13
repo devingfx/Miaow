@@ -700,7 +700,16 @@ cat.Store = class Store {
 const SchemaList = new SchemaExtractor({
 	"@context": "http://schema.org/",
 	"@type": "ItemList",
-	"itemListElement": "=>SchemaListItem.from(...this.itemListElement)"
+	"itemListElement": "=>ListItem.from(...this.itemListElement)"
+	
+	// "itemListElement": {
+	// 	"@selector": "json: this.itemListElement",
+	// 	"@type": ListItem,
+	// }
+	
+	// "itemListElement": "json: this.itemListElement=>ListItem.from(item)"
+	// "itemListElement": {"json: this.itemListElement": ListItem }
+	// "itemListElement": "json:this.itemListElement=>ListItem"
 })
 const ListItem = new SchemaExtractor({
 	"@context": "http://schema.org/",
