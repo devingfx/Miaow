@@ -300,8 +300,17 @@ cat.Store = class Store {
 		// 		return this.push( collection, item )
 		// 	}
 		// });
+		var idbAdapter = new LokiIndexedAdapter('Miaow');
+		this.db = new loki( parentWindow.document.location.host, {
+				autoload: true,
+				autoloadCallback : this.prepareEmptyDB.bind(this),
+				autosave: true, 
+				autosaveInterval: 10000,
+				adapter: idbAdapter
+			});
 		
-		this.schemas = SchemaList.from( JSON.parse(localStorage['store_schemas']||'{}') );
+		
+		// this.schemas = SchemaList.from( JSON.parse(localStorage['store_schemas']||'{}') );
 		
         this.$nav = $('nav').eq(0);
         this.$collections = $('#collections');
@@ -309,6 +318,14 @@ cat.Store = class Store {
         this.updateCollections();
         this.updateLanguage( navigator.language );
         this.onPageChange();
+    }
+    prepareEmptyDB()
+    {
+		var db = this.db, coll;
+		// if database did not exist it will be empty so I will intitialize here
+		this.schemas = db.getCollection('schemas') || db.addCollection('schemas');
+		this.objects = db.getCollection('objects') || db.addCollection('objects');
+		
     }
     onPageChange()
     {
