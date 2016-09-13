@@ -284,7 +284,9 @@ cat.Store = class Store {
     }
     start()
     {
-        if( typeof $ == 'undefined' || this.$nav ) return;
+        if( typeof $ == 'undefined'
+         || typeof loki == 'undefined'
+         || this.db ) return;
         
   //      this.data = low('store_data');
   //      this.data._.mixin({
