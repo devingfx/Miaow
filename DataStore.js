@@ -261,28 +261,17 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
         switch( typeof json )
         {
             case 'string': return JSON.stringify( json ).replace(/^(")(.*)(")$/, 
-                                '<String contenteditable="true">$2</String>');
-            case 'boolean': return `<Boolean class="${json}" contenteditable="true">${json}</Boolean>`;
-            case 'number': return `<Number class="${json}" contenteditable="true">${json}</Number>`;
+                                '<String contenteditable="true" value="$2">$2</String>');
+            case 'boolean': return `<Boolean value="${json}" contenteditable="true">${json}</Boolean>`;
+            case 'number': return `<Number value="${json}" contenteditable="true">${json}</Number>`;
             case 'object': if( Array.isArray(json) )
                                 return `<Array><children>${json.map( item=> this.transform(item) ).join(',\n')}</children></Array>`;
                             else
-                                return `<Object><children>${Object.getOwnPropertyNames(json)
-        .map( n=> `<key contenteditable="true" >${n}</key>${this.transform(json[n])}` )
+                                return `<Object type="${json['@type']||json.constructor.name}"><children>${Object.getOwnPropertyNames(json)
+        .map( n=> `<key contenteditable="true" name="${n}">${n}</key>${this.transform(json[n])}` )
         .join(',\n')
     }</children></Object>`;
         }
-    }
-    stringify( o )
-    {
-        return '<s>{</s>\n' +
-            Object.getOwnPropertyNames(o)
-                .map( n=> `<s>"</s><p contenteditable="true">${n}</p><s>"</s><k>: </k>` +
-                (typeof o[n] == 'string'
-                 ? JSON.stringify(o[n]).replace(/^(")(.*)(")$/, '<s>$1</s><v contenteditable="true">$2</v><s>$3</s>')
-                 : `<v contenteditable="true">${JSON.stringify(o[n])}</v>`
-                )).join('<s>,</s>\n')
-        + '<s>};</s>';
     }
     
     addStyle( name, css )
@@ -299,6 +288,8 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     	this.customStyles[name].disabled = typeof force != 'undefined' ? !!force : !this.customStyles[name].disabled;
     }
 }
+cat.MultiEditor.addStyle = ()=>{}
+cat.MultiEditor.addPlugin = ()=>{}
 cat.Navigation = class Navigation extends cat.Element {
     constructor()
     {
@@ -318,8 +309,75 @@ window.ON = function(ss,...args)
 	return ss.map((s,i)=>s+`${args[i]||''}`).join('')
 };
 ON.id = 0;
-        
 
+
+
+cat.MultiEditor.addStyle('SchemaExtractor', `
+key[name^="@sel"] {
+    color: #FFEB3B;
+    text-shadow: 0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5);
+}
+[value^="@json:"]:after,
+[value^="@selector:"]:after,
+[value^="@xpath:"]:after {
+    content: " ";
+}
+[value^="@json:"]:before,
+[value^="@selector:"]:before,
+[value^="@xpath:"]:before {
+    content: " ";
+}
+key[name^="@selector"] + [value],
+[value^="@json:"],
+[value^="@selector:"],
+[value^="@xpath:"] {
+    background: #FFEB3B;
+}`);
+cat.MultiEditor.addStyle('jsonld', `
+key[name^="@"] {
+    color: #9C27B0;
+    text-shadow: none;
+}
+key[name^="@"] + [value] {
+    color: darkorchid;
+}`);
+cat.MultiEditor.addStyle('Editor', `
+*:focus {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .7);
+    background: white;
+}
+`);
+cat.MultiEditor.addStyle('Fancy', `
+				String, Boolean, Number, Array, key { transition: all .3s ease; }
+			    String { color: green; }
+			    Boolean { color: lightseagreen; }
+				    Boolean[value=false] { color: orangered; }
+			    
+			    Number { color: blue; }
+			    Array { color: red; }
+			    /*Object { color: blueviolet; }*/
+			    Object > children, Array > children {
+				    border-left: 1px dashed;
+				}
+				children {
+				    margin-left: 4em;
+				    display: block;
+				    margin-left: 0.3em !important;
+				    padding-left: 4em;
+				}
+				Object:hover > children, Array:hover > children {
+				    background: rgba(0, 0, 0, 0.02);
+				}
+				key {
+					text-shadow: 0 1px 0 rgba(0, 0, 0, 0.62);
+				    font-weight: bolder;
+				    line-height: 25px;
+				    padding: 4px;
+				    border: none;
+				}
+					key:before { content: ''; }
+					key::after { content: ' :'; }
+				`)
 /*
 
 db._.mixin({
@@ -428,12 +486,12 @@ cat.Store = class Store {
 		this.schemas = db.getCollection('schemas') || 
 						db.addCollection('schemas', {
 							unique: ['@id'],
-							indices: ['@id','@type']
+							indices: ['@id']
 						});
 		this.objects = db.getCollection('objects') || 
 						db.addCollection('objects', {
 							unique: ['@id'],
-							indices: ['@id','@type']
+							indices: ['@id']
 						});
 		
     }
