@@ -148,11 +148,12 @@ cat.TabView = class TabView extends cat.Element {
     								 			this.children(':not(tabs)').hide();
     								 			$(node).show();
     								 			this._selectedIndex = $(node).index();
-    								 			this.$tabs.eq(this._selectedIndex).addClass('selected');
+    								 			this.$tabs.children().removeClass('selected');
+    								 			this.$tabs.children().eq(this._selectedIndex-1).addClass('selected');
 								 			})
 								 			.appendTo(this.$tabs)
 						 );
-		this.$tabs.eq(this._selectedIndex).addClass('selected');
+		this.$tabs.children().eq(this._selectedIndex-1).addClass('selected');
     }
     get selectedIndex()     { return this._selectedIndex }
     set selectedIndex( v )  { this.$header.find('h1').append(v) }
@@ -463,7 +464,7 @@ cat.Store = class Store {
         themeColor = themeColor ? themeColor.content : "#888";
         document.body.style.color = themeColor;
         document.body.innerHTML = `
-            <nav>
+            <nav><link rel="import" type="text/xml" async href="https://devingfx.github.io/Miaow/logo.svg"/>
                 <img class="logo" src="https://devingfx.github.io/Miaow/logo.svg"/>
                 <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()"
                 		langfr="Cette page">Current page</button>

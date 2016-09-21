@@ -183,19 +183,25 @@ window {
 	    window[page] > .content { top: 110px; }
 	   
 	window tab {
-	    position: fixed;
-	    top: 70px;
-	    z-index: 1000093;
+	    
 	}
 		window tab tabs {
-		    height: 40px;
-		    /* background: red; */
+		    height: 30px;
 		    display: block;
+		    position: fixed;
+		    top: 80px;
+		    z-index: 1;
 		}
 			tab > tabs > button {
 			    height: 100%;
-			    margin: 0 .2em;
+			    transform: scale(0.9);
+    			transform-origin: 50% 100%;
+    			border-bottom: none;
+    			border-radius: .3em .3em 0px 0px;
 			}
+				tab > tabs > button.selected {
+				    transform: scale(1);
+				}
 pre v {
     border: 1px solid #ccc;
     background: white;
