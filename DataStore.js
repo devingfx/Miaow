@@ -126,6 +126,37 @@ cat.Element = class Element {
         } )
     }
 }
+cat.TabView = class TabView extends cat.Element {
+    constructor( html )
+    {
+        // debugger;
+        super( html || '<tab><tabs>' );
+        this.$tabs = this.find('tabs');
+        this.update();
+    }
+    appendChild( child )
+    {
+    	super.appendChild( child );
+    	this.update();
+    }
+    update()
+    {
+    	this.$tabs.empty();
+    	this.children().map( node=> node != this.$tabs[0]
+    								 && $(`<button>${$(node).attr('label')||'Tab'}</button>`)
+    								 		.on('click', e=> {
+    								 			this.children('not(tabs)').hide().find(node).show();
+    								 			this._selectedIndex = $(node).index();
+    								 			this.$tabs.eq(this._selectedIndex).addClass('selected');
+								 			})
+						 );
+		this.$tabs.eq(this._selectedIndex).addClass('selected');
+    }
+    get selectedIndex()     { return this._selectedIndex }
+    set selectedIndex( v )  { this.$header.find('h1').append(v) }
+    get currentTab()     	{ return this.$header.find('h1').text() }
+    set currentTab( v )  	{ this.$header.find('h1').append(v) }
+}
 cat.Window = class Window extends cat.Element {
     constructor( html )
     {
@@ -490,6 +521,11 @@ cat.Store = class Store {
 						});
 		this.objects = db.getCollection('objects') || 
 						db.addCollection('objects', {
+							unique: ['@id'],
+							indices: ['@id']
+						});
+		this.settings = db.getCollection('settings') || 
+						db.addCollection('settings', {
 							unique: ['@id'],
 							indices: ['@id']
 						});
