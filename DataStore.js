@@ -464,7 +464,7 @@ cat.Store = class Store {
         themeColor = themeColor ? themeColor.content : "#888";
         document.body.style.color = themeColor;
         document.body.innerHTML = `
-            <nav><link rel="import" type="text/xml" async href="https://devingfx.github.io/Miaow/logo.svg"/>
+            <nav><link rel="import" type="text/xml" async href="file:///home/chronos/u-096a46e122712ea91076f397c6f7eb782dce99f5/Downloads/dev/AppKit/src/ak/Window.xhtml"/>
                 <img class="logo" src="https://devingfx.github.io/Miaow/logo.svg"/>
                 <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()"
                 		langfr="Cette page">Current page</button>
