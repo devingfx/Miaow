@@ -121,7 +121,7 @@ cat.Element = class Element {
     {
         this._target = $( tag );
         return new Proxy( this, {
-            get: (o,k) => Reflect.get( Reflect.has(this._target,k) ? this._target : o, k ),
+            get: (o,k) => Reflect.has(this._target,k) ? Reflect.get(this._target, k).bind(this._target) : Reflect.get( o,k ),
             set: (o,k,v) => Reflect.set( Reflect.has(this._target,k) ? this._target : o, k, v )
         } )
     }
@@ -129,7 +129,7 @@ cat.Element = class Element {
 cat.TabView = class TabView extends cat.Element {
     constructor( html )
     {
-        // debugger;
+        debugger;
         super( html || '<tab><tabs>' );
         this.$tabs = this.find('tabs');
         this.update();
@@ -142,13 +142,15 @@ cat.TabView = class TabView extends cat.Element {
     update()
     {
     	this.$tabs.empty();
-    	this.children().map( node=> node != this.$tabs[0]
+    	this.children().map( (i,node)=> node != this.$tabs[0]
     								 && $(`<button>${$(node).attr('label')||'Tab'}</button>`)
     								 		.on('click', e=> {
-    								 			this.children('not(tabs)').hide().find(node).show();
+    								 			this.children(':not(tabs)').hide();
+    								 			$(node).show();
     								 			this._selectedIndex = $(node).index();
     								 			this.$tabs.eq(this._selectedIndex).addClass('selected');
 								 			})
+								 			.appendTo(this.$tabs)
 						 );
 		this.$tabs.eq(this._selectedIndex).addClass('selected');
     }
@@ -225,6 +227,16 @@ cat.Page = class Page extends cat.Window {
     // set content( v ){ this.$content.append(v) }
     // get footer()    { return this.$footer }
     // set footer( v ) { this.$footer.append(v) }
+}
+cat.TabbedPage = class TabbedPage extends cat.Page {
+    constructor( html )
+    {
+        // debugger;
+        super( html || '<window page>' );
+        this.$tabview = new cat.TabView;
+        this.$tabview.appendTo( this.$content ); // appends
+        this.$content = this.$tabview // replace reference
+    }
 }
 cat.Editor = class Editor {
     constructor( before, data )
@@ -459,6 +471,11 @@ cat.Store = class Store {
                 <!--span>Collections</span-->
                 <ul id="collections"></ul>
                 <hr/>
+                <button id="schemasBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSchemasWindow()">
+                	<lang en>Schemas</lang>
+                	<lang fr>Schémas</lang>
+            	</button>
+            	<hr/>
                 <button id="settingsBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSettings()">
                 	<lang en>Settings</lang>
                 	<lang fr>Préférences</lang>
@@ -801,6 +818,24 @@ cat.Store = class Store {
         page.footer = page.content.find('.dataTables_scrollFoot')
         page.footer.css({ padding: 3 });
         page.table.draw();
+    }
+    showSchemasWindow()
+    {
+    	var page = new cat.TabbedPage, editor;
+		
+	    page.title = `<lang en>Schemas</lang><lang fr>Schémas</lang>`;
+	    this.schemas.find()
+	    	.map( item=> {
+	    		editor = new cat.MultiEditor( item.item );
+	    		editor.attr('label', item.name );
+	    		page.content = editor._target;
+	    	})
+	    editor = new cat.MultiEditor( {"@context":"http://schema.org/"} );
+		editor.attr('label', "+" );
+		page.content = editor._target;
+		page.$content.update();
+		
+		this.showPage( page );
     }
     showSettings()
     {

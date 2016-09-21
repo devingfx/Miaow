@@ -87,6 +87,12 @@ nav {
         list-style: none;
         padding: 0;
     }
+    nav button#schemasBtn {
+	    position: absolute;
+	    width: 100%;
+	    bottom: 42px;
+	    border-top: 1px dashed rgba(255,255,255,0.3);
+	}
     nav button#settingsBtn {
     	position: absolute;
     	width: 100%;
@@ -175,6 +181,21 @@ window {
 		window[page] > header { height: 110px; }
 			window[page] > header > controls { display: none; }
 	    window[page] > .content { top: 110px; }
+	   
+	window tab {
+	    position: fixed;
+	    top: 70px;
+	    z-index: 1000093;
+	}
+		window tab tabs {
+		    height: 40px;
+		    /* background: red; */
+		    display: block;
+		}
+			tab > tabs > button {
+			    height: 100%;
+			    margin: 0 .2em;
+			}
 pre v {
     border: 1px solid #ccc;
     background: white;
