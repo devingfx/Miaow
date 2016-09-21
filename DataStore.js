@@ -136,7 +136,7 @@ cat.TabView = class TabView extends cat.Element {
     }
     appendChild( child )
     {
-    	super.appendChild( child );
+    	this.append( child );
     	this.update();
     }
     update()
