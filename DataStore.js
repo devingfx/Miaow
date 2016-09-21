@@ -421,7 +421,7 @@ cat.Store = class Store {
         document.body.style.color = themeColor;
         document.body.innerHTML = `
             <nav>
-                <img class="logo" src="//devingfx.github.io/Miaow/logo.svg"/>
+                <img class="logo" src="https://devingfx.github.io/Miaow/logo.svg"/>
                 <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()"
                 		langfr="Cette page">Current page</button>
                 <hr/>
