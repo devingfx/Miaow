@@ -391,8 +391,8 @@ cat.Store = class Store {
     {
         return {
             css: [
-                `//devingfx.github.io/Miaow/layout.css?${Math.random()}`,
-                `//cdn.datatables.net/1.10.12/css/jquery.dataTables.css`
+                `https://devingfx.github.io/Miaow/layout.css?${Math.random()}`,
+                `https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css`
             ],
             js: [
                 // `https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js`,
@@ -400,12 +400,12 @@ cat.Store = class Store {
                 // `//devingfx.github.io/Miaow/lowdb.minou.js`,
                 // `https://unpkg.com/lowdb/dist/lowdb.min.js`,
                 
-                `//devingfx.github.io/Miaow/db.minou.js`,
-                `//devingfx.github.io/Miaow/db-indexed-adapter.minou.js`,
+                `https://devingfx.github.io/Miaow/db.minou.js`,
+                `https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js`,
                 
-                `//devingfx.github.io/Miaow/lang.js?${Math.random()}" editor="true`,
-                "//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
-                "//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
+                `https://devingfx.github.io/Miaow/lang.js?${Math.random()}" editor="true`,
+                "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
+                "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
             ]
         }
     }
@@ -573,13 +573,15 @@ cat.Store = class Store {
             // id = pageid[2],
             data;
         
-        store.schemas.find()
-        	.filter( schema=> new RegExp(schema.url).test(url) )
-        	.map( schema=> new SchemaExtractor( schema.item )
-        							.from( doc )
-       // 	store.objects.insert(
-							// )
-        	)
+        var results = store.schemas.find()
+			        	.filter( schema=> new RegExp(schema.url).test(url) )
+			        	.map( schema=> new SchemaExtractor( schema.item )
+			        							.from( doc )
+			       // 	store.objects.insert(
+										// )
+			        	)
+		var page = this.showObjectPage( results );
+		page.save = ()=> this.objects.insert()
 		
     }
     showObjectPage( object )
