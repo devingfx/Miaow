@@ -320,7 +320,7 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     }</children></Object>`;
         }
     }
-    serialize()
+    toString()
     {
     	this.find('*:not(style)')
     		.map( (i,n)=> {
@@ -592,7 +592,7 @@ cat.Store = class Store {
     showAddPage()
     {
 		var page = this.showObjectPage( this.extract2()[0] );
-		page.save = ()=> this.objects.insert( JSON.parse(page.editor.serialize()) )
+		page.save = ()=> this.objects.insert( JSON.parse(page.editor.toString()) )
 		
     	return page;
     }
