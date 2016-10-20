@@ -943,7 +943,7 @@ cat.Store = class Store {
     updateCollections()
     {
         this.$collections.empty();
-        Object.getOwnPropertyNames(this.data.keys().value())
+        Object.getOwnPropertyNames( this.schemas.find().map(o=>o.name) )
             .map( n=> this.$collections.append(`<li><button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showInTable(store['${n.replace(/'/g,"\\'")}'])">${n}</button></li>`) )
     }
     updateLanguage( lang )
