@@ -122,9 +122,13 @@ cat.Element = class Element {
         this._target = $( tag );
         this._target[0].ctrl = this;
         return new Proxy( this, {
-            get: (o,k) => Reflect.has(this._target,k) && typeof Reflect.get(this._target, k) == 'function'
-            				  ? Reflect.get(this._target, k).bind(this._target)
-            				  : Reflect.get( o,k ),
+            get: (o,k) => Reflect.has(this._target,k)
+            				? typeof Reflect.get(this._target, k) == 'function'
+            					? Reflect.get(this._target, k).bind(this._target)
+            					: Reflect.get(this._target, k)
+            				: Reflect.has( o._target[0], k )
+            					? Reflect.get( o._target[0], k )
+            					: Reflect.get( o,k ),
             set: (o,k,v) => Reflect.set( Reflect.has(this._target,k) ? this._target : o, k, v )
         } )
     }
