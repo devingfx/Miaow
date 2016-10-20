@@ -120,6 +120,7 @@ cat.Element = class Element {
     constructor( tag )
     {
         this._target = $( tag );
+        this._target[0].ctrl = this;
         return new Proxy( this, {
             get: (o,k) => Reflect.has(this._target,k) && typeof Reflect.get(this._target, k) == 'function'
             				  ? Reflect.get(this._target, k).bind(this._target)
