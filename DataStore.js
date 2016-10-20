@@ -596,7 +596,7 @@ cat.Store = class Store {
     showAddPage()
     {
 		var page = this.showObjectPage( this.extract2()[0] );
-		page.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString()) )
+		page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString()) )
 		
     	return page;
     }
