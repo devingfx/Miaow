@@ -357,81 +357,6 @@ window.ON = function(ss,...args)
 ON.id = 0;
 
 
-
-cat.MultiEditor.addStyle('SchemaExtractor', `
-key[name^="@sel"] {
-    color: #FFEB3B;
-    text-shadow: 0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5);
-}
-[value^="@json:"]:after,
-[value^="@selector:"]:after,
-[value^="@xpath:"]:after {
-    content: " ";
-}
-[value^="@json:"]:before,
-[value^="@selector:"]:before,
-[value^="@xpath:"]:before {
-    content: " ";
-}
-key[name^="@selector"] + [value],
-[value^="@json:"],
-[value^="@selector:"],
-[value^="@xpath:"] {
-    background: #FFEB3B;
-}`);
-cat.MultiEditor.addStyle('jsonld', `
-key[name^="@"] {
-    color: #9C27B0;
-    text-shadow: none;
-}
-key[name^="@"] + [value] {
-    color: darkorchid;
-}`);
-cat.MultiEditor.addStyle('Editor', `
-*:focus {
-    box-shadow: 0 3px 10px rgba(0, 0, 0, .7);
-    background: white;
-}
-`);
-cat.MultiEditor.addStyle('Fancy', `
-				String, Boolean, Number, Array, key { transition: all .3s ease; }
-			    String { color: green; }
-			    Boolean { color: lightseagreen; }
-				    Boolean[value=false] { color: orangered; }
-			    
-			    Number { color: blue; }
-			    Array { color: red; }
-			    /*Object { color: blueviolet; }*/
-			    Object > children, Array > children {
-				    border-left: 1px dashed;
-				}
-				children {
-				    margin-left: 4em;
-				    display: block;
-				    margin-left: 0.3em !important;
-				    padding-left: 4em;
-				}
-				Object:hover > children, Array:hover > children {
-				    background: rgba(0, 0, 0, 0.02);
-				}
-				key {
-					text-shadow: 0 1px 0 rgba(0, 0, 0, 0.62);
-				    font-weight: bolder;
-				    line-height: 25px;
-				    padding: 4px;
-				    border: none;
-				}
-					key:before { content: ''; }
-					key::after { content: ' :'; }
-				`)
-/*
-
-db._.mixin({
-  type: function(collection,Type) {
-    console.log(arguments);return this.filter(collection,{'@type': Type})
-  }
-})
-*/
 cat.Store = class Store {
     static get deps()
     {
@@ -468,7 +393,7 @@ cat.Store = class Store {
         document.body.innerHTML = `
             <nav>
                 <img class="logo" src="https://devingfx.github.io/Miaow/logo.svg"/>
-                <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.addPage()"
+                <button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showAddPage()"
                 		langfr="Cette page">Current page</button>
                 <hr/>
                 <!--span>Collections</span-->
@@ -639,9 +564,7 @@ cat.Store = class Store {
 			       // 	store.objects.insert(
 										// )
 			        	)
-		var page = this.showObjectPage( results );
-		page.save = ()=> this.objects.insert()
-		
+		return results;
     }
     showObjectPage( object )
     {
@@ -656,6 +579,13 @@ cat.Store = class Store {
         <button onclick="${e=> page.editor.remove()}">${LANG('Delete')}</button>`;
         this.showPage( page );
         return page;
+    }
+    showAddPage()
+    {
+		var page = this.showObjectPage( this.extract2()[0] );
+		page.save = ()=> this.objects.insert( this.extract2()[0] )
+		
+    	return page;
     }
     addPage()
     {
@@ -1031,6 +961,75 @@ CollectionPage.from({
 
 var store = new cat.Store;
 
+
+
+
+cat.MultiEditor.addStyle('SchemaExtractor', `
+key[name^="@sel"] {
+    color: #FFEB3B;
+    text-shadow: 0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5),0 0 1px rgba(0,0,0,0.5);
+}
+[value^="@json:"]:after,
+[value^="@selector:"]:after,
+[value^="@xpath:"]:after {
+    content: " ";
+}
+[value^="@json:"]:before,
+[value^="@selector:"]:before,
+[value^="@xpath:"]:before {
+    content: " ";
+}
+key[name^="@selector"] + [value],
+[value^="@json:"],
+[value^="@selector:"],
+[value^="@xpath:"] {
+    background: #FFEB3B;
+}`);
+cat.MultiEditor.addStyle('jsonld', `
+key[name^="@"] {
+    color: #9C27B0;
+    text-shadow: none;
+}
+key[name^="@"] + [value] {
+    color: darkorchid;
+}`);
+cat.MultiEditor.addStyle('Editor', `
+*:focus {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .7);
+    background: white;
+}
+`);
+cat.MultiEditor.addStyle('Fancy', `
+				String, Boolean, Number, Array, key { transition: all .3s ease; }
+			    String { color: green; }
+			    Boolean { color: lightseagreen; }
+				    Boolean[value=false] { color: orangered; }
+			    
+			    Number { color: blue; }
+			    Array { color: red; }
+			    /*Object { color: blueviolet; }*/
+			    Object > children, Array > children {
+				    border-left: 1px dashed;
+				}
+				children {
+				    margin-left: 4em;
+				    display: block;
+				    margin-left: 0.3em !important;
+				    padding-left: 4em;
+				}
+				Object:hover > children, Array:hover > children {
+				    background: rgba(0, 0, 0, 0.02);
+				}
+				key {
+					text-shadow: 0 1px 0 rgba(0, 0, 0, 0.62);
+				    font-weight: bolder;
+				    line-height: 25px;
+				    padding: 4px;
+				    border: none;
+				}
+					key:before { content: ''; }
+					key::after { content: ' :'; }
+				`)
 /*
 
 
