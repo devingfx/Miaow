@@ -121,7 +121,9 @@ cat.Element = class Element {
     {
         this._target = $( tag );
         return new Proxy( this, {
-            get: (o,k) => Reflect.has(this._target,k) ? Reflect.get(this._target, k).bind(this._target) : Reflect.get( o,k ),
+            get: (o,k) => Reflect.has(this._target,k) && typeof Reflect.get(this._target, k) == 'function'
+            				  ? Reflect.get(this._target, k).bind(this._target)
+            				  : Reflect.get( o,k ),
             set: (o,k,v) => Reflect.set( Reflect.has(this._target,k) ? this._target : o, k, v )
         } )
     }
@@ -476,7 +478,6 @@ cat.Store = class Store {
                 	<lang en>Schemas</lang>
                 	<lang fr>Schémas</lang>
             	</button>
-            	<hr/>
                 <button id="settingsBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSettings()">
                 	<lang en>Settings</lang>
                 	<lang fr>Préférences</lang>
@@ -938,12 +939,12 @@ cat.Store = class Store {
 		// parentWindow.addEventListener('click', onClick, true );
     }
     
-    update()
-    {
-        this.data = localStorage.store_data ? JSON.parse(localStorage.store_data) : {};
-        // Object.getOwnPropertyNames(this.data)
-            // .map( n=> Object.defineProperty(this, n, {get: ()=> this.data[n]}) )
-    }
+    // update()
+    // {
+    //     this.data = localStorage.store_data ? JSON.parse(localStorage.store_data) : {};
+    //     // Object.getOwnPropertyNames(this.data)
+    //         // .map( n=> Object.defineProperty(this, n, {get: ()=> this.data[n]}) )
+    // }
     updateCollections()
     {
         this.$collections.empty();
