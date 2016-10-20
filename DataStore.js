@@ -573,7 +573,7 @@ cat.Store = class Store {
         page.title2 = object.url || object['@type'];
         page.content = (
                 page.editor = new cat.MultiEditor( object )
-                );
+                )._target;
         page.footer = ON`
         <button onclick="${e=> page.editor.save()}" class="important">${LANG('Save')}</button>
         <button onclick="${e=> page.editor.remove()}">${LANG('Delete')}</button>`;
