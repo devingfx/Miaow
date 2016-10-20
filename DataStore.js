@@ -524,7 +524,7 @@ cat.Store = class Store {
         this.$nav = $('nav').eq(0);
         this.$collections = $('#collections');
         // this.$main = $('#main');
-        this.updateCollections();
+        // this.updateCollections();
         this.updateLanguage( navigator.language );
         this.onPageChange();
     }
@@ -547,7 +547,11 @@ cat.Store = class Store {
 							unique: ['@id'],
 							indices: ['@id']
 						});
-		
+		this.onDBReady();
+    }
+    onDBReady()
+    {
+    	this.updateCollections();
     }
     onPageChange()
     {
