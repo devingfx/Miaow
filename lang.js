@@ -4,7 +4,9 @@ Object.defineProperty( window, 'language', {
         L = L || document.documentElement.attributes.lang.value;
         
         Array.from( document.querySelectorAll('lang') )
-        	.map( lang=> lang.attributes.length && (lang.style.display='none') );
+        	.map( lang=> Array.from( lang.attributes )
+        					.some( attr=> ~LANG.all.indexOf(attr.name) )
+        					 && (lang.style.display='none') );
         	
         Array.from( document.querySelectorAll(`lang[${L}]`) )
         	.map( lang=> (lang.style.display='inline') );
@@ -30,6 +32,10 @@ var LANG = mess=> {
 LANG.DEFAULT = Symbol`LANG.DEFAULT`;
 LANG.options = document.currentScript.attributes;
 // LANG.options.editor && 
+Object.defineProperty( LANG, 'all', {
+	get: ()=> Object.getOwnPropertyNames( LANG )
+				.filter( s=> s.length == 2 )
+});
 
 LANG[LANG.DEFAULT] = LANG.options.default ? LANG.options.default.value : 'en';
 LANG[LANG[LANG.DEFAULT]]={}
