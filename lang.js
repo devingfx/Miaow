@@ -2,7 +2,7 @@ Object.defineProperty( window, 'language', {
 	get: ()=> document.documentElement.attributes.lang,
 	set: ( L )=> {
         L = L || document.documentElement.attributes.lang.value;
-        
+        // debugger;
         Array.from( document.querySelectorAll('lang') )
         	.map( lang=> Array.from( lang.attributes )
         					.some( attr=> ~LANG.all.indexOf(attr.name) )
@@ -40,7 +40,6 @@ Object.defineProperty( LANG, 'all', {
 LANG[LANG.DEFAULT] = LANG.options.default ? LANG.options.default.value : 'en';
 LANG[LANG[LANG.DEFAULT]]={}
 
-language = navigator.language || LANG[LANG.DEFAULT];
 
 
 
@@ -58,6 +57,8 @@ LANG.fr = {
 	"Cancel": "Annuler",
 	"Delete": "Supprimer"
 };
+
+language = navigator.language || LANG[LANG.DEFAULT];
 
 // LANG('Save') // <lang en>Save</lang><lang fr>Enregistrer</lang>
 // LANG('Cancel') // <lang en>Cancel</lang> + LANG['en']['Cancel'] = 'Cancel'
