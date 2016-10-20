@@ -4,7 +4,7 @@ Object.defineProperty( window, 'language', {
         L = L || document.documentElement.attributes.lang.value;
         
         Array.from( document.querySelectorAll('lang') )
-        	.map( lang=> (lang.style.display='none') );
+        	.map( lang=> lang.attributes.length && (lang.style.display='none') );
         	
         Array.from( document.querySelectorAll(`lang[${L}]`) )
         	.map( lang=> (lang.style.display='inline') );
