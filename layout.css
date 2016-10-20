@@ -44,6 +44,9 @@ button {
     button:hover, button.selected {
         background: currentColor;
     }
+	    button:hover > *, button.selected > * {
+		    color: white;
+		}
     button.important {
         box-shadow: inset 0 0 0px 2px;
     }

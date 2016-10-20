@@ -151,7 +151,7 @@ cat.TabView = class TabView extends cat.Element {
     {
     	this.$tabs.empty();
     	this.children().map( (i,node)=> node != this.$tabs[0]
-    								 && $(`<button>${$(node).attr('label')||'Tab'}</button>`)
+    								 && $(`<button><lang>${$(node).attr('label')||'Tab'}</lang></button>`)
     								 		.on('click', e=> {
     								 			this.children(':not(tabs)').hide();
     								 			$(node).show();
@@ -161,6 +161,7 @@ cat.TabView = class TabView extends cat.Element {
 								 			})
 								 			.appendTo(this.$tabs)
 						 );
+		debugger;
 		this.$tabs.children().eq(this._selectedIndex-1).addClass('selected');
     }
     get selectedIndex()     { return this._selectedIndex }
@@ -785,11 +786,14 @@ cat.Store = class Store {
 	    		editor.attr('label', item.name );
 	    		page.content = editor._target;
 	    	})
-	    editor = new cat.MultiEditor( {"@context":"http://schema.org/"} );
+	    editor = new cat.MultiEditor( {"@context":"http://schema.org/","@type":""} );
 		editor.attr('label', "+" );
 		page.content = editor._target;
 		page.$content.update();
-		
+		page.footer = ON`
+        <button onclick="${e=> page.editor.save()}" class="important">${LANG('Save')}</button>
+        <button onclick="${e=> page.editor.remove()}">${LANG('Delete')}</button>`;
+        
 		this.showPage( page );
     }
     showSettings()
