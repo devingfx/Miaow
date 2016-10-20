@@ -319,7 +319,15 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     }</children></Object>`;
         }
     }
-    
+    serialize()
+    {
+    	this.find('*:not(style)')
+    		.map( (i,n)=> {
+			    $(n).prepend( eval(getComputedStyle(n,':before').content) )
+			    	.append( eval(getComputedStyle(n,':after').content) )
+			})
+		return this.innerText;
+    }
     addStyle( name, css )
     {
     	var s = document.createElement('style');
@@ -583,7 +591,7 @@ cat.Store = class Store {
     showAddPage()
     {
 		var page = this.showObjectPage( this.extract2()[0] );
-		page.save = ()=> this.objects.insert( this.extract2()[0] )
+		page.save = ()=> this.objects.insert( JSON.parse(page.editor.serialize()) )
 		
     	return page;
     }
