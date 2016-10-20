@@ -1,8 +1,8 @@
+        debugger;
 Object.defineProperty( window, 'language', {
 	get: ()=> document.documentElement.attributes.lang,
 	set: ( L )=> {
         L = L || document.documentElement.attributes.lang.value;
-        // debugger;
         Array.from( document.querySelectorAll('lang') )
         	.map( lang=> Array.from( lang.attributes )
         					.some( attr=> ~LANG.all.indexOf(attr.name) )
