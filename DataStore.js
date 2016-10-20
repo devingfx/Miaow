@@ -329,12 +329,15 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     {
     	let copy = this.clone();
     	copy.find('style').remove();
+    	this.append( copy );
     	copy.find('*:not(style)')
     		.map( (i,n)=> {
 			    $(n).prepend( eval(getComputedStyle(n,':before').content) )
 			    	.append( eval(getComputedStyle(n,':after').content) )
 			})
-		return copy.text();
+		let str = copy.text();
+		copy.remove();
+		return str;
     }
     addStyle( name, css )
     {
