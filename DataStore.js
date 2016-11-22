@@ -304,10 +304,12 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
         // this.$el[0].innerHTML = `<header>${before}</header>` + this.stringify(data);
 	    document.body.setAttribute('spellcheck',"false");
 	    Array.from( this.find('[contenteditable]').get() )
-	        .map( node=> {
-	        	debugger;
-	        	node.addEventListener('keydown', e=> e.key == 'Enter' && (e.preventDefault(),e.target.blur()) ) 
-	        })
+	        .map( node=> 
+	        	node.addEventListener('keydown', e=> {
+	        		debugger;
+	        		e.key == 'Enter' && (e.preventDefault(),e.target.blur()) 
+        		}) 
+	        )
         
     }
     transform( json )
