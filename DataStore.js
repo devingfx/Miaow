@@ -305,10 +305,7 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 	    document.body.setAttribute('spellcheck',"false");
 	    Array.from( this.find('[contenteditable]').get() )
 	        .map( node=> 
-	        	node.addEventListener('keydown', e=> {
-	        		debugger;
-	        		e.key == 'Enter' && (e.preventDefault(),e.target.blur()) 
-        		}) 
+	        	node.addEventListener('keydown', e=> e.key == 'Enter' && (e.preventDefault(),e.target.blur()) ) 
 	        )
         
     }
