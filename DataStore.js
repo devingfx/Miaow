@@ -901,15 +901,16 @@ cat.Store = class Store {
     updateCollections()
     {
         this.$collections.empty();
-        this.schemas.find().map(o=>o.name)
-            .map( n=> this.$collections.append(`<li><button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showInTable(store['${n.replace(/'/g,"\\'")}'])">${n}</button></li>`) )
+        this.schemas.find()//.map(o=>o.name)
+            .map( schema=> this.$collections.append(`<li><button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showInTable(store.objects.find({'@type':'${schema.item['@type']}'})">${schema.name}</button></li>`) )
     }
     updateLanguage( lang )
     {
-        lang = lang || $('html').attr('lang');
-        $('lang').hide();
-        $(`lang[${lang}]`).show();
-        $('html').attr('lang', lang );
+        language = null;
+        // lang = lang || $('html').attr('lang');
+        // $('lang').hide();
+        // $(`lang[${lang}]`).show();
+        // $('html').attr('lang', lang );
     }
     
     save()
