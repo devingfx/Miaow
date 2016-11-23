@@ -712,13 +712,13 @@ cat.Store = class Store {
             dom: 'iftr',
             "processing": true,
             columns: [
-                { data: 'Marque', title: 'Marque', className: 'select-filter', defaultContent: '' },
-                { data: 'Modèle', title: 'Modèle', className: 'select-filter', defaultContent: '' },
-                { data: 'Carburant', title: 'Carburant', className: 'select-filter', defaultContent: '' },
-                { data: 'Kilométrage', title: 'Kilométrage', defaultContent: '' },
-                { data: 'releaseDate', title: 'Année', defaultContent: '' },
+                { data: 'brand.name', title: 'Marque', className: 'select-filter', defaultContent: '' },
+                { data: 'model.name', title: 'Modèle', className: 'select-filter', defaultContent: '' },
+                { data: 'fuelType', title: 'Carburant', className: 'select-filter', defaultContent: '' },
+                { data: 'mileageFromOdometer', title: 'Kilométrage', defaultContent: '' },
+                { data: 'vehiculeModelDate', title: 'Année', defaultContent: '' },
                 { data: 'Chevaux', title: 'Chevaux', className: 'select-filter', defaultContent: '' },
-                { data: 'price', title: 'Prix', render: data => data + '€', defaultContent: '' },
+                { data: 'offers.price', title: 'Prix', render: data => data + '€', defaultContent: '' },
                 { data: 'description', title:'Description', className: 'text-filter', defaultContent: '', render: function ( data, type, full, meta ) {
                     return data && type === 'display' && data.length > 40 ?
                         '<span title="'+data+'">'+data.substr( 0, 38 )+'...</span>' :
