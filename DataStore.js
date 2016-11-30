@@ -57,9 +57,11 @@ window.SchemaExtractor = class SchemaExtractor {
 		handlers.length &&
 			handlers.map(f=>(val = (Array.isArray(val)?val:[val]).map(f)));
 		
-		return Array.isArray(val) && val.length == 1
-				? val[0]
-				: val;
+		return Array.isArray(val) && val.length == 0
+				? 0[0]
+				: Array.isArray(val) && val.length == 1
+					? val[0]
+					: val;
 	}
 	extract( json, nodes )
 	{
@@ -378,6 +380,13 @@ window.ON = function(ss,...args)
 	return ss.map((s,i)=>s+`${args[i]||''}`).join('')
 };
 ON.id = 0;
+
+// class azea {
+// 	meth(){
+// 		node.innerHTML = ON`<div id="coucou" onclick="${e=> this.callback()}">Coucou</div>`;
+// 	}
+// 	callback(){}
+// }
 
 
 cat.Store = class Store {
@@ -715,8 +724,8 @@ cat.Store = class Store {
                 { data: 'brand.name', title: 'Marque', className: 'select-filter', defaultContent: '' },
                 { data: 'model.name', title: 'Modèle', className: 'select-filter', defaultContent: '' },
                 { data: 'fuelType', title: 'Carburant', className: 'select-filter', defaultContent: '' },
-                { data: 'mileageFromOdometer', title: 'Kilométrage', defaultContent: '' },
-                { data: 'vehiculeModelDate', title: 'Année', defaultContent: '' },
+                { data: 'mileageFromOdometer.value', title: 'Kilométrage', defaultContent: '' },
+                { data: 'vehicleModelDate', title: 'Année', defaultContent: '' },
                 { data: 'Chevaux', title: 'Chevaux', className: 'select-filter', defaultContent: '' },
                 { data: 'offers.price', title: 'Prix', render: data => data + '€', defaultContent: '' },
                 { data: 'description', title:'Description', className: 'text-filter', defaultContent: '', render: function ( data, type, full, meta ) {
