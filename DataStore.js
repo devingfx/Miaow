@@ -54,12 +54,13 @@ window.SchemaExtractor = class SchemaExtractor {
 			val = a.join(':');
 			val = this.jsonPath( val, node );
 		}
+		val = Array.isArray(val) ? val : [val];
 		handlers.length &&
-			handlers.map(f=>(val = (Array.isArray(val)?val:[val]).map(f)));
+			handlers.map(f=>(val = val.map(f)));
 		
-		return Array.isArray(val) && val.length == 0
-				? 0[0]
-				: Array.isArray(val) && val.length == 1
+		return val.length == 0
+				? null
+				: val.length == 1
 					? val[0]
 					: val;
 	}
