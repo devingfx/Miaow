@@ -277,14 +277,12 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
         super( `<MultiEditor>`);
     	this.customStyles = {}
         this.rawChildren = this[0].createShadowRoot();
-        this.rawChildren.innerHTML = `<content>`;
-        
-        this.addStyle('default', `
+        this.rawChildren.innerHTML = `<style>
         	:host { white-space: pre; display: block; margin: 0; }
 		    ::content *:focus {
 		        outline: none;
 		    }
-        `);
+        </style><content>`;
         
         this.addStyle('json', `
 		    ::content StringLiteral, 
@@ -316,7 +314,7 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
         
         this.addStyle('json-pretty', `
 		   ::content  NullLiteral::before { color: grey; }
-		    ::content BooleanLiteral { color: blueviolet; }
+		    ::content BooleanLiteral { color: darkorchid; }
 		    ::content NumberLiteral { color: blue; }
 		    ::content StringLiteral { color: green; }
 			::content ObjectProperty { display: block; }
