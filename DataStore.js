@@ -279,7 +279,8 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 			    *:focus {
 			        outline: none;
 			    }
-			    String, Boolean, Number, Array, key { display: inline; }
+			    String, Boolean, Number, Array, key, NullLiteral { display: inline; }
+			    NullLiteral:before { content: 'null'; color: grey; }
 			    String {  }
 				    String:before { content: '"'; }
 				    String:after { content: '"'; }
@@ -325,6 +326,8 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
             case 'number': return `<Number value="${json}" contenteditable="true">${json}</Number>`;
             case 'object': if( Array.isArray(json) )
                                 return `<Array><children>${json.map( item=> this.transform(item) ).join(',\n')}</children></Array>`;
+                            else if( json === null )
+                            	return `<NullLiteral></NullLiteral>`;
                             else
                                 return `<Object type="${json['@type']||json.constructor.name}"><children>${Object.getOwnPropertyNames(json)
         .map( n=> `<key contenteditable="true" name="${n}">${n}</key>${this.transform(json[n])}` )
