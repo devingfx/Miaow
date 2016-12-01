@@ -372,15 +372,22 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     toComputedString()
     {
     	let copy = this.clone();
-    	copy.find('style').remove();
+    	// copy.find('style').remove();
+    	this.toggleStyle('*',false);
+		this.toggleStyle('json',true);
+		// str=this.toComputedString();
+		// JSON.parse(str)
+
     	this.append( copy );
-    	copy.find('*:not(style)')
+    	copy.find('*')
     		.map( (i,n)=> {
 			    $(n).prepend( eval(getComputedStyle(n,':before').content) )
 			    	.append( eval(getComputedStyle(n,':after').content) )
 			})
 		let str = copy.text();
 		copy.remove();
+		
+		this.toggleStyle('*',true);
 		return str;
     }
     addStyle( name, css )
