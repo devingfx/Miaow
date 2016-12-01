@@ -281,7 +281,7 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 			    }
 			    String, Boolean, Number, Array, key, NullLiteral { display: inline; }
 			    NullLiteral:before { content: 'null'; color: grey; }
-			    String {  }
+			    String { color: black; }
 				    String:before { content: '"'; }
 				    String:after { content: '"'; }
 			    Boolean {  }
@@ -299,8 +299,9 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 				key {
 				    border-bottom: 1px dashed;
 				}
-					key:before { content: '"'; }
-					key::after { content: '":'; }
+					/*key:before { content: '"'; }*/
+					/*key::after { content: '":'; }*/
+					key::after { content: ' :'; }
         	</style>
     	</pre>` );
     	this.append( this.transform(data) );
