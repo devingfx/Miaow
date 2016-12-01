@@ -667,7 +667,7 @@ cat.Store = class Store {
     showAddPage()
     {
 		var page = this.showObjectPage( this.extract2()[0] );
-		page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString()) )
+		page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString('json')) )
 		
     	return page;
     }
@@ -769,7 +769,8 @@ cat.Store = class Store {
             scrollY: '100%',
             scrollX: true,
             paging:   false,
-            data: Object.getOwnPropertyNames( what ).map( id=> what[id] ),
+            // data: Object.getOwnPropertyNames( what ).map( id=> what[id] ),
+            data: what,
             dom: 'iftr',
             "processing": true,
             columns: [
@@ -780,11 +781,12 @@ cat.Store = class Store {
                 { data: 'vehicleModelDate', title: 'Année', defaultContent: '' },
                 { data: 'Chevaux', title: 'Chevaux', className: 'select-filter', defaultContent: '' },
                 { data: 'offers.price', title: 'Prix', render: data => data + '€', defaultContent: '' },
-                { data: 'description', title:'Description', className: 'text-filter', defaultContent: '', render: function ( data, type, full, meta ) {
-                    return data && type === 'display' && data.length > 40 ?
-                        '<span title="'+data+'">'+data.substr( 0, 38 )+'...</span>' :
-                        data;
-                    } }
+                { data: 'description', title:'Description', className: 'text-filter', defaultContent: '', 
+                  render: ( data, type, full, meta ) =>
+                    	data && type === 'display' && data.length > 40
+                    	? `<span title="${data}">${data.substr( 0, 38 )}...</span>`
+                        : data
+                }
             ],
             initComplete: function () {
                 this.api().columns( '.select-filter' ).every( function () {
