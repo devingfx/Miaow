@@ -274,51 +274,68 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     constructor( data )
     {
         // debugger;
-        super( `<pre style="margin:0">
-        	<style>
-			    *:focus {
-			        outline: none;
-			    }
-			    StringLiteral, BooleanLiteral, NumberLiteral, ArrayExpression, key, NullLiteral { display: inline; }
-			    NullLiteral::before { content: 'null'; color: grey; }
-			    StringLiteral { color: green; }
-				    StringLiteral::before { content: '"'; }
-				    StringLiteral::after { content: '"'; }
-			    BooleanLiteral {  }
-			    NumberLiteral {  }
-			    ArrayExpression {  }
-				    ArrayExpression::before { content: "["; }
-				    ArrayExpression::after { content: "]"; }
-			    ObjectExpression {  }
-				    ObjectExpression::before { content: "{"; }
-				    ObjectExpression::after { content: "}"; }
-				elements, properties {
-				    margin-left: 4em;
-				    display: block;
-				}
-				ObjectProperty::after { content: ","; }
-					ObjectProperty > key > StringLiteral { 
-					    border-bottom: 1px dashed;
-						color: currentColor;
-					}
-						ObjectProperty > key > StringLiteral::before,
-						ObjectProperty > key > StringLiteral::after { content: none; }
-						
-					ObjectProperty > value::before { content: ' '; }
-					ObjectProperty > key::after { content: ' :'; }
-        	</style>
-    	</pre>` );
-    	this.append( this.transform(data) );
+        super( `<MultiEditor>`);
     	this.customStyles = {}
+        this.rawChildren = this[0].createShadowRoot();
+        this.rawChildren.innerHTML = `<content>`;
+        
+        this.addStyle('default', `
+        	MultiEditor { white-space: pre; display: block; margin: 0; }
+		    *:focus {
+		        outline: none;
+		    }
+        `);
+        
+        this.addStyle('json', `
+		    StringLiteral, BooleanLiteral, NumberLiteral, ArrayExpression, key, NullLiteral { display: inline; }
+		    NullLiteral::before { content: 'null'; }
+		    StringLiteral {  }
+			    StringLiteral::before { content: '"'; }
+			    StringLiteral::after { content: '"'; }
+		    BooleanLiteral {  }
+		    NumberLiteral {  }
+		    ArrayExpression {  }
+			    ArrayExpression::before { content: "["; }
+			    ArrayExpression::after { content: "]"; }
+		    ObjectExpression {  }
+			    ObjectExpression::before { content: "{"; }
+			    ObjectExpression::after { content: "}"; }
+			elements, properties {
+			    margin-left: 4em;
+			    display: block;
+			}
+			ObjectProperty::after { content: ","; }
+				ObjectProperty > value::before { content: ' '; }
+				ObjectProperty > key::after { content: ' :'; }
+        `);
+        
+        this.addStyle('json-pretty', `
+		    NullLiteral::before { color: grey; }
+		    StringLiteral { color: green; }
+			ObjectProperty::after { content: none; }
+				ObjectProperty > key > StringLiteral { 
+				    border-bottom: 1px dashed;
+					color: currentColor;
+				}
+					ObjectProperty > key > StringLiteral::before,
+					ObjectProperty > key > StringLiteral::after { content: none; }
+        `);
+        
+        
+    	this.append( this.transform(data) );
         // this.$el[0].innerHTML = `<header>${before}</header>` + this.stringify(data);
 	    document.body.setAttribute('spellcheck',"false");
-	    Array.from( this.find('[contenteditable]').get() )
-	        .map( node=> 
-	        	node.addEventListener('keydown', e=> {
-	        		debugger;
-	        		e.key == 'Enter' && (e.preventDefault(),e.target.blur());
-	        	}) 
-	        )
+	    
+	    this.on('keydown','[contenteditable]', e=> {
+    		e.key == 'Enter' && (e.preventDefault(),e.target.blur());
+    	});
+	    // Array.from( this.find('[contenteditable]').get() )
+	    //     .map( node=> 
+	    //     	node.addEventListener('keydown', e=> {
+	    //     		debugger;
+	    //     		e.key == 'Enter' && (e.preventDefault(),e.target.blur());
+	    //     	}) 
+	    //     )
         
     }
     transform( json )
@@ -359,13 +376,20 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     	var s = document.createElement('style');
 		s.id = name;
 		s.innerText = css;
-		this.append(s);
-		s.disabled = true;
+		this.rawChildren.append(s);
+		// s.disabled = true;
     	this.customStyles[name] = s;
     }
     toggleStyle( name, force )
     {
-    	this.customStyles[name].disabled = typeof force != 'undefined' ? !!force : !this.customStyles[name].disabled;
+    	if( name == '*' )
+	    	Object.getOwnPropertyNames( this.customStyles )
+	    		.map( name=> this.customStyles[name].disabled = typeof force != 'undefined' 
+	    															? !!force
+	    															: !this.customStyles[name].disabled
+				)
+    	else if( this.customStyles[name] )
+    		this.customStyles[name].disabled = typeof force != 'undefined' ? !!force : !this.customStyles[name].disabled;
     }
 }
 cat.MultiEditor.addStyle = ()=>{}
