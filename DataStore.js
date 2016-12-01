@@ -303,21 +303,24 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 		    ::content ObjectExpression {  }
 			    ::content ObjectExpression::before { content: "{"; }
 			    ::content ObjectExpression::after { content: "}"; }
-			::content elements, ::content properties {
-			    margin-left: 4em;
-			    display: block;
-			}
-			::content ObjectProperty::after { content: ","; }
+			::content ObjectProperty:not(:last-child)::after { content: ","; }
 				::content ObjectProperty > value::before { content: ' '; }
 				::content ObjectProperty > key::after { content: ' :'; }
         `);
         
         this.addStyle('json-pretty', `
+			::content elements, ::content properties {
+			    margin-left: 4em;
+			    display: block;
+			}
+			::content ObjectProperty { display: block; }
+        `);
+        
+        this.addStyle('json-color', `
 		   ::content  NullLiteral::before { color: grey; }
 		    ::content BooleanLiteral { color: darkorchid; }
 		    ::content NumberLiteral { color: blue; }
 		    ::content StringLiteral { color: green; }
-			::content ObjectProperty { display: block; }
 				::content ObjectProperty::after { content: none; }
 					::content ObjectProperty > key > StringLiteral { 
 					    border-bottom: 1px dashed;
@@ -325,6 +328,9 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 					}
 						::content ObjectProperty > key > StringLiteral::before,
 						::content ObjectProperty > key > StringLiteral::after { content: none; }
+        `);
+        
+        this.addStyle('json-form', `
         `);
         
         
