@@ -390,11 +390,11 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     	if( name == '*' )
 	    	Object.getOwnPropertyNames( this.customStyles )
 	    		.map( name=> this.customStyles[name].disabled = typeof force != 'undefined' 
-	    															? !!force
+	    															? !force
 	    															: !this.customStyles[name].disabled
 				)
     	else if( this.customStyles[name] )
-    		this.customStyles[name].disabled = typeof force != 'undefined' ? !!force : !this.customStyles[name].disabled;
+    		this.customStyles[name].disabled = typeof force != 'undefined' ? !force : !this.customStyles[name].disabled;
     }
 }
 cat.MultiEditor.addStyle = ()=>{}
