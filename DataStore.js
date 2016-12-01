@@ -316,14 +316,17 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
         
         this.addStyle('json-pretty', `
 		   ::content  NullLiteral::before { color: grey; }
+		    ::content BooleanLiteral { color: blueviolet; }
+		    ::content NumberLiteral { color: blue; }
 		    ::content StringLiteral { color: green; }
-			::content ObjectProperty::after { content: none; }
-				::content ObjectProperty > key > StringLiteral { 
-				    border-bottom: 1px dashed;
-					color: currentColor;
-				}
-					::content ObjectProperty > key > StringLiteral::before,
-					::content ObjectProperty > key > StringLiteral::after { content: none; }
+			::content ObjectProperty { display: block; }
+				::content ObjectProperty::after { content: none; }
+					::content ObjectProperty > key > StringLiteral { 
+					    border-bottom: 1px dashed;
+						color: currentColor;
+					}
+						::content ObjectProperty > key > StringLiteral::before,
+						::content ObjectProperty > key > StringLiteral::after { content: none; }
         `);
         
         
@@ -359,7 +362,7 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
                             else
                                 return `<ObjectExpression type="${json['@type']||json.constructor.name}"><properties>${Object.getOwnPropertyNames(json).map( n=> 
                                 				`<ObjectProperty><key name="${n}">${this.transform(n)}</key><value>${this.transform(json[n])}</ObjectProperty>`
-                                				).join('\n')}</properties></ObjectExpression>`;
+                                				).join('')}</properties></ObjectExpression>`;
         }
     }
     toComputedString()
