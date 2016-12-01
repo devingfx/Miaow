@@ -279,20 +279,20 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 			    *:focus {
 			        outline: none;
 			    }
-			    String, Boolean, Number, Array, key, NullLiteral { display: inline; }
+			    StringLiteral, BooleanLiteral, NumberLiteral, ArrayExpression, key, NullLiteral { display: inline; }
 			    NullLiteral:before { content: 'null'; color: grey; }
-			    String { color: black; }
-				    String:before { content: '"'; }
-				    String:after { content: '"'; }
-			    Boolean {  }
-			    Number {  }
-			    Array {  }
-				    Array:before { content: "["; }
-				    Array:after { content: "]"; }
-			    Object {  }
-				    Object:before { content: "{"; }
-				    Object:after { content: "}"; }
-				children {
+			    StringLiteral { color: black; }
+				    StringLiteral:before { content: '"'; }
+				    StringLiteral:after { content: '"'; }
+			    BooleanLiteral {  }
+			    NumberLiteral {  }
+			    ArrayExpression {  }
+				    ArrayExpression:before { content: "["; }
+				    ArrayExpression:after { content: "]"; }
+			    ObjectExpression {  }
+				    ObjectExpression:before { content: "{"; }
+				    ObjectExpression:after { content: "}"; }
+				elements, properties {
 				    margin-left: 4em;
 				    display: block;
 				}
@@ -321,19 +321,30 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     {
         switch( typeof json )
         {
+            case 'undefined': return `<NullLiteral></NullLiteral>`;
+            case 'boolean': return `<BooleanLiteral value="${json}" contenteditable="true">${json}</BooleanLiteral>`;
+            case 'number': return `<NumberLiteral value="${json}" contenteditable="true">${json}</NumberLiteral>`;
             case 'string': return JSON.stringify( json ).replace(/^(")(.*)(")$/, 
-                                '<String contenteditable="true" value="$2">$2</String>');
-            case 'boolean': return `<Boolean value="${json}" contenteditable="true">${json}</Boolean>`;
-            case 'number': return `<Number value="${json}" contenteditable="true">${json}</Number>`;
+                                '<StringLiteral contenteditable="true" value="$2">$2</StringLiteral>');
             case 'object': if( Array.isArray(json) )
-                                return `<Array><children>${json.map( item=> this.transform(item) ).join(',\n')}</children></Array>`;
+                                return `<ArrayExpression>
+                                			<elements>
+                                				${json.map( item=> this.transform(item) ).join(',\n')}
+                            				</elements>
+                        				</ArrayExpression>`;
                             else if( json === null )
                             	return `<NullLiteral></NullLiteral>`;
                             else
-                                return `<Object type="${json['@type']||json.constructor.name}"><children>${Object.getOwnPropertyNames(json)
-        .map( n=> `<key contenteditable="true" name="${n}">${n}</key>${this.transform(json[n])}` )
-        .join(',\n')
-    }</children></Object>`;
+                                return `<ObjectExpression type="${json['@type']||json.constructor.name}">
+                                			<properties>
+                                				${Object.getOwnPropertyNames(json).map( n=> 
+                                				`<ObjectProperty>
+	                                				<key contenteditable="true" name="${n}">${n}</key>
+	                                				${this.transform(json[n])}
+                                				</ObjectProperty>`
+                                				).join(',\n')}
+    										</properties>
+										</ObjectExpression>`;
         }
     }
     toComputedString()
