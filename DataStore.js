@@ -280,45 +280,50 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
         this.rawChildren.innerHTML = `<content>`;
         
         this.addStyle('default', `
-        	MultiEditor { white-space: pre; display: block; margin: 0; }
-		    *:focus {
+        	:host { white-space: pre; display: block; margin: 0; }
+		    ::content *:focus {
 		        outline: none;
 		    }
         `);
         
         this.addStyle('json', `
-		    StringLiteral, BooleanLiteral, NumberLiteral, ArrayExpression, key, NullLiteral { display: inline; }
-		    NullLiteral::before { content: 'null'; }
-		    StringLiteral {  }
-			    StringLiteral::before { content: '"'; }
-			    StringLiteral::after { content: '"'; }
-		    BooleanLiteral {  }
-		    NumberLiteral {  }
-		    ArrayExpression {  }
-			    ArrayExpression::before { content: "["; }
-			    ArrayExpression::after { content: "]"; }
-		    ObjectExpression {  }
-			    ObjectExpression::before { content: "{"; }
-			    ObjectExpression::after { content: "}"; }
-			elements, properties {
+		    ::content StringLiteral, 
+		    ::content BooleanLiteral, 
+		    ::content NumberLiteral, 
+		    ::content ArrayExpression, 
+		    ::content key, 
+		    ::content NullLiteral { display: inline; }
+		    ::content NullLiteral::before { content: 'null'; }
+		    ::content StringLiteral {  }
+			    ::content StringLiteral::before { content: '"'; }
+			    ::content StringLiteral::after { content: '"'; }
+		    ::content BooleanLiteral {  }
+		    ::content NumberLiteral {  }
+		    ::content ArrayExpression {  }
+			    ::content ArrayExpression::before { content: "["; }
+			    ::content ArrayExpression::after { content: "]"; }
+		    ::content ObjectExpression {  }
+			    ::content ObjectExpression::before { content: "{"; }
+			    ::content ObjectExpression::after { content: "}"; }
+			::content elements, ::content properties {
 			    margin-left: 4em;
 			    display: block;
 			}
-			ObjectProperty::after { content: ","; }
-				ObjectProperty > value::before { content: ' '; }
-				ObjectProperty > key::after { content: ' :'; }
+			::content ObjectProperty::after { content: ","; }
+				::content ObjectProperty > value::before { content: ' '; }
+				::content ObjectProperty > key::after { content: ' :'; }
         `);
         
         this.addStyle('json-pretty', `
-		    NullLiteral::before { color: grey; }
-		    StringLiteral { color: green; }
-			ObjectProperty::after { content: none; }
-				ObjectProperty > key > StringLiteral { 
+		   ::content  NullLiteral::before { color: grey; }
+		    ::content StringLiteral { color: green; }
+			::content ObjectProperty::after { content: none; }
+				::content ObjectProperty > key > StringLiteral { 
 				    border-bottom: 1px dashed;
 					color: currentColor;
 				}
-					ObjectProperty > key > StringLiteral::before,
-					ObjectProperty > key > StringLiteral::after { content: none; }
+					::content ObjectProperty > key > StringLiteral::before,
+					::content ObjectProperty > key > StringLiteral::after { content: none; }
         `);
         
         
