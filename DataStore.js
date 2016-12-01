@@ -280,28 +280,32 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 			        outline: none;
 			    }
 			    StringLiteral, BooleanLiteral, NumberLiteral, ArrayExpression, key, NullLiteral { display: inline; }
-			    NullLiteral:before { content: 'null'; color: grey; }
-			    StringLiteral { color: black; }
-				    StringLiteral:before { content: '"'; }
-				    StringLiteral:after { content: '"'; }
+			    NullLiteral::before { content: 'null'; color: grey; }
+			    StringLiteral { color: green; }
+				    StringLiteral::before { content: '"'; }
+				    StringLiteral::after { content: '"'; }
 			    BooleanLiteral {  }
 			    NumberLiteral {  }
 			    ArrayExpression {  }
-				    ArrayExpression:before { content: "["; }
-				    ArrayExpression:after { content: "]"; }
+				    ArrayExpression::before { content: "["; }
+				    ArrayExpression::after { content: "]"; }
 			    ObjectExpression {  }
-				    ObjectExpression:before { content: "{"; }
-				    ObjectExpression:after { content: "}"; }
+				    ObjectExpression::before { content: "{"; }
+				    ObjectExpression::after { content: "}"; }
 				elements, properties {
 				    margin-left: 4em;
 				    display: block;
 				}
-				key {
-				    border-bottom: 1px dashed;
-				}
-					/*key:before { content: '"'; }*/
-					/*key::after { content: '":'; }*/
-					key::after { content: ' :'; }
+				ObjectProperty::after { content: ","; }
+					ObjectProperty > key > StringLiteral { 
+					    border-bottom: 1px dashed;
+						color: currentColor;
+					}
+						ObjectProperty > key > StringLiteral::before,
+						ObjectProperty > key > StringLiteral::after { content: none; }
+						
+					ObjectProperty > value::before { content: ' '; }
+					ObjectProperty > key::after { content: ' :'; }
         	</style>
     	</pre>` );
     	this.append( this.transform(data) );
@@ -327,24 +331,13 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
             case 'string': return JSON.stringify( json ).replace(/^(")(.*)(")$/, 
                                 '<StringLiteral contenteditable="true" value="$2">$2</StringLiteral>');
             case 'object': if( Array.isArray(json) )
-                                return `<ArrayExpression>
-                                			<elements>
-                                				${json.map( item=> this.transform(item) ).join(',\n')}
-                            				</elements>
-                        				</ArrayExpression>`;
+                                return `<ArrayExpression><elements>${json.map( item=> this.transform(item) ).join(',\n')}</elements></ArrayExpression>`;
                             else if( json === null )
                             	return `<NullLiteral></NullLiteral>`;
                             else
-                                return `<ObjectExpression type="${json['@type']||json.constructor.name}">
-                                			<properties>
-                                				${Object.getOwnPropertyNames(json).map( n=> 
-                                				`<ObjectProperty>
-	                                				<key contenteditable="true" name="${n}">${n}</key>
-	                                				${this.transform(json[n])}
-                                				</ObjectProperty>`
-                                				).join(',\n')}
-    										</properties>
-										</ObjectExpression>`;
+                                return `<ObjectExpression type="${json['@type']||json.constructor.name}"><properties>${Object.getOwnPropertyNames(json).map( n=> 
+                                				`<ObjectProperty><key name="${n}">${this.transform(n)}</key><value>${this.transform(json[n])}</ObjectProperty>`
+                                				).join('\n')}</properties></ObjectExpression>`;
         }
     }
     toComputedString()
