@@ -446,8 +446,8 @@ cat.Store = class Store {
     {
         return {
             css: [
-                `https://devingfx.github.io/Miaow/layout.css?${Math.random()}`,
-                `https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css`
+                `https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css`,
+                `https://devingfx.github.io/Miaow/layout.css?${Math.random()}`
             ],
             js: [
                 // `https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js`,
@@ -836,7 +836,7 @@ cat.Store = class Store {
                                         top: 10
                                     })
         page.head = page.content.find('.dataTables_scrollHead')
-                                    .css({ margin: '8px -15px' })
+                                    .css({ margin: '14px -15px' })
         page.footer = page.content.find('.dataTables_scrollFoot')
         page.footer.css({ padding: 3 });
         page.table.draw();

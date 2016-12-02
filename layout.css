@@ -232,6 +232,8 @@ pre p {
     border-top: none;
 }
 
+/* DATA TABLES */
+
 table th.sorting:hover,
 table th.sorting_asc:hover,
 table th.sorting_desc:hover {
@@ -241,4 +243,31 @@ table th.sorting_desc:hover {
 table select {
     width: 100%;
 }
-table.dataTable tfoot th, table.dataTable tfoot td { border:none; }
+table.dataTable tfoot th, table.dataTable tfoot td { border: none !important; }
+
+table.dataTable tbody tr.selected,
+table.dataTable.stripe tbody tr.odd.selected,
+table.dataTable.display tbody tr.odd.selected { background-color: currentColor; }
+
+table.dataTable.display tbody tr.selected td {
+    color: white;
+    text-shadow: 0 1px 1px black;
+}
+
+table.dataTable.display tbody tr.odd.selected > .sorting_1, 
+table.dataTable.order-column.stripe tbody tr.odd.selected > .sorting_1,
+table.dataTable.display tbody tr.even.selected > .sorting_1, 
+table.dataTable.order-column.stripe tbody tr.even.selected > .sorting_1 {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+table.dataTable.hover tbody tr:hover.selected, 
+table.dataTable.display tbody tr:hover.selected {
+	background-color: inherit;
+    box-shadow: 0 0 0px 2000px rgba(0,0,0,0.3) inset;
+}
+
+table.dataTable tfoot th, table.dataTable tfoot td {
+    border: none !important;
+    padding: 10px 18px 10px 18px !important;
+}
