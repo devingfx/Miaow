@@ -313,7 +313,7 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 			    margin-left: 4em;
 			    display: block;
 			}
-			::content ObjectProperty { display: block; }
+			::content ObjectProperty { display: block; margin-left: 4em; }
         `);
         
         this.addStyle('json-color', `
