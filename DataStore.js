@@ -788,7 +788,7 @@ cat.Store = class Store {
                         : data
                 }
             ],
-            initComplete: function () {
+            initComplete: function ( settings ) {
                 this.api().columns( '.select-filter' ).every( function () {
                     var column = this;
                     var select = $('<select><option value=""></option></select>')
@@ -825,6 +825,9 @@ cat.Store = class Store {
                             }
                         } );
                 } );
+                $('tbody', settings.nScrollBody).on( 'click', 'tr', function () {
+			        $(this).toggleClass('selected');
+			    } );
             }
         });
         
