@@ -653,11 +653,12 @@ cat.Store = class Store {
     showObjectPage( object )
     {
         var page = new cat.Page;
-        page.title = object.name;
+        page.title = object.name || object['@type'];
         page.title2 = object.url || object['@type'];
         page.content = (
                 page.editor = new cat.MultiEditor( object )
                 )._target;
+		page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString('json')) )
         page.footer = ON`
         <button onclick="${e=> page.editor.save()}" class="important">${LANG('Save')}</button>
         <button onclick="${e=> page.editor.remove()}">${LANG('Delete')}</button>`;
@@ -825,9 +826,14 @@ cat.Store = class Store {
                             }
                         } );
                 } );
-                $('tbody', settings.nScrollBody).on( 'click', 'tr', function () {
-			        $(this).toggleClass('selected');
-			    } );
+                
+                $('tbody', settings.nScrollBody)
+	                .on( 'click', 'tr', function () {
+				        $(this).toggleClass('selected');
+				    })
+				    .on( 'dblclick', 'tr', function () {
+						store.showObjectPage( table.row(this).data() )
+					});
             }
         });
         
