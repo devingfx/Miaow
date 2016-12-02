@@ -661,7 +661,8 @@ cat.Store = class Store {
 		page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString('json')) )
         page.footer = ON`
         <button onclick="${e=> page.editor.save()}" class="important">${LANG('Save')}</button>
-        <button onclick="${e=> page.editor.remove()}">${LANG('Delete')}</button>`;
+        <button onclick="${e=> page.remove()}">${LANG('Cancel')}</button>
+        <button style="color:red" onclick="${e=> page.editor.remove()}">${LANG('Delete')}</button>`;
         this.showPage( page );
         return page;
     }
