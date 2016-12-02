@@ -354,7 +354,7 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     {
         switch( typeof json )
         {
-            case 'undefined': return `<NullLiteral></NullLiteral>`;
+            case 'undefined': return `<NullLiteral contenteditable="true"></NullLiteral>`;
             case 'boolean': return `<BooleanLiteral value="${json}" contenteditable="true">${json}</BooleanLiteral>`;
             case 'number': return `<NumberLiteral value="${json}" contenteditable="true">${json}</NumberLiteral>`;
             case 'string': return JSON.stringify( json ).replace(/^(")(.*)(")$/, 
@@ -362,10 +362,12 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
             case 'object': if( Array.isArray(json) )
                                 return `<ArrayExpression><elements>${json.map( item=> this.transform(item) ).join(',\n')}</elements></ArrayExpression>`;
                             else if( json === null )
-                            	return `<NullLiteral></NullLiteral>`;
+                            	return `<NullLiteral contenteditable="true"></NullLiteral>`;
                             else
-                                return `<ObjectExpression type="${json['@type']||json.constructor.name}"><properties>${Object.getOwnPropertyNames(json).map( n=> 
-                                				`<ObjectProperty><key name="${n}">${this.transform(n)}</key><value>${this.transform(json[n])}</ObjectProperty>`
+                                return `<ObjectExpression type="${json['@type']||json.constructor.name}">${
+                                			Object.getOwnPropertyNames(json)
+                                				.map( n=> 
+                                					`<ObjectProperty key="${n}" value="${json[n]}"><key>${this.transform(n)}</key><value>${this.transform(json[n])}</value></ObjectProperty>`
                                 				).join('')}</properties></ObjectExpression>`;
         }
     }
@@ -658,11 +660,21 @@ cat.Store = class Store {
         page.content = (
                 page.editor = new cat.MultiEditor( object )
                 )._target;
-		page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString('json')) )
+		page.editor.save = ()=> {
+			let json = JSON.parse(page.editor.toComputedString('json'));
+			'$loki' in json
+				? this.objects.update( json )
+				: this.objects.insert( json )
+		}
+		page.editor.remove = ()=> {
+			let json = JSON.parse(page.editor.toComputedString('json'));
+			'$loki' in json
+				&& this.objects.remove( json )
+		}
         page.footer = ON`
-        <button onclick="${e=> page.editor.save()}" class="important">${LANG('Save')}</button>
-        <button onclick="${e=> page.remove()}">${LANG('Cancel')}</button>
-        <button style="color:red" onclick="${e=> page.editor.remove()}">${LANG('Delete')}</button>`;
+	        <button onclick="${e=> page.editor.save()||page.remove()}" class="important">${LANG('Save')}</button>
+	        <button onclick="${e=> page.remove()}">${LANG('Cancel')}</button>
+	        <button style="color:red" onclick="${e=> page.editor.remove()||page.remove()}">${LANG('Delete')}</button>`;
         this.showPage( page );
         return page;
     }
@@ -771,6 +783,7 @@ cat.Store = class Store {
             scrollY: '100%',
             scrollX: true,
             paging:   false,
+            select:   true,
             // data: Object.getOwnPropertyNames( what ).map( id=> what[id] ),
             data: what,
             dom: 'iftr',
