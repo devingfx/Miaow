@@ -794,7 +794,9 @@ cat.Store = class Store {
                 { data: 'fuelType', title: 'Carburant', className: 'select-filter', defaultContent: '' },
                 { data: 'mileageFromOdometer.value', title: 'Kilométrage', defaultContent: '' },
                 { data: 'vehicleModelDate', title: 'Année', defaultContent: '' },
-                { data: 'Chevaux', title: 'Chevaux', className: 'select-filter', defaultContent: '' },
+                // { data: 'Chevaux', title: 'Chevaux', className: 'select-filter', defaultContent: '' },
+                { data: 'offers.seller.alternateName', title: 'Vendeur', className: 'text-filter', defaultContent: '' },
+                { data: 'offers.availableAtOrFrom.address.addressLocality', title: 'Ville', className: 'select-filter', defaultContent: '' },
                 { data: 'offers.price', title: 'Prix', render: data => data + '€', defaultContent: '' },
                 { data: 'description', title:'Description', className: 'text-filter', defaultContent: '', 
                   render: ( data, type, full, meta ) =>
