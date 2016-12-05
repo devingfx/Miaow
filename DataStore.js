@@ -762,7 +762,7 @@ cat.Store = class Store {
     }
     showInTable( what )// $($0).parents('ObjectProperty').get().map( n=> n.getAttribute('key') ).reverse().join('.')
     {
-        var colNum = 8;
+        var colNum = 9;
         // this.$main.empty();
         // var $table = $('<table class="display compact" cellspacing="0" width="100%"><tfoot><tr></tr></tfoot></table>');
         var page = new cat.Page;
@@ -789,7 +789,7 @@ cat.Store = class Store {
             dom: 'iftr',
             "processing": true,
             columns: [
-                { data: 'image', title: 'Photo', className: 'image', defaultContent: '',
+                { data: 'image', title: 'Photo', width: '10%', className: 'image', defaultContent: '',
 	                render: ( data, type, full, meta ) =>
 	                    	Array.isArray(data) && type === 'display' && data.length
 	                    	? `<div class="photo" style="background-image:url(${data[0].thumbnail})"><span>${data.length}</span></div>`
@@ -797,10 +797,10 @@ cat.Store = class Store {
                 { data: 'brand.name', title: 'Marque', className: 'select-filter', defaultContent: '' },
                 { data: 'model.name', title: 'Modèle', className: 'select-filter', defaultContent: '' },
                 { data: 'fuelType', title: 'Carburant', className: 'select-filter', defaultContent: '' },
-                { data: 'mileageFromOdometer.value', title: 'Kilométrage', defaultContent: '' },
+                { data: 'mileageFromOdometer.value', title: 'Km', width: '10%', defaultContent: '' },
                 { data: 'vehicleModelDate', title: 'Année', defaultContent: '' },
                 // { data: 'Chevaux', title: 'Chevaux', className: 'select-filter', defaultContent: '' },
-                { data: 'offers.seller.alternateName', title: 'Vendeur', className: 'text-filter', defaultContent: '' },
+                { data: 'offers.seller.alternateName', title: 'Vendeur', width: '10%', className: 'text-filter', defaultContent: '' },
                 { data: 'offers.availableAtOrFrom.address.addressLocality', title: 'Ville', className: 'select-filter', defaultContent: '' },
                 { data: 'offers.price', title: 'Prix', render: data => data + '€', defaultContent: '' },
                 { data: 'description', title:'Description', className: 'text-filter', defaultContent: '', 

@@ -236,8 +236,8 @@ pre p {
 
 table .photo {
     display: inline-block;
-    width: 80px;
-    height: 50px;
+    width: 100px;
+    height: 100%;
     background-size: cover;
     background-position-x: center;
     background-position-y: center;
