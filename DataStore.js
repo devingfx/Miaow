@@ -789,6 +789,11 @@ cat.Store = class Store {
             dom: 'iftr',
             "processing": true,
             columns: [
+                { data: 'image', title: 'Photo', className: 'image', defaultContent: '',
+	                render: ( data, type, full, meta ) =>
+	                    	Array.isArray(data) && type === 'display' && data.length
+	                    	? `<img src="${data[0].thumbnail}"><span>${data.length}</span>`
+	                        : data},
                 { data: 'brand.name', title: 'Marque', className: 'select-filter', defaultContent: '' },
                 { data: 'model.name', title: 'Modèle', className: 'select-filter', defaultContent: '' },
                 { data: 'fuelType', title: 'Carburant', className: 'select-filter', defaultContent: '' },
