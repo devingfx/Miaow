@@ -537,7 +537,7 @@ cat.Store = class Store {
         this.$collections = $('#collections');
         // this.$main = $('#main');
         // this.updateCollections();
-        this.updateLanguage( navigator.language );
+        // this.updateLanguage( navigator.language );
         this.onPageChange();
     }
     prepareEmptyDB()
@@ -758,7 +758,7 @@ cat.Store = class Store {
     {
         $('section').remove();
         section.appendTo('body');
-        this.updateLanguage();
+        // this.updateLanguage();
     }
     showInTable( what )// $($0).parents('ObjectProperty').get().map( n=> n.getAttribute('key') ).reverse().join('.')
     {
@@ -997,7 +997,7 @@ cat.Store = class Store {
     }
     updateLanguage( lang )
     {
-        language = null;
+        // language = null;
         // lang = lang || $('html').attr('lang');
         // $('lang').hide();
         // $(`lang[${lang}]`).show();
