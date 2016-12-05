@@ -234,7 +234,7 @@ pre p {
 
 /* DATA TABLES */
 
-table .picture {
+table .photo {
     display: inline-block;
     width: 80px;
     height: 50px;
@@ -243,7 +243,7 @@ table .picture {
     background-position-y: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
-	table .picture span {
+	table .photo span {
 		display: block;
 		position: absolute;
 		bottom: 0;
