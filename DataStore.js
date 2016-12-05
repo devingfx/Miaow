@@ -760,7 +760,7 @@ cat.Store = class Store {
         section.appendTo('body');
         this.updateLanguage();
     }
-    showInTable( what )
+    showInTable( what )// $($0).parents('ObjectProperty').get().map( n=> n.getAttribute('key') ).reverse().join('.')
     {
         var colNum = 8;
         // this.$main.empty();
