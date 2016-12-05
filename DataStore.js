@@ -792,7 +792,7 @@ cat.Store = class Store {
                 { data: 'image', title: 'Photo', className: 'image', defaultContent: '',
 	                render: ( data, type, full, meta ) =>
 	                    	Array.isArray(data) && type === 'display' && data.length
-	                    	? `<div class="photo" style="background-image:url(${data[0].thumbnail)}"><span>${data.length}</span></div>`
+	                    	? `<div class="photo" style="background-image:url(${data[0].thumbnail})"><span>${data.length}</span></div>`
 	                        : data},
                 { data: 'brand.name', title: 'Marque', className: 'select-filter', defaultContent: '' },
                 { data: 'model.name', title: 'Modèle', className: 'select-filter', defaultContent: '' },
