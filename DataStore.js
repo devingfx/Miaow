@@ -1001,7 +1001,12 @@ cat.Store = class Store {
     {
         this.$collections.empty();
         this.schemas.find()//.map(o=>o.name)
-            .map( schema=> this.$collections.append(`<li><button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showInTable(store.objects.find({'@type':'${schema.item['@type']}'}))">${schema.name}</button></li>`) )
+            .map( schema=> this.$collections.append(
+            	ON`<li>
+            		<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');
+            		${e=>this.showInTable(store.objects.find(schema.potentialAction.query))}"
+            		>${schema.name}</button>
+        		 </li>`) )
     }
     updateLanguage( lang )
     {
