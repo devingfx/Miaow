@@ -658,7 +658,7 @@ cat.Store = class Store {
         page.title = object.name || object['@type'];
         page.title2 = object.url || object['@type'];
         object.url
-        	&& page.title2.click(e=>( parentWindow.document.location = object.url) );
+        	&& page.title2.dblclick(e=>( parentWindow.document.location = object.url) );
         
         page.content = (
                 page.editor = new cat.MultiEditor( object )
