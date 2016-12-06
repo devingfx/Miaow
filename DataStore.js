@@ -765,7 +765,7 @@ cat.Store = class Store {
     }
     showInTable( what )// $($0).parents('ObjectProperty').get().map( n=> n.getAttribute('key') ).reverse().join('.')
     {
-        var colNum = 9;
+        var colNum = 10;
         // this.$main.empty();
         // var $table = $('<table class="display compact" cellspacing="0" width="100%"><tfoot><tr></tr></tfoot></table>');
         var page = new cat.Page;
