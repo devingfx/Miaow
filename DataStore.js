@@ -1004,7 +1004,7 @@ cat.Store = class Store {
             .map( schema=> this.$collections.append(
             	ON`<li>
             		<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');
-            		${e=>this.showInTable(store.objects.find(schema.potentialAction.query))}"
+            		${e=>this.showInTable(store.objects.findObjects(schema.potentialAction.query))}"
             		>${schema.name}</button>
         		 </li>`) )
     }
