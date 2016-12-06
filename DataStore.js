@@ -232,7 +232,7 @@ cat.Page = class Page extends cat.Window {
     }
     // get title()     { return this.$header.find('h1').text() }
     // set title( v )  { this.$header.find('h1').append(v) }
-    get title2()    { return this.$header.find('span').text() }
+    get title2()    { return this.$header.find('span') }
     set title2( v ) { this.$header.find('span').append(v) }
     // get head()      { return this.$header }
     // set head( v )   { this.$header.append(v) }
