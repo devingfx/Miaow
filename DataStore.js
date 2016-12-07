@@ -792,7 +792,7 @@ cat.Store = class Store {
             dom: 'iftr',
             "processing": true,
             columns: [
-                { data: 'image', title: 'Photo', width: '10%', className: 'image', defaultContent: '',
+                { data: 'image', title: 'Photo', width: '10%', className: 'color-filter', defaultContent: '',
 	                render: ( data, type, full, meta ) =>
 	                    	Array.isArray(data) && type === 'display' && data.length
 	                    	? `<div class="photo" style="background-image:url(${data[0].thumbnail})"><span>${data.length}</span></div>`
