@@ -327,9 +327,9 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 		    ::content key, 
 		    ::content NullLiteral { display: inline; }
 		    	::content NullLiteral::before { content: 'null'; }
-				::content NullLiteral:not(:empty) { color: green; }
+				::content NullLiteral:not(:empty) {  }
 			    	::content NullLiteral:not(:empty)::after { content: '"'; }
-					::content NullLiteral:not(:empty)::before { content: '"' !important; color: green; }
+					::content NullLiteral:not(:empty)::before { content: '"'; color: green; }
 		    ::content StringLiteral {  }
 			    ::content StringLiteral::before { content: '"'; }
 			    ::content StringLiteral::after { content: '"'; }
@@ -355,7 +355,9 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
         `);
         
         this.addStyle('json-color', `
-		   ::content  NullLiteral::before { color: grey; }
+		   ::content  NullLiteral { color: grey; }
+				::content NullLiteral:not(:empty) { color: green; }
+					::content NullLiteral:not(:empty)::before { color: green; }
 		    ::content BooleanLiteral { color: darkorchid; }
 		    ::content NumberLiteral { color: blue; }
 		    ::content StringLiteral { color: green; }
@@ -421,8 +423,10 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     	this.append( copy );
     	copy.find('*')
     		.map( (i,n)=> {
-			    $(n).prepend( eval(getComputedStyle(n,':before').content) )
-			    	.append( eval(getComputedStyle(n,':after').content) )
+			  	var b = eval(getComputedStyle(n,':before').content) );
+			   	var a = eval(getComputedStyle(n,':after').content) );
+			    $(n).prepend( b )
+			    	.append( a )
 			})
 		let str = copy.text();
 		copy.remove();
