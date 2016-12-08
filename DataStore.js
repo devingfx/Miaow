@@ -1,3 +1,38 @@
+var org;
+function loadSchemaOrg()
+{
+	$.getJSON('http://schema.org/version/latest/all-layers.jsonld')
+		.then( json=> {
+			org.schema = json;
+			org.schema = {version:{latest:{"all-layers":json}}};
+			org.schema.search = function( str )
+			{
+				return this['@graph'].map( lib=> 
+					lib['@graph']
+						// .filter( o=> o['@type']=='rdf:Property' && o['http://schema.org/domainIncludes'] && o['http://schema.org/domainIncludes']['@id']=='http://schema.org/Person')
+						.filter( o=> new RegExp(str,'i').test(o['rdfs:label']) )
+						// .map(o=>o['rdfs:label'])
+				)
+				.reduce( (p,n)=> p.concat(n) )
+			}
+			
+		})
+}
+/*
+org.schema.search('fuel')
+	.map( o=> {
+		let domain = o['http://schema.org/domainIncludes']
+						? Array.isArray(o['http://schema.org/domainIncludes'])
+							? o['http://schema.org/domainIncludes'][0]['@id']
+							: o['http://schema.org/domainIncludes']['@id']
+						: '';
+		console.log(
+		`%c${ o['@type'] == 'rdf:Property' && domain
+				? `${domain.split('/').pop()}.` 
+				: ''}%c${o['rdfs:label']}`,
+		'color:blue', ''
+	)})
+*/
 
 window.SchemaExtractor = class SchemaExtractor {
 	constructor( json, doc )
@@ -291,7 +326,10 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 		    ::content ArrayExpression, 
 		    ::content key, 
 		    ::content NullLiteral { display: inline; }
-		    ::content NullLiteral::before { content: 'null'; }
+		    	::content NullLiteral::before { content: 'null'; }
+				::content NullLiteral:not(:empty) { color: green; }
+			    	::content NullLiteral:not(:empty)::after { content: '"'; }
+					::content NullLiteral:not(:empty)::before { content: '"' !important; color: green; }
 		    ::content StringLiteral {  }
 			    ::content StringLiteral::before { content: '"'; }
 			    ::content StringLiteral::after { content: '"'; }
@@ -362,7 +400,7 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
             case 'object': if( Array.isArray(json) )
                                 return `<ArrayExpression><elements>${json.map( item=> this.transform(item) ).join(',\n')}</elements></ArrayExpression>`;
                             else if( json === null )
-                            	return `<NullLiteral contenteditable="true"></NullLiteral>`;
+                            	return `<NullLiteral contenteditable="true"> </NullLiteral>`;
                             else
                                 return `<ObjectExpression type="${json['@type']||json.constructor.name}">${
                                 			Object.getOwnPropertyNames(json)
