@@ -423,8 +423,8 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
     	this.append( copy );
     	copy.find('*')
     		.map( (i,n)=> {
-			  	var b = eval(getComputedStyle(n,':before').content) );
-			   	var a = eval(getComputedStyle(n,':after').content) );
+			  	var b = eval(getComputedStyle(n,':before').content);
+			   	var a = eval(getComputedStyle(n,':after').content);
 			    $(n).prepend( b )
 			    	.append( a )
 			})
