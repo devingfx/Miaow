@@ -70,17 +70,23 @@ LANG.en = {}
 
 
 // in a file
-LANG.en = {
-	"This page": "This page",
-	"Save": "Save",
-	"Cancel": "Cancel",
-	"Delete": "Delete"
-};
+// LANG.en = {
+// 	"This page": "This page",
+// 	"Save": "Save",
+// 	"Cancel": "Cancel",
+// 	"Delete": "Delete",
+// 	"Current page": "Cette page",
+// 	"Schemas": "Schémas",
+// 	"Settings": "Préférences"
+// };
 LANG.fr = {
 	"This page": "Cette page",
 	"Save": "Enregistrer",
 	"Cancel": "Annuler",
-	"Delete": "Supprimer"
+	"Delete": "Supprimer",
+	"Current page": "Cette page",
+	"Schemas": "Schémas",
+	"Settings": "Préférences"
 };
 
 language = navigator.language || LANG[LANG.DEFAULT];
