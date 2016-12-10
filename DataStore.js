@@ -318,67 +318,68 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 		this.rawChildren = this[0].createShadowRoot();
 		this.rawChildren.innerHTML = `<style>
 			:host { white-space: pre; display: block; margin: 0; }
-			::content *:focus {
+			 *:focus {
 				outline: none;
 			}
-		</style><content>`;
+		</style>`;
 		
 		this.addStyle('json', `
-			::content StringLiteral, 
-			::content BooleanLiteral, 
-			::content NumberLiteral, 
-			::content ArrayExpression, 
-			::content key, 
-			::content NullLiteral { display: inline; }
-				::content NullLiteral::before { content: 'null'; }
-				::content NullLiteral:not(:empty) {  }
-					::content NullLiteral:not(:empty)::after { content: '"'; }
-					::content NullLiteral:not(:empty)::before { content: '"'; color: green; }
-			::content StringLiteral {  }
-				::content StringLiteral::before { content: '"'; }
-				::content StringLiteral::after { content: '"'; }
-			::content BooleanLiteral {  }
-			::content NumberLiteral {  }
-			::content ArrayExpression {  }
-				::content ArrayExpression::before { content: "["; }
-				::content ArrayExpression::after { content: "]"; }
-			::content ObjectExpression {  }
-				::content ObjectExpression::before { content: "{"; }
-				::content ObjectExpression::after { content: "}"; }
-			::content ObjectProperty:not(:last-child)::after { content: ","; }
-				::content ObjectProperty > value::before { content: ' '; }
-				::content ObjectProperty > key::after { content: ' :'; }
+			StringLiteral, 
+			BooleanLiteral, 
+			NumberLiteral, 
+			ArrayExpression, 
+			key, 
+			NullLiteral { display: inline; }
+				NullLiteral::before { content: 'null'; }
+				NullLiteral:not(:empty) {  }
+					NullLiteral:not(:empty)::after { content: '"'; }
+					NullLiteral:not(:empty)::before { content: '"'; color: green; }
+			StringLiteral {  }
+				StringLiteral::before { content: '"'; }
+				StringLiteral::after { content: '"'; }
+			BooleanLiteral {  }
+			NumberLiteral {  }
+			ArrayExpression {  }
+				ArrayExpression::before { content: "["; }
+				ArrayExpression::after { content: "]"; }
+			ObjectExpression {  }
+				ObjectExpression::before { content: "{"; }
+				ObjectExpression::after { content: "}"; }
+			ObjectProperty:not(:last-child)::after { content: ","; }
+				ObjectProperty > value::before { content: ' '; }
+				ObjectProperty > key::after { content: ' :'; }
 		`);
 		
 		this.addStyle('json-pretty', `
-			::content elements, ::content properties {
+			elements, properties {
 				margin-left: 4em;
 				display: block;
 			}
-			::content ObjectProperty { display: block; margin-left: 4em; }
+			ObjectProperty { display: block; margin-left: 4em; }
 		`);
 		
 		this.addStyle('json-color', `
-		   ::content  NullLiteral { color: grey; }
-				::content NullLiteral:not(:empty) { color: green; }
-					::content NullLiteral:not(:empty)::before { color: green; }
-			::content BooleanLiteral { color: darkorchid; }
-			::content NumberLiteral { color: blue; }
-			::content StringLiteral { color: green; }
-				::content ObjectProperty::after { content: none; }
-					::content ObjectProperty > key > StringLiteral { 
+		    NullLiteral { color: grey; }
+				NullLiteral:not(:empty) { color: green; }
+					NullLiteral:not(:empty)::before { color: green; }
+			BooleanLiteral { color: darkorchid; }
+			NumberLiteral { color: blue; }
+			StringLiteral { color: green; }
+				ObjectProperty::after { content: none; }
+					ObjectProperty > key > StringLiteral { 
 						border-bottom: 1px dashed;
 						color: currentColor;
 					}
-						::content ObjectProperty > key > StringLiteral::before,
-						::content ObjectProperty > key > StringLiteral::after { content: none; }
+						ObjectProperty > key > StringLiteral::before,
+						ObjectProperty > key > StringLiteral::after { content: none; }
 		`);
 		
 		this.addStyle('json-form', `
 		`);
 		
 		
-		this.append( this.transform(data) );
+		this.data = data;
+		this.$root = $( this.transform(data) ).appenTo( this.rawChildren );
 		// this.$el[0].innerHTML = `<header>${before}</header>` + this.stringify(data);
 		document.body.setAttribute('spellcheck',"false");
 		
@@ -406,12 +407,12 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 			case 'object': if( Array.isArray(json) )
 								return `<ArrayExpression><elements>${json.map( item=> this.transform(item) ).join(',\n')}</elements></ArrayExpression>`;
 							else if( json === null )
-								return `<NullLiteral contenteditable="true"> </NullLiteral>`;
+								return `<NullLiteral contenteditable="true"></NullLiteral>`;
 							else
 								return `<ObjectExpression type="${json['@type']||json.constructor.name}">${
 											Object.getOwnPropertyNames(json)
 												.map( n=> 
-													`<ObjectProperty key="${n}" value="${json[n]}"><key>${this.transform(n)}</key><value>${this.transform(json[n])}</value></ObjectProperty>`
+													`<ObjectProperty key="${n}" value="${json[n]}"><key>${this.transform(n).replace(' ',' key ')}</key><value>${this.transform(json[n])}</value></ObjectProperty>`
 												).join('')}</properties></ObjectExpression>`;
 		}
 	}
