@@ -597,13 +597,10 @@ cat.Store = class Store {
 	}
 	constructor()
 	{
-		console.info(document.documentElement.outerHTML);
-		console.info(document.head);
-		console.info(document.body);
-		Store.deps.css.map( url => document.write(`<link rel="stylesheet" type="text/css" href="${url}">`) )
-		Store.deps.js.map( url => document.write(`<script type="text/javascript" src="${url}" onload="store.start()"></script>`) )
+		Store.deps.css.map( url => document.head.innerHTML += `<link rel="stylesheet" type="text/css" href="${url}">` )
+		Store.deps.js.map( url => document.head.innerHTML += `<script type="text/javascript" src="${url}" onload="store.start()"></script>` )
 		console.log(Store.deps, document);
-		document.write(`<title>Miaow online - ${parentWindow.document.location.host}</title>`);
+		document.head.innerHTML += `<title>Miaow online - ${parentWindow.document.location.host}</title>`;
 		document.documentElement.appendChild(document.createElement('body'))
 		var themeColor = parentWindow.document.querySelector('meta[name="theme-color"]');
 		themeColor = themeColor ? themeColor.content : "#888";
