@@ -597,6 +597,7 @@ cat.Store = class Store {
 	}
 	constructor()
 	{
+		var n;
 		Store.deps.css.map( url => 
 			document.head.appendChild((
 				n = document.createElement('link'), 
