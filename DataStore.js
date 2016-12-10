@@ -597,15 +597,17 @@ cat.Store = class Store {
 	}
 	constructor()
 	{
-		Store.deps.css.map( url => document.head.innerHTML += `<link rel="stylesheet" type="text/css" href="${url}">` )
-		Store.deps.js.map( url => document.head.innerHTML += `<script type="text/javascript" src="${url}" onload="store.start()"></script>` )
-		console.log(Store.deps, document);
-		document.head.innerHTML += `<title>Miaow online - ${parentWindow.document.location.host}</title>`;
-		document.documentElement.appendChild(document.createElement('body'))
-		var themeColor = parentWindow.document.querySelector('meta[name="theme-color"]');
-		themeColor = themeColor ? themeColor.content : "#888";
-		document.body.style.color = themeColor;
-		document.body.innerHTML = `
+		document.documentElement.innerHTML += 
+		`<head>
+			${Store.deps.css.map( url => 
+				`<link rel="stylesheet" type="text/css" href="${url}">`
+			).join('')}
+			${Store.deps.js.map( url => 
+				`<script type="text/javascript" src="${url}" onload="store.start()"></script>`
+			).join('')}
+			<title>Miaow online - ${parentWindow.document.location.host}</title>
+		</head>
+		<body>
 			<nav>
 				<img class="logo" src="https://devingfx.github.io/Miaow/logo.svg"/>
 				<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showAddPage()"
@@ -623,7 +625,40 @@ cat.Store = class Store {
 					<lang fr>Préférences</lang>
 				</button>
 			</nav>
-		`
+		</body>
+		`;
+		var themeColor = parentWindow.document.querySelector('meta[name="theme-color"]');
+		themeColor = themeColor ? themeColor.content : "#888";
+		document.body.style.color = themeColor;
+		
+		
+		// Store.deps.css.map( url => document.head.innerHTML += `<link rel="stylesheet" type="text/css" href="${url}">` )
+		// Store.deps.js.map( url => document.head.innerHTML += `<script type="text/javascript" src="${url}" onload="store.start()"></script>` )
+		// console.log(Store.deps, document);
+		// document.head.innerHTML += `<title>Miaow online - ${parentWindow.document.location.host}</title>`;
+		// document.documentElement.appendChild(document.createElement('body'))
+		// var themeColor = parentWindow.document.querySelector('meta[name="theme-color"]');
+		// themeColor = themeColor ? themeColor.content : "#888";
+		// document.body.style.color = themeColor;
+		// document.body.innerHTML = `
+		// 	<nav>
+		// 		<img class="logo" src="https://devingfx.github.io/Miaow/logo.svg"/>
+		// 		<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showAddPage()"
+		// 				langfr="Cette page">Current page</button>
+		// 		<hr/>
+		// 		<!--span>Collections</span-->
+		// 		<ul id="collections"></ul>
+		// 		<hr/>
+		// 		<button id="schemasBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSchemasWindow()">
+		// 			<lang en>Schemas</lang>
+		// 			<lang fr>Schémas</lang>
+		// 		</button>
+		// 		<button id="settingsBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSettings()">
+		// 			<lang en>Settings</lang>
+		// 			<lang fr>Préférences</lang>
+		// 		</button>
+		// 	</nav>
+		// `
 		
 		// Object.getOwnPropertyNames(this.data)
 		//	 .map( n=> Object.defineProperty(this, n, {get: ()=> this.data[n]}) )
