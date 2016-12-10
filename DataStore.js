@@ -153,11 +153,6 @@ window.SchemaExtractor = class SchemaExtractor {
 }
 window.SchemaExtractor.schema = Symbol`schema`;
 
-Object.getOwnPropertyDescriptor(o,k).get.bind(o._target[0].ctrl)
-Object.getOwnPropertyDescriptor(o.constructor.prototype,k).get.bind(o._target[0].ctrl)
-
-
-
 
 var cat = {};
 cat.Element = class Element {
