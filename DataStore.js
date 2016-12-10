@@ -611,6 +611,7 @@ cat.Store = class Store {
 				n = document.createElement('script'), 
 				n.type = "text/javascript",
 				n.src = url,
+				n.onload = store.start,
 				n ))
 		)
 		document.documentElement.innerHTML += 
