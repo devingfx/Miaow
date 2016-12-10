@@ -379,7 +379,7 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 		
 		
 		this.data = data;
-		this.$root = $( this.transform(data) ).appenTo( this.rawChildren );
+		this.$root = $( this.transform(data) ).appendTo( this.rawChildren );
 		// this.$el[0].innerHTML = `<header>${before}</header>` + this.stringify(data);
 		document.body.setAttribute('spellcheck',"false");
 		
