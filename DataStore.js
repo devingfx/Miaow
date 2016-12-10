@@ -597,14 +597,23 @@ cat.Store = class Store {
 	}
 	constructor()
 	{
+		Store.deps.css.map( url => 
+			document.head.appendChild((
+				n = document.createElement('link'), 
+				n.rel = "stylesheet",
+				n.type = "text/css",
+				n.href = url,
+				n ))
+		)
+		Store.deps.js.map( url => 
+			document.head.appendChild((
+				n = document.createElement('script'), 
+				n.type = "text/javascript",
+				n.src = url,
+				n ))
+		)
 		document.documentElement.innerHTML += 
 		`<head>
-			${Store.deps.css.map( url => 
-				`<link rel="stylesheet" type="text/css" href="${url}">`
-			).join('')}
-			${Store.deps.js.map( url => 
-				`<script type="text/javascript" src="${url}" onload="store.start()"></script>`
-			).join('')}
 			<title>Miaow online - ${parentWindow.document.location.host}</title>
 		</head>
 		<body>
@@ -632,8 +641,7 @@ cat.Store = class Store {
 		document.body.style.color = themeColor;
 		
 		
-		// Store.deps.css.map( url => document.head.innerHTML += `<link rel="stylesheet" type="text/css" href="${url}">` )
-		// Store.deps.js.map( url => document.head.innerHTML += `<script type="text/javascript" src="${url}" onload="store.start()"></script>` )
+		
 		// console.log(Store.deps, document);
 		// document.head.innerHTML += `<title>Miaow online - ${parentWindow.document.location.host}</title>`;
 		// document.documentElement.appendChild(document.createElement('body'))
