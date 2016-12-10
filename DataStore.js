@@ -153,6 +153,12 @@ window.SchemaExtractor = class SchemaExtractor {
 }
 window.SchemaExtractor.schema = Symbol`schema`;
 
+Object.getOwnPropertyDescriptor(o,k).get.bind(o._target[0].ctrl)
+Object.getOwnPropertyDescriptor(o.constructor.prototype,k).get.bind(o._target[0].ctrl)
+
+
+
+
 var cat = {};
 cat.Element = class Element {
 	constructor( tag )
@@ -165,7 +171,19 @@ cat.Element = class Element {
 								: Reflect.get(this._target, k)
 							: Reflect.has( o._target[0], k )
 								? Reflect.get( o._target[0], k )
-								: Reflect.get( o,k ),
+								: Reflect.has(o,k)
+									? (cur => {
+											var desc;
+											while( cur.__proto__ != Object )
+											{
+												if( desc = Object.getOwnPropertyDescriptor( cur, k ) ) break;
+												cur = cur.__proto__;
+											}
+											if( desc )
+												return desc.get && desc.get.bind( o._target[0].ctrl )()
+											 	 		|| desc.value;
+										})(o)
+									: null,
 			set: (o,k,v) => Reflect.set( Reflect.has(this._target,k) ? this._target : o, k, v )
 		} )
 		this._target[0].ctrl = proxy;
