@@ -597,7 +597,10 @@ cat.Store = class Store {
 	}
 	constructor()
 	{
-		debugger;Store.deps.css.map( url => document.write(`<link rel="stylesheet" type="text/css" href="${url}">`) )
+		console.info(document.documentElement.outerHTML);
+		console.info(document.head);
+		console.info(document.body);
+		Store.deps.css.map( url => document.write(`<link rel="stylesheet" type="text/css" href="${url}">`) )
 		Store.deps.js.map( url => document.write(`<script type="text/javascript" src="${url}" onload="store.start()"></script>`) )
 		console.log(Store.deps, document);
 		document.write(`<title>Miaow online - ${parentWindow.document.location.host}</title>`);
