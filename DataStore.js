@@ -832,7 +832,7 @@ cat.Store = class Store {
 		
 		page.content = (
 				page.editor = new cat.MultiEditor( object )
-				)._target;
+				).[Symbol.proxified];
 		page.editor.save = ()=> {
 			let json = JSON.parse(page.editor.toComputedString('json'));
 			'$loki' in json
@@ -903,7 +903,7 @@ cat.Store = class Store {
 			<button onclick="this.parentNode.parentNode.saveData()" class="important">Enregistrer</button>
 			<button onclick="">Supprimer</button>`;
 			this.showPage( page );
-			page._target[0].saveData = ()=> {
+			page.[Symbol.proxified][0].saveData = ()=> {
 				var data = JSON.parse( editor.$el.text() );
 				!this.data.has(collection) && this.data.set(collection) && this.updateCollections();
 				this.data.get(collection).set( data['@id'], data );
@@ -1053,11 +1053,11 @@ cat.Store = class Store {
 			.map( item=> {
 				editor = new cat.MultiEditor( item.item );
 				editor.attr('label', item.name );
-				page.content = editor._target;
+				page.content = editor.[Symbol.proxified];
 			})
 		editor = new cat.MultiEditor( {"@context":"http://schema.org/","@type":""} );
 		editor.attr('label', "+" );
-		page.content = editor._target;
+		page.content = editor.[Symbol.proxified];
 		page.$content.update();
 		page.footer = ON`
 		<button onclick="${e=> page.editor.save()}" class="important">${LANG('Save')}</button>
@@ -1080,7 +1080,7 @@ cat.Store = class Store {
 		
 		this.showPage( page );
 		
-		page._target[0].saveData = ()=> {
+		page.[Symbol.proxified][0].saveData = ()=> {
 			var settings;
 			try {
 				settings= JSON.parse( page.content.text() );
