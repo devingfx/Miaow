@@ -468,7 +468,8 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 	}
 	toComputedString()
 	{
-		let copy = this.clone();
+		// let copy = this.clone();
+		let copy = $(this.rawChildren).find('> :not(style)').clone();
 		// copy.find('style').remove();
 		this.toggleStyle('*',false);
 		this.toggleStyle('json',true);
