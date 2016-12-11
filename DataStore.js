@@ -218,7 +218,7 @@ cat.Element = class Element {
 									: null,
 			set: (o,k,v) => Reflect.set( Reflect.has(o[Symbol.proxified],k) ? o[Symbol.proxified] : o, k, v )
 		} )
-		o[Symbol.proxified][0].ctrl = proxy;
+		this[Symbol.proxified][0].ctrl = proxy;
 		return proxy;
 	}
 	Element()
