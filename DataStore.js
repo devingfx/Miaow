@@ -197,12 +197,12 @@ cat.Element = class Element {
 	{
 		this[Symbol.proxified] = $( tag );
 		let proxy = new Proxy( this, {
-			get: (o,k) => Reflect.has(this._target,k)
-							? typeof Reflect.get(this._target, k) == 'function'
-								? Reflect.get(this._target, k).bind(this._target)
-								: Reflect.get(this._target, k)
-							: Reflect.has( o._target[0], k )
-								? Reflect.get( o._target[0], k )
+			get: (o,k) => Reflect.has(o[Symbol.proxified],k)
+							? typeof Reflect.get(o[Symbol.proxified], k) == 'function'
+								? Reflect.get(o[Symbol.proxified], k).bind(o[Symbol.proxified])
+								: Reflect.get(o[Symbol.proxified], k)
+							: Reflect.has( o[Symbol.proxified][0], k )
+								? Reflect.get( o[Symbol.proxified][0], k )
 								: Reflect.has(o,k)
 									? (cur => {
 											var desc;
@@ -212,13 +212,13 @@ cat.Element = class Element {
 												cur = cur.__proto__;
 											}
 											if( desc )
-												return desc.get && desc.get.bind( o._target[0].ctrl )()
+												return desc.get && desc.get.bind( o[Symbol.proxified][0].ctrl )()
 											 	 		|| desc.value;
 										})(o)
 									: null,
-			set: (o,k,v) => Reflect.set( Reflect.has(this._target,k) ? this._target : o, k, v )
+			set: (o,k,v) => Reflect.set( Reflect.has(o[Symbol.proxified],k) ? o[Symbol.proxified] : o, k, v )
 		} )
-		this._target[0].ctrl = proxy;
+		o[Symbol.proxified][0].ctrl = proxy;
 		return proxy;
 	}
 	Element()
