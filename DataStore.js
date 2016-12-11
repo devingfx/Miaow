@@ -476,7 +476,7 @@ cat.MultiEditor = class MultiEditor extends cat.Element {
 		// str=this.toComputedString();
 		// JSON.parse(str)
 
-		this.append( copy );
+		this.rawChildren.appendChild( copy[0] );
 		copy.find('*')
 			.map( (i,n)=> {
 			  	var b = eval(getComputedStyle(n,':before').content);
