@@ -1,7 +1,3 @@
-document.addEventListener('DOMContentLoaded', e=> console.log(e) );
-document.addEventListener('loaded', e=> console.log(e) );
-window.addEventListener('loaded', e=> console.log(e) );
-
 var org;
 function loadSchemaOrg()
 {
@@ -611,7 +607,7 @@ cat.Store = class Store {
 				n = document.createElement('script'), 
 				n.type = "text/javascript",
 				n.src = url,
-				n.onload = this.start,
+				n.onload = this.start.bind( this ),
 				n ))
 		)
 		document.documentElement.innerHTML += 
