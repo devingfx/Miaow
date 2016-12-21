@@ -34,6 +34,9 @@ org.schema.search('fuel')
 	)})
 */
 
+import 'https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css';
+import 'https://devingfx.github.io/Miaow/layout.css';
+
 import 'https://devingfx.github.io/Miaow/db.minou.js';
 import 'https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js';
 
@@ -123,34 +126,34 @@ export default class Store {
 				// `//devingfx.github.io/Miaow/lowdb.minou.js`,
 				// `https://unpkg.com/lowdb/dist/lowdb.min.js`,
 				
-				`https://devingfx.github.io/Miaow/db.minou.js`,
-				`https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js`,
+				// `https://devingfx.github.io/Miaow/db.minou.js`,
+				// `https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js`,
 				
-				`https://devingfx.github.io/Miaow/lang.js?${Math.random()}" editor="true`,
-				"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
-				"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
+				// `https://devingfx.github.io/Miaow/lang.js?${Math.random()}" editor="true`,
+				// "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
+				// "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
 			]
 		}
 	}
 	constructor()
 	{
-		var n;
-		Store.deps.css.map( url => 
-			document.head.appendChild((
-				n = document.createElement('link'), 
-				n.rel = "stylesheet",
-				n.type = "text/css",
-				n.href = url,
-				n ))
-		)
-		Store.deps.js.map( url => 
-			document.head.appendChild((
-				n = document.createElement('script'), 
-				n.type = "text/javascript",
-				n.src = url,
-				n.onload = this.start.bind( this ),
-				n ))
-		)
+		// var n;
+		// Store.deps.css.map( url => 
+		// 	document.head.appendChild((
+		// 		n = document.createElement('link'), 
+		// 		n.rel = "stylesheet",
+		// 		n.type = "text/css",
+		// 		n.href = url,
+		// 		n ))
+		// )
+		// Store.deps.js.map( url => 
+		// 	document.head.appendChild((
+		// 		n = document.createElement('script'), 
+		// 		n.type = "text/javascript",
+		// 		n.src = url,
+		// 		n.onload = this.start.bind( this ),
+		// 		n ))
+		// )
 		document.documentElement.innerHTML += 
 		`<head>
 			<title>Miaow online - ${parentWindow.document.location.host}</title>
