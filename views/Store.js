@@ -34,6 +34,13 @@ org.schema.search('fuel')
 	)})
 */
 
+import `https://devingfx.github.io/Miaow/db.minou.js`;
+import `https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js`;
+
+import "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js";
+import "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js;
+
+import `../lang.js?${Math.random()}" editor="true`;
 import { SchemaExtractor } from '../schemas/SchemaExtractor.js';
 
 
@@ -110,7 +117,7 @@ export default class Store {
 				`https://devingfx.github.io/Miaow/layout.css?${Math.random()}`
 			],
 			js: [
-				"https://jspm.io/system@0.19.js",
+				// "https://jspm.io/system@0.19.js",
 				// `https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js`,
 				// `https://unpkg.com/lodash@4/lodash.min.js`,
 				// `//devingfx.github.io/Miaow/lowdb.minou.js`,
