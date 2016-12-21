@@ -39,8 +39,9 @@ import 'https://devingfx.github.io/Miaow/layout.css';
 
 // import { LokiIndexedAdapter, loki } from 'https://devingfx.github.io/Miaow/db.minou.js';
 import loki from 'https://devingfx.github.io/Miaow/db.minou.js';
-console.log(window.ikol=loki);
-import 'https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js';
+console.log(window.loki=loki);
+import LokiIndexedAdapter from 'https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js';
+console.log(window.LokiIndexedAdapter=LokiIndexedAdapter);
 
 import 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js';
 import 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js';
