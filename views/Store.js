@@ -93,7 +93,7 @@ import { SchemaExtractor } from '../schemas/SchemaExtractor.js';
 // import { TabbedPage } from 'TabbedPage.js';
 // import { Editor } from 'Editor.js';
 // import { MultiEditor } from 'MultiEditor.js';
-// import { Navigation } from 'Navigation.js';
+import { Navigation } from 'Navigation.js';
 
 
 window.ON = function(ss,...args)
@@ -112,48 +112,9 @@ ON.id = 0;
 
 
 export default class Store {
-	static get deps()
-	{
-		return {
-			css: [
-				`https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css`,
-				`https://devingfx.github.io/Miaow/layout.css?${Math.random()}`
-			],
-			js: [
-				// "https://jspm.io/system@0.19.js",
-				// `https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js`,
-				// `https://unpkg.com/lodash@4/lodash.min.js`,
-				// `//devingfx.github.io/Miaow/lowdb.minou.js`,
-				// `https://unpkg.com/lowdb/dist/lowdb.min.js`,
-				
-				// `https://devingfx.github.io/Miaow/db.minou.js`,
-				// `https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js`,
-				
-				// `https://devingfx.github.io/Miaow/lang.js?${Math.random()}" editor="true`,
-				// "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js",
-				// "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js"
-			]
-		}
-	}
+	
 	constructor()
 	{
-		// var n;
-		// Store.deps.css.map( url => 
-		// 	document.head.appendChild((
-		// 		n = document.createElement('link'), 
-		// 		n.rel = "stylesheet",
-		// 		n.type = "text/css",
-		// 		n.href = url,
-		// 		n ))
-		// )
-		// Store.deps.js.map( url => 
-		// 	document.head.appendChild((
-		// 		n = document.createElement('script'), 
-		// 		n.type = "text/javascript",
-		// 		n.src = url,
-		// 		n.onload = this.start.bind( this ),
-		// 		n ))
-		// )
 		document.documentElement.innerHTML += 
 		`<head>
 			<title>Miaow online - ${parentWindow.document.location.host}</title>
@@ -182,44 +143,15 @@ export default class Store {
 		themeColor = themeColor ? themeColor.content : "#888";
 		document.body.style.color = themeColor;
 		
-		
-		
-		// console.log(Store.deps, document);
-		// document.head.innerHTML += `<title>Miaow online - ${parentWindow.document.location.host}</title>`;
-		// document.documentElement.appendChild(document.createElement('body'))
-		// var themeColor = parentWindow.document.querySelector('meta[name="theme-color"]');
-		// themeColor = themeColor ? themeColor.content : "#888";
-		// document.body.style.color = themeColor;
-		// document.body.innerHTML = `
-		// 	<nav>
-		// 		<img class="logo" src="https://devingfx.github.io/Miaow/logo.svg"/>
-		// 		<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showAddPage()"
-		// 				langfr="Cette page">Current page</button>
-		// 		<hr/>
-		// 		<!--span>Collections</span-->
-		// 		<ul id="collections"></ul>
-		// 		<hr/>
-		// 		<button id="schemasBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSchemasWindow()">
-		// 			<lang en>Schemas</lang>
-		// 			<lang fr>Schémas</lang>
-		// 		</button>
-		// 		<button id="settingsBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSettings()">
-		// 			<lang en>Settings</lang>
-		// 			<lang fr>Préférences</lang>
-		// 		</button>
-		// 	</nav>
-		// `
-		
-		// Object.getOwnPropertyNames(this.data)
-		//	 .map( n=> Object.defineProperty(this, n, {get: ()=> this.data[n]}) )
-		
 		parentWindow.addEventListener("beforeunload", this.onPageChange.bind(this) );
+		
+		this.start();
 	}
 	start()
 	{
-		if( typeof $ == 'undefined'
-		 || typeof loki == 'undefined'
-		 || this.db ) return;
+		// if( typeof $ == 'undefined'
+		//  || typeof loki == 'undefined'
+		//  || this.db ) return;
 		
   //	  this.data = low('store_data');
   //	  this.data._.mixin({
@@ -731,17 +663,5 @@ export default class Store {
 		// 			>${schema.name}</button>
 		// 		 </li>`) )
 	}
-	updateLanguage( lang )
-	{
-		// language = null;
-		// lang = lang || $('html').attr('lang');
-		// $('lang').hide();
-		// $(`lang[${lang}]`).show();
-		// $('html').attr('lang', lang );
-	}
 	
-	save()
-	{
-		localStorage.store_data = JSON.stringify( this.data );
-	}
 }
