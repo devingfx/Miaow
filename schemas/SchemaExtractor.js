@@ -1,4 +1,4 @@
-export default class SchemaExtractor {
+class SchemaExtractor {
 	constructor( json, doc )
 	{
 		this[SchemaExtractor.schema] = json;
@@ -312,3 +312,4 @@ export default class SchemaExtractor {
 	}
 }
 SchemaExtractor.schema = Symbol`schema`;
+export default SchemaExtractor
