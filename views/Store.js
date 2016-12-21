@@ -93,7 +93,7 @@ import { SchemaExtractor } from '../schemas/SchemaExtractor.js';
 // import { TabbedPage } from 'TabbedPage.js';
 // import { Editor } from 'Editor.js';
 // import { MultiEditor } from 'MultiEditor.js';
-import { Navigation } from 'Navigation.js';
+import { Navigation } from './Navigation.js';
 
 
 window.ON = function(ss,...args)
