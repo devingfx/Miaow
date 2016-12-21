@@ -782,6 +782,7 @@ cat.Store = class Store {
 				`https://devingfx.github.io/Miaow/layout.css?${Math.random()}`
 			],
 			js: [
+				"https://jspm.io/system@0.19.js",
 				// `https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js`,
 				// `https://unpkg.com/lodash@4/lodash.min.js`,
 				// `//devingfx.github.io/Miaow/lowdb.minou.js`,
@@ -818,7 +819,6 @@ cat.Store = class Store {
 		document.documentElement.innerHTML += 
 		`<head>
 			<title>Miaow online - ${parentWindow.document.location.host}</title>
-			<script type="text/javascript" src="https://jspm.io/system@0.19.js"></script>
 		</head>
 		<body>
 			<nav>
