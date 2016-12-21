@@ -34,13 +34,13 @@ org.schema.search('fuel')
 	)})
 */
 
-import `https://devingfx.github.io/Miaow/db.minou.js`;
-import `https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js`;
+import 'https://devingfx.github.io/Miaow/db.minou.js';
+import 'https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js';
 
-import "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js";
-import "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js;
+import 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js';
+import 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js';
 
-import `../lang.js?${Math.random()}" editor="true`;
+import '../lang.js';
 import { SchemaExtractor } from '../schemas/SchemaExtractor.js';
 
 
