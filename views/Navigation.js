@@ -1,4 +1,6 @@
-export class Navigation extends cat.Element {
+import Element from './Element.js'
+
+export class Navigation extends Element {
 	constructor()
 	{
 		super(`<nav>
