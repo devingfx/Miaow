@@ -1,4 +1,4 @@
-cat.Navigation = class Navigation extends cat.Element {
+export class Navigation extends cat.Element {
 	constructor()
 	{
 		super(`<nav>
