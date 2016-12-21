@@ -37,13 +37,11 @@ org.schema.search('fuel')
 import 'https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css';
 import 'https://devingfx.github.io/Miaow/layout.css';
 
-// import { LokiIndexedAdapter, loki } from 'https://devingfx.github.io/Miaow/db.minou.js';
 import loki from 'https://devingfx.github.io/Miaow/db.minou.js';
-console.log(window.loki=loki);
 import LokiIndexedAdapter from 'https://devingfx.github.io/Miaow/db-indexed-adapter.minou.js';
-console.log(window.LokiIndexedAdapter=LokiIndexedAdapter);
 
-import 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js';
+import 'jquery';
+// import 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js';
 import 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js';
 
 import '../lang.js';
@@ -123,25 +121,30 @@ export default class Store {
 			<title>Miaow online - ${parentWindow.document.location.host}</title>
 		</head>
 		<body>
-			<nav>
-				<img class="logo" src="https://devingfx.github.io/Miaow/logo.svg"/>
-				<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showAddPage()"
-						langfr="Cette page">Current page</button>
-				<hr/>
-				<!--span>Collections</span-->
-				<ul id="collections"></ul>
-				<hr/>
-				<button id="schemasBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSchemasWindow()">
-					<lang en>Schemas</lang>
-					<lang fr>Schémas</lang>
-				</button>
-				<button id="settingsBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSettings()">
-					<lang en>Settings</lang>
-					<lang fr>Préférences</lang>
-				</button>
-			</nav>
-		</body>
-		`;
+		</body>`;
+		document.body.appendChild(
+			this.nav = new Navigation
+		)
+		// <body>
+		// 	<nav>
+		// 		<img class="logo" src="https://devingfx.github.io/Miaow/logo.svg"/>
+		// 		<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showAddPage()"
+		// 				langfr="Cette page">Current page</button>
+		// 		<hr/>
+		// 		<!--span>Collections</span-->
+		// 		<ul id="collections"></ul>
+		// 		<hr/>
+		// 		<button id="schemasBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSchemasWindow()">
+		// 			<lang en>Schemas</lang>
+		// 			<lang fr>Schémas</lang>
+		// 		</button>
+		// 		<button id="settingsBtn" onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');store.showSettings()">
+		// 			<lang en>Settings</lang>
+		// 			<lang fr>Préférences</lang>
+		// 		</button>
+		// 	</nav>
+		// </body>
+		// `;
 		var themeColor = parentWindow.document.querySelector('meta[name="theme-color"]');
 		themeColor = themeColor ? themeColor.content : "#888";
 		document.body.style.color = themeColor;
