@@ -49,7 +49,7 @@ import { SchemaExtractor } from '../schemas/SchemaExtractor.js';
 
 
 // var cat = {};
-// Symbol.proxified = Symbol`[[proxified]]`;
+Symbol.proxified = Symbol`[[proxified]]`;
 // Intrication = class Intrication {
 // 	constructor()
 // 	{
