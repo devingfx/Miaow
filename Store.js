@@ -528,19 +528,19 @@ export default class Store {
 	}
 	showSchemasWindow()
 	{
-		var page = new cat.TabbedPage, editor;
+		var page = new TabbedPage, editor;
 		
 		page.title = `<lang en>Schemas</lang><lang fr>Schémas</lang>`;
 		this.schemas.find()
 			.map( item=> {
-				editor = new cat.MultiEditor( item.item );
+				editor = new MultiEditor( item.item );
 				editor.attr('label', item.name );
-				page.content = editor[Symbol.proxified];
+				page.tabView = editor[Symbol.proxified];
 			})
-		editor = new cat.MultiEditor( {"@context":"http://schema.org/","@type":""} );
+		editor = new MultiEditor( {"@context":"http://schema.org/","@type":""} );
 		editor.attr('label', "+" );
-		page.content = editor[Symbol.proxified];
-		page.$content.update();
+		page.tabView = editor[Symbol.proxified];
+		page.tabView.update();
 		page.footer = ON`
 		<button onclick="${e=> page.editor.save()}" class="important">${LANG('Save')}</button>
 		<button onclick="${e=> page.editor.remove()}">${LANG('Delete')}</button>`;
@@ -549,7 +549,7 @@ export default class Store {
 	}
 	showSettings()
 	{
-		var page = new cat.Page, editor;
+		var page = new Page;
 		
 		page.title = LANG('Settings');
 		page.title2 = `${LANG('Language')}: ${$('html').attr('lang')}`;

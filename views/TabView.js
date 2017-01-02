@@ -3,7 +3,7 @@ import { Element} from './Element.sj';
 export class TabView extends Element {
 	constructor( html )
 	{
-		debugger;
+		// debugger;
 		super( html || '<tab><tabs>' );
 		this.tabs = this.find('tabs');
 		this.update();

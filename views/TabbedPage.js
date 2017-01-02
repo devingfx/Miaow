@@ -8,6 +8,6 @@ export class TabbedPage extends Page {
 		super( html || '<window page>' );
 		this.tabview = new TabView;
 		this.tabview.appendTo( this.content ); // appends
-		this.content = this.tabview; // replace reference
+		// this.content = this.tabview; // replace reference
 	}
 }
