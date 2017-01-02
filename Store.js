@@ -91,9 +91,9 @@ Symbol.proxified = Symbol`[[proxified]]`;
 // import { TabView } from './views/TabView.js';
 import { Window } from './views/Window.js';
 import { Page } from './views/Page.js';
-// import { TabbedPage } from './views/TabbedPage.js';
+import { TabbedPage } from './views/TabbedPage.js';
 // import { Editor } from './views/Editor.js';
-// import { MultiEditor } from './views/MultiEditor.js';
+import { MultiEditor } from './views/MultiEditor.js';
 import { Navigation } from './views/Navigation.js';
 
 
@@ -306,14 +306,14 @@ export default class Store {
 	}
 	showObjectPage( object )
 	{
-		var page = new cat.Page;
+		var page = new Page;
 		page.title = object.name || object['@type'];
 		page.title2 = object.url || object['@type'];
 		object.url
 			&& page.title2.dblclick(e=>( parentWindow.document.location = object.url) );
 		
 		page.content = (
-				page.editor = new cat.MultiEditor( object )
+				page.editor = new MultiEditor( object )
 				)[Symbol.proxified];
 		page.editor.save = ()=> {
 			let json = JSON.parse(page.editor.toComputedString('json'));
