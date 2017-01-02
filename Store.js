@@ -190,7 +190,7 @@ export default class Store {
 		// this.$main = $('#main');
 		// this.updateCollections();
 		// this.updateLanguage( navigator.language );
-		this.onPageChange();
+		// this.onPageChange();
 	}
 	prepareEmptyDB()
 	{
