@@ -44,8 +44,8 @@ import 'jquery';
 // import 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js';
 import 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js';
 
-import '../lang.js';
-import { SchemaExtractor } from '../schemas/SchemaExtractor.js';
+import 'lang.js';
+import { SchemaExtractor } from 'schemas/SchemaExtractor.js';
 
 
 // var cat = {};
@@ -89,12 +89,12 @@ Symbol.proxified = Symbol`[[proxified]]`;
 
 // import { Element } from 'Element.js';
 // import { TabView } from 'TabView.js';
-import { Window } from 'Window.js';
-import { Page } from 'Page.js';
+import { Window } from 'views/Window.js';
+import { Page } from 'views/Page.js';
 // import { TabbedPage } from 'TabbedPage.js';
 // import { Editor } from 'Editor.js';
 // import { MultiEditor } from 'MultiEditor.js';
-import { Navigation } from './Navigation.js';
+import { Navigation } from 'views/Navigation.js';
 
 
 window.ON = function(ss,...args)
