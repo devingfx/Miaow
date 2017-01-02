@@ -19,14 +19,14 @@ export class Navigation extends Element {
 					${LANG('Settings')}
 				</button>
 			</nav>`);
-		this.$collections = this.find('#collections');
+		this.collections = this.find('#collections');
 		debugger;
 		this.on('click', 'button', e=> {
 			this.find('.selected').removeClass('selected');
 			e.target.classList.add('selected'); 
 		})
 	}
-	get buttons()	 { return this;}//.find('button') }
+	get buttons()	 { return this.find('button') }
 	set buttons( v )  { this.append(v) }
 	
 	updateCollections()

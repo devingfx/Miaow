@@ -123,7 +123,7 @@ export default class Store {
 		<body>
 		</body>`;
 		document.body.appendChild(
-			this.nav = new Navigation
+			(this.nav = new Navigation)[Symbol.proxified][0]
 		)
 		// <body>
 		// 	<nav>
