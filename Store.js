@@ -149,7 +149,7 @@ export default class Store {
 		themeColor = themeColor ? themeColor.content : "#888";
 		document.body.style.color = themeColor;
 		
-		parentWindow.addEventListener("beforeunload", this.onPageChange.bind(this) );
+		// parentWindow.addEventListener("beforeunload", this.onPageChange.bind(this) );
 		
 		this.start();
 	}
