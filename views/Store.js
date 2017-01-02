@@ -89,8 +89,8 @@ Symbol.proxified = Symbol`[[proxified]]`;
 
 // import { Element } from 'Element.js';
 // import { TabView } from 'TabView.js';
-// import { Window } from 'Window.js';
-// import { Page } from 'Page.js';
+import { Window } from 'Window.js';
+import { Page } from 'Page.js';
 // import { TabbedPage } from 'TabbedPage.js';
 // import { Editor } from 'Editor.js';
 // import { MultiEditor } from 'MultiEditor.js';
@@ -185,8 +185,8 @@ export default class Store {
 		
 		// this.schemas = SchemaList.from( JSON.parse(localStorage['store_schemas']||'{}') );
 		
-		this.$nav = $('nav').eq(0);
-		this.$collections = $('#collections');
+		// this.$nav = $('nav').eq(0);
+		// this.$collections = $('#collections');
 		// this.$main = $('#main');
 		// this.updateCollections();
 		// this.updateLanguage( navigator.language );
@@ -215,12 +215,12 @@ export default class Store {
 	}
 	onDBReady()
 	{
-		this.updateCollections();
+		this.nav.updateCollections();
 	}
-	onPageChange()
-	{
-		// parentWindow.location.pathname
-	}
+	// onPageChange()
+	// {
+	// 	// parentWindow.location.pathname
+	// }
 	// addItem()
 	// {
 	//	 var doc = parentWindow.document,
@@ -340,75 +340,75 @@ export default class Store {
 		
 		return page;
 	}
-	addPage()
-	{
-		var doc = parentWindow.document,
-			uri = doc.location.pathname,
-			pageid = uri.match(/\/(.*?)\/(.*?)\.(html|htm)/),
-			collection = pageid[1], id = pageid[2];
-		// console.log(collection,id);
-		if( collection && id )
-		{
-			var data = {}, collection,
-				extractors = JSON.parse(localStorage.store_extractors || {});
+	// addPage()
+	// {
+	// 	var doc = parentWindow.document,
+	// 		uri = doc.location.pathname,
+	// 		pageid = uri.match(/\/(.*?)\/(.*?)\.(html|htm)/),
+	// 		collection = pageid[1], id = pageid[2];
+	// 	// console.log(collection,id);
+	// 	if( collection && id )
+	// 	{
+	// 		var data = {}, collection,
+	// 			extractors = JSON.parse(localStorage.store_extractors || {});
 			
-			for( var n in extractors )
-			{
-				console.log(n);
-				if( eval(n).test(uri) )
-				{
-					console.log('pass test');
-					for( var nn in extractors[n].selectors )
-					{
-						console.log(nn);
-						console.log(extractors[n].selectors[nn]);
-						Array.from( doc.querySelectorAll(nn) )
-							.map( eval(extractors[n].selectors[nn]) )
-					}
-				}
-			}
-			// console.log(collection, id, data);
+	// 		for( var n in extractors )
+	// 		{
+	// 			console.log(n);
+	// 			if( eval(n).test(uri) )
+	// 			{
+	// 				console.log('pass test');
+	// 				for( var nn in extractors[n].selectors )
+	// 				{
+	// 					console.log(nn);
+	// 					console.log(extractors[n].selectors[nn]);
+	// 					Array.from( doc.querySelectorAll(nn) )
+	// 						.map( eval(extractors[n].selectors[nn]) )
+	// 				}
+	// 			}
+	// 		}
+	// 		// console.log(collection, id, data);
 			
-			var page = new cat.Page, editor;
-			page.title = doc.title;
-			page.title2 = uri;
-			page.content = (
-					editor = new cat.Editor(`
-						store.data.get("${collection}").push()
-						store.data["${collection}"] = store.data["${collection}"] || {};
-						store.data["${collection}"][${id}] = `,
-						data)
-					).$el;
-			// `
-			// <pre>store.data["${collection}"][${id}] = <span contenteditable="true">${JSON.stringify(data,null,'\t').replace(/([{}"':,])/g,"<s>$1</s>")}</span></pre>`;
-			page.footer = `
-			<button onclick="this.parentNode.parentNode.saveData()" class="important">Enregistrer</button>
-			<button onclick="">Supprimer</button>`;
-			this.showPage( page );
-			page[Symbol.proxified][0].saveData = ()=> {
-				var data = JSON.parse( editor.$el.text() );
-				!this.data.has(collection) && this.data.set(collection) && this.updateCollections();
-				this.data.get(collection).set( data['@id'], data );
-				// store.save();
-				store.updateCollections();
-			}
-			// var $section = $('<section>');
-			// $section[0].innerHTML = `
-			// <header>
-			// <h1>${doc.title}</h1>
-			// <span>${uri}</span><br/>
-			// Collection: <input type="text" value="${cat}"/><br/>
-			// Search: <input type="text" value="#adview [itemprop]"/><button>GO</button><br/>
-			// Search: <input type="text" value="#adview .line .property, #adview .line .value:not(.large-hidden)"/><button>GO</button><br/>
-			// </header>
-			// <div class="content"><pre contenteditable="true">store.data["${cat}"][${id}] = ${JSON.stringify(data,null,'\t')}</pre></div>
-			// <footer>
-			// <button onclick="eval(this.previousElementSibling.innerText) && store.save()">Enregistrer</button>
-			// </footer>`;
+	// 		var page = new cat.Page, editor;
+	// 		page.title = doc.title;
+	// 		page.title2 = uri;
+	// 		page.content = (
+	// 				editor = new cat.Editor(`
+	// 					store.data.get("${collection}").push()
+	// 					store.data["${collection}"] = store.data["${collection}"] || {};
+	// 					store.data["${collection}"][${id}] = `,
+	// 					data)
+	// 				).$el;
+	// 		// `
+	// 		// <pre>store.data["${collection}"][${id}] = <span contenteditable="true">${JSON.stringify(data,null,'\t').replace(/([{}"':,])/g,"<s>$1</s>")}</span></pre>`;
+	// 		page.footer = `
+	// 		<button onclick="this.parentNode.parentNode.saveData()" class="important">Enregistrer</button>
+	// 		<button onclick="">Supprimer</button>`;
+	// 		this.showPage( page );
+	// 		page[Symbol.proxified][0].saveData = ()=> {
+	// 			var data = JSON.parse( editor.$el.text() );
+	// 			!this.data.has(collection) && this.data.set(collection) && this.updateCollections();
+	// 			this.data.get(collection).set( data['@id'], data );
+	// 			// store.save();
+	// 			store.updateCollections();
+	// 		}
+	// 		// var $section = $('<section>');
+	// 		// $section[0].innerHTML = `
+	// 		// <header>
+	// 		// <h1>${doc.title}</h1>
+	// 		// <span>${uri}</span><br/>
+	// 		// Collection: <input type="text" value="${cat}"/><br/>
+	// 		// Search: <input type="text" value="#adview [itemprop]"/><button>GO</button><br/>
+	// 		// Search: <input type="text" value="#adview .line .property, #adview .line .value:not(.large-hidden)"/><button>GO</button><br/>
+	// 		// </header>
+	// 		// <div class="content"><pre contenteditable="true">store.data["${cat}"][${id}] = ${JSON.stringify(data,null,'\t')}</pre></div>
+	// 		// <footer>
+	// 		// <button onclick="eval(this.previousElementSibling.innerText) && store.save()">Enregistrer</button>
+	// 		// </footer>`;
 			
-			// this.showSection( $section );
-		}
-	}
+	// 		// this.showSection( $section );
+	// 	}
+	// }
 	showPage( section )
 	{
 		$('section').remove();
@@ -551,8 +551,8 @@ export default class Store {
 	{
 		var page = new cat.Page, editor;
 		
-		page.title = `<lang en>Settings</lang><lang fr>Préférences</lang>`;
-		page.title2 = `<lang en>Language</lang><lang fr>Langue</lang>: ${$('html').attr('lang')}`;
+		page.title = LANG('Settings');
+		page.title2 = `${LANG('Language')}: ${$('html').attr('lang')}`;
 		
 		page.content = `<pre contenteditable="true">${JSON.stringify(JSON.parse(localStorage.store_extractors),null,'\t')}</pre>`
 		
@@ -571,7 +571,7 @@ export default class Store {
 			if( settings )
 				localStorage.store_extractors = JSON.stringify(settings);
 			// store.save();
-			// store.updateCollections();
+			// store.nav.updateCollections();
 		}
 	}
 	
@@ -649,25 +649,25 @@ export default class Store {
 	//	 // Object.getOwnPropertyNames(this.data)
 	//		 // .map( n=> Object.defineProperty(this, n, {get: ()=> this.data[n]}) )
 	// }
-	updateCollections()
-	{
-		this.$collections.empty();
-		this.$collections.html(
-			store.objects.DynamicViews.map( view=> 
-					ON`<li>
-						<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');
-						${e=>this.showInTable(view.data())}"
-						>${view.name}</button>
-					 </li>`
-			).join('')
-		)
-		// this.schemas.find()//.map(o=>o.name)
-		// 	.map( schema=> this.$collections.append(
-		// 		ON`<li>
-		// 			<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');
-		// 			${e=>this.showInTable(store.objects.findObjects(schema.potentialAction.query))}"
-		// 			>${schema.name}</button>
-		// 		 </li>`) )
-	}
+	// deprecated_updateCollections()
+	// {
+	// 	this.$collections.empty();
+	// 	this.$collections.html(
+	// 		store.objects.DynamicViews.map( view=> 
+	// 				ON`<li>
+	// 					<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');
+	// 					${e=>this.showInTable(view.data())}"
+	// 					>${view.name}</button>
+	// 				 </li>`
+	// 		).join('')
+	// 	)
+	// 	// this.schemas.find()//.map(o=>o.name)
+	// 	// 	.map( schema=> this.$collections.append(
+	// 	// 		ON`<li>
+	// 	// 			<button onclick="$('nav .selected').removeClass('selected');this.classList.add('selected');
+	// 	// 			${e=>this.showInTable(store.objects.findObjects(schema.potentialAction.query))}"
+	// 	// 			>${schema.name}</button>
+	// 	// 		 </li>`) )
+	// }
 	
 }

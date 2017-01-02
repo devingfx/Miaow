@@ -31,12 +31,13 @@ export class Navigation extends Element {
 	
 	updateCollections()
 	{
-		this.$collections.empty();
-		Object.getOwnPropertyNames(this.data)
-			.map( n=> 
-				this.$collections.append(
-					`<li><button onclick="store.showInTable(store['${n}'])">${n}</button></li>`
-				)
-			)
+		this.collections.empty();
+		this.collections.html(
+			store.objects.DynamicViews.map( view=> 
+					ON`<li>
+						<button onclick="${e=>this.showInTable(view.data())}">${view.name}</button>
+					 </li>`
+			).join('')
+		)
 	}
 }

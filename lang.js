@@ -86,7 +86,8 @@ LANG.fr = {
 	"Delete": "Supprimer",
 	"Current page": "Cette page",
 	"Schemas": "Schémas",
-	"Settings": "Préférences"
+	"Settings": "Préférences",
+	"Language": "Langue"
 };
 
 language = navigator.language || LANG[LANG.DEFAULT];
