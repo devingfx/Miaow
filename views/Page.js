@@ -5,7 +5,7 @@ export class Page extends Window {
 	{
 		// debugger;
 		super( html || '<window page>' );
-		this.$header = '<span>';
+		this.header = '<span>';
 	}
 	get title2()	{ return this.$header.find('span') }
 	set title2( v ) { this.$header.find('span').append(v) }

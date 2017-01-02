@@ -1,4 +1,4 @@
-import { Element} from './Element.sj';
+import { Element} from './Element.js';
 
 export class TabView extends Element {
 	constructor( html )
