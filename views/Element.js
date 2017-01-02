@@ -27,8 +27,14 @@ export class Element {
 		this[Symbol.proxified][0].ctrl = proxy;
 		return proxy;
 	}
+	
 	Element()
 	{
 		return this;
+	}
+	
+	appendChild( child )
+	{
+		return super.appendChild( child[Symbol.proxified] ? child[Symbol.proxified][0] : child );
 	}
 }

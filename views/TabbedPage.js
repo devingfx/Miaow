@@ -7,7 +7,7 @@ export class TabbedPage extends Page {
 		// debugger;
 		super( html || '<window page>' );
 		this.tabview = new TabView;
-		this.tabview.appendTo( this.content ); // appends
+		this.tabview.appendTo( this.$content ); // appends
 		// this.content = this.tabview; // replace reference
 	}
 }
