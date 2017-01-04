@@ -1,6 +1,6 @@
 import { Element } from './Element.js';
 
-cat.MultiEditor = class MultiEditor extends Element {
+export class MultiEditor extends Element {
 	constructor( data )
 	{
 		// debugger;
@@ -159,6 +159,6 @@ cat.MultiEditor = class MultiEditor extends Element {
 		else if( this.customStyles[name] )
 			this.customStyles[name].disabled = typeof force != 'undefined' ? !force : !this.customStyles[name].disabled;
 	}
+	static addStyle(){}
+	static addPlugin(){}
 }
-cat.MultiEditor.addStyle = ()=>{}
-cat.MultiEditor.addPlugin = ()=>{}
