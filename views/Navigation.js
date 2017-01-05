@@ -38,7 +38,7 @@ export class Navigation extends Element {
 		this.collections.html(
 			store.objects.DynamicViews.map( view=> 
 					ON`<li>
-						<button onclick="${e=>this.showInTable(view.data())}">${view.name}</button>
+						<button onclick="${e=>store.showInTable(view.data())}">${view.name}</button>
 					 </li>`
 			).join('')
 		)
