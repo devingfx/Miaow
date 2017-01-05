@@ -253,16 +253,25 @@ export default class Store {
 	//		 this.save();
 	//	 }
 	// }
-	createCollection( name, query )
+	createCollection( name )
 	{
 		let view = this.objects.addDynamicView( name, {persistent: true} );
-		view.applyFind( query );
+		view.applyFind( {$loki: {$in: []} } );
 		this.nav.updateCollections();
 	}
 	addToCollection( name, obj )
 	{
-		
+		let ids = store.objects.getDynamicView( name ).filterPipeline[1].val.$loki.$in;
+		if( !ids.includes(obj.$loki) )
+			ids.push( obj.$loki );
 	}
+	removeFromCollection( name, obj )
+	{
+		let ids = store.objects.getDynamicView( name ).filterPipeline[1].val.$loki.$in;
+		if( ids.includes(obj.$loki) )
+			ids.splice( ids.indexOf(obj.$loki), 1 );
+	}
+	
 	extract()
 	{
 		var doc = parentWindow.document,
