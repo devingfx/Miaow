@@ -302,7 +302,7 @@ export default class Store {
 				   // 	store.objects.insert(
 										// )
 						)
-		return results;
+		return Promise.all( results );
 	}
 	showObjectPage( object )
 	{
@@ -335,9 +335,10 @@ export default class Store {
 	}
 	showAddPage()
 	{
-		var page = this.showObjectPage( this.extract2()[0] );
-		page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString('json')) )
-		
+		this.extract2().then( results=> {
+			var page = this.showObjectPage( rezsults[0] );
+			page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString('json')) )
+		})
 		return page;
 	}
 	// addPage()
