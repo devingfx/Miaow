@@ -7,9 +7,9 @@ import 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js';
 export class DataTable extends HTMLTableElement {
 	constructor( html )
 	{
+		super();
 		var colNum = 10;
 		// debugger;
-		// super();
 		this.rawChildren = this.attashShadow({ mode: 'open' });
 		this.rawChildren.innerHTML = `
 		<table class="display" cellspacing="0" width="100%">
