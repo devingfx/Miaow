@@ -161,7 +161,7 @@ class SchemaExtractor {
 	}
 	async extract( json, nodes, _loaded )
 	{
-		console.groupCollapsed( 'extract( %o, %o )', json, nodes );
+		// console.groupCollapsed( 'extract( %o, %o )', json, nodes );
 		
 		switch( typeof json )
 		{
@@ -227,9 +227,9 @@ class SchemaExtractor {
 			/* case Array: */else
 			{
 				
-				result[key] = Array.isArray(json[key])
-							? Promise.all( json[key].map( item=> this.extract( item, [node] )) )
-							: this.extract( json[key], [node] );
+				// result[key] = Array.isArray(json[key])
+				// 			? Promise.all( json[key].map( item=> this.extract( item, [node] )) )
+				// 			: this.extract( json[key], [node] );
 				
 				// console.groupEnd();
 			}
@@ -241,7 +241,7 @@ class SchemaExtractor {
 			default: return json; break;
 		}
 		
-		console.groupEnd();
+		// console.groupEnd();
 	}
 	extract_prom( json, nodes )
 	{
