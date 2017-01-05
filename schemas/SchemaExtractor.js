@@ -312,4 +312,4 @@ class SchemaExtractor {
 	}
 }
 SchemaExtractor.schema = Symbol`schema`;
-export default SchemaExtractor
+export SchemaExtractor;

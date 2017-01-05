@@ -535,12 +535,12 @@ export default class Store {
 			.map( item=> {
 				editor = new MultiEditor( item.item );
 				editor.attr('label', item.name );
-				page.tabView = editor[Symbol.proxified];
+				page.content = editor[Symbol.proxified];
 			})
 		editor = new MultiEditor( {"@context":"http://schema.org/","@type":""} );
 		editor.attr('label', "+" );
-		page.tabView = editor[Symbol.proxified];
-		page.tabView.update();
+		page.content = editor[Symbol.proxified];
+		// page.tabView.update();
 		page.footer = ON`
 		<button onclick="${e=> page.editor.save()}" class="important">${LANG('Save')}</button>
 		<button onclick="${e=> page.editor.remove()}">${LANG('Delete')}</button>`;
