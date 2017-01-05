@@ -261,13 +261,13 @@ export default class Store {
 	}
 	addToCollection( name, obj )
 	{
-		let ids = store.objects.getDynamicView( name ).filterPipeline[1].val.$loki.$in;
+		let ids = store.objects.getDynamicView( name ).filterPipeline[0].val.$loki.$in;
 		if( !ids.includes(obj.$loki) )
 			ids.push( obj.$loki );
 	}
 	removeFromCollection( name, obj )
 	{
-		let ids = store.objects.getDynamicView( name ).filterPipeline[1].val.$loki.$in;
+		let ids = store.objects.getDynamicView( name ).filterPipeline[0].val.$loki.$in;
 		if( ids.includes(obj.$loki) )
 			ids.splice( ids.indexOf(obj.$loki), 1 );
 	}
