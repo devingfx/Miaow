@@ -114,4 +114,5 @@ class DataTable extends HTMLTableElement {
 },
 {extends: 'table'} );
 
-export { customElements.get('data-table') as DataTable };
+let DataTableElement = customElements.get('data-table');
+export { DataTableElement as DataTable };
