@@ -9,7 +9,7 @@ export class DataTable extends HTMLTableElement {
 	{
 		var colNum = 10;
 		// debugger;
-		super();
+		// super();
 		this.rawChildren = this.attashShadow({ mode: 'open' });
 		this.rawChildren.innerHTML = `
 		<table class="display" cellspacing="0" width="100%">
