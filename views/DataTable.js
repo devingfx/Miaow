@@ -4,32 +4,34 @@ import 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js';
 
 import { Element } from './Element.js';
 
-export class DataTable extends Element {
+export class DataTable extends HTMLTableElement {
 	constructor( html )
 	{
 		var colNum = 10;
 		// debugger;
-		super( html || `
+		super();
+		this.rawChildren = this.attashShadow({ mode: 'open' });
+		this.rawChildren.innerHTML = `
 		<table class="display" cellspacing="0" width="100%">
 			<tfoot>
 				<tr>
 				 ${'<td>'.repeat(colNum)}
 				</tr>
 			</tfoot>
-		</table>` );
+		</table>`;
 		
 		this.update();
 	}
-	appendChild( child )
-	{
-		this.append( child );
-		this.update();
-	}
+	// appendChild( child )
+	// {
+	// 	this.append( child );
+	// 	this.update();
+	// }
 	update()
 	{
 		if( this._data && this._columns )
 		{
-			var table = this.DataTable({
+			var table = $(this).DataTable({
 				scrollY: '100%',
 				scrollX: true,
 				paging:   false,
