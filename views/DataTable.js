@@ -4,21 +4,21 @@ import 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js';
 
 // import { Element } from './Element.js';
 
-export class DataTable extends HTMLTableElement {
+customElements.define( 'data-table', 
+class DataTable extends HTMLTableElement {
 	constructor( html )
 	{
 		super();
 		var colNum = 10;
 		// debugger;
-		this.rawChildren = this.attashShadow({ mode: 'open' });
-		this.rawChildren.innerHTML = `
-		<table class="display" cellspacing="0" width="100%">
-			<tfoot>
+		this.classList.add( 'display' );
+		this.setAttribute( 'cellspacing', "0" );
+		this.setAttribute( 'width', "100%" );
+		this.innerHTML = `<tfoot>
 				<tr>
 				 ${'<td>'.repeat(colNum)}
 				</tr>
-			</tfoot>
-		</table>`;
+			</tfoot>`;
 		
 		this.update();
 	}
@@ -111,6 +111,7 @@ export class DataTable extends HTMLTableElement {
 				store.showObjectPage( table.row(this).data() )
 			});
 	}
-}
+},
+{extends: 'table'} );
 
-customElements.define( 'data-table', DataTable, {extends: 'table'} );
+export { customElements.get('data-table') as DataTable };
