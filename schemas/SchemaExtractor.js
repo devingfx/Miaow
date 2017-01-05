@@ -230,6 +230,8 @@ class SchemaExtractor {
 				result[key] = Array.isArray(json[key])
 							? Promise.all( json[key].map( item=> this.extract( item, [node] )) )
 							: this.extract( json[key], [node] );
+				
+				console.groupEnd();
 			}
 				
 			break;
