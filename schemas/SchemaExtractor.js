@@ -221,7 +221,7 @@ class SchemaExtractor {
 					}))
 					.then( res=> res.length == 1 ? res[0] : res );
 				
-				console.groupEnd();
+				// console.groupEnd();
 				return proms;
 			}
 			/* case Array: */else
@@ -231,15 +231,17 @@ class SchemaExtractor {
 							? Promise.all( json[key].map( item=> this.extract( item, [node] )) )
 							: this.extract( json[key], [node] );
 				
-				console.groupEnd();
+				// console.groupEnd();
 			}
 				
 			break;
-			case 'string': console.groupEnd(); return this.resolveProperty( json, nodes[0] ); break;
-			case 'function': console.groupEnd(); return json( nodes[0] ); break;
+			case 'string': return this.resolveProperty( json, nodes[0] ); break;
+			case 'function': return json( nodes[0] ); break;
 			// number, boolean
 			default: return json; break;
 		}
+		
+		console.groupEnd();
 	}
 	extract_prom( json, nodes )
 	{
