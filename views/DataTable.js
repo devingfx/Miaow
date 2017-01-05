@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css';
 import 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js';
 
-import { Element } from './Element.js';
+// import { Element } from './Element.js';
 
 export class DataTable extends HTMLTableElement {
 	constructor( html )
@@ -113,4 +113,4 @@ export class DataTable extends HTMLTableElement {
 	}
 }
 
-customElements.define( 'data-table', DataTable );
+customElements.define( 'data-table', DataTable, {extends: 'table'} );
