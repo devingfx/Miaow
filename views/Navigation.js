@@ -11,6 +11,9 @@ export class Navigation extends Element {
 				<hr/>
 				<!--span>Collections</span-->
 				<ul id="collections"></ul>
+				<button id="schemasBtn" onclick="store.createCollection(prompt('Name :'))">
+					+ ${LANG('Create collection')}
+				</button>
 				<hr/>
 				<button id="schemasBtn" onclick="store.showSchemasWindow()">
 					${LANG('Schemas')}

@@ -253,40 +253,17 @@ export default class Store {
 	//		 this.save();
 	//	 }
 	// }
-	extract()
+	createCollection( name, query )
 	{
-		var doc = parentWindow.document,
-			uri = doc.location.pathname,
-			// pageid = uri.match(/\/(.*?)\/(.*?)\.(html|htm)/),
-			// collection = pageid[1], 
-			// id = pageid[2],
-			extractors = this.extractors = this.extractors || JSON.parse(localStorage.store_extractors || {}),
-			data;
-		
-		
-		for( var n in extractors )
-		{
-			console.groupCollapsed('Extractor : %s', n);
-			if( eval(n).test(uri) )
-			{
-				console.info('%s match %o', uri, eval(n) );
-				for( var nn in extractors[n].selectors )
-				{
-					console.log(nn);
-					console.log(extractors[n].selectors[nn]);
-					Array.from( doc.querySelectorAll(nn) )
-						.map( eval(extractors[n].selectors[nn]) )
-				}
-			}
-			else
-				console.info('%c%s did\'t match %o', 'color:red', uri, eval(n) );
-			console.groupEnd();
-		}
-		
-		if( collection && id )
-		{}
+		let view = this.objects.addDynamicView( name, {persistent: true} );
+		view.applyFind( query );
+		this.nav.updateCollections();
 	}
-	extract2()
+	addToCollection( name, obj )
+	{
+		
+	}
+	extract()
 	{
 		var doc = parentWindow.document,
 			url = doc.location+'',
@@ -335,7 +312,7 @@ export default class Store {
 	}
 	showAddPage()
 	{
-		return this.extract2()
+		return this.extract()
 				.then( results=> {
 					var page = this.showObjectPage( results[0] );
 					page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString('json')) )
