@@ -34,7 +34,6 @@ org.schema.search('fuel')
 	)})
 */
 
-import 'https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css';
 import 'https://devingfx.github.io/Miaow/layout.css';
 
 import loki from 'https://devingfx.github.io/Miaow/db.minou.js';
@@ -42,6 +41,7 @@ import LokiIndexedAdapter from 'https://devingfx.github.io/Miaow/db-indexed-adap
 
 import $ from 'jquery';
 // import 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js';
+import 'https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css';
 import 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js';
 
 import './lang.js';
@@ -89,12 +89,13 @@ Symbol.proxified = Symbol`[[proxified]]`;
 
 // import { Element } from './views/Element.js';
 // import { TabView } from './views/TabView.js';
+import { Navigation } from './views/Navigation.js';
 import { Window } from './views/Window.js';
 import { Page } from './views/Page.js';
 import { TabbedPage } from './views/TabbedPage.js';
+import { TablePage } from './views/TablePage.js';
 // import { Editor } from './views/Editor.js';
 import { MultiEditor } from './views/MultiEditor.js';
-import { Navigation } from './views/Navigation.js';
 
 
 window.ON = function(ss,...args)
@@ -315,7 +316,8 @@ export default class Store {
 		page.footer = ON`
 			<button onclick="${e=> page.editor.save()||page.remove()}" class="important">${LANG('Save')}</button>
 			<button onclick="${e=> page.remove()}">${LANG('Cancel')}</button>
-			<button style="color:red" onclick="${e=> page.editor.remove()||page.remove()}">${LANG('Delete')}</button>`;
+			${LANG('Move or copy in collection')} <select></select>
+			<button style="color:red;float:right" onclick="${e=> page.editor.remove()||page.remove()}">${LANG('Delete')}</button>`;
 		this.showPage( page );
 		return page;
 	}
@@ -408,7 +410,7 @@ export default class Store {
 		var colNum = 10;
 		// this.$main.empty();
 		// var $table = $('<table class="display compact" cellspacing="0" width="100%"><tfoot><tr></tr></tfoot></table>');
-		var page = new cat.Page;
+		var page = new Page;
 		page.title = 'collection';
 		page.content = `
 		<table class="display" cellspacing="0" width="100%">

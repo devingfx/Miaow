@@ -30,8 +30,8 @@ export class Window extends Element {
 	set icon( v )  { this.$header.find('h1').append(v) }
 	get title()	 { return this.$header.find('h1').text() }
 	set title( v )  { this.$header.find('h1').append(v) }
-	get head()	  { return this.$header }
-	set head( v )   { this.$header.append(v) }
+	get header()	  { return this.$header }
+	set header( v )   { this.$header.append(v) }
 	get content()   { return this.$content }
 	set content( v ){ this.$content.append(v) }
 	get footer()	{ return this.$footer }
