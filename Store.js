@@ -335,11 +335,12 @@ export default class Store {
 	}
 	showAddPage()
 	{
-		this.extract2().then( results=> {
-			var page = this.showObjectPage( rezsults[0] );
-			page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString('json')) )
-		})
-		return page;
+		return this.extract2()
+				.then( results=> {
+					var page = this.showObjectPage( results[0] );
+					page.editor.save = ()=> this.objects.insert( JSON.parse(page.editor.toComputedString('json')) )
+					return page;
+				})
 	}
 	// addPage()
 	// {
